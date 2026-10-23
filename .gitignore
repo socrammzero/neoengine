@@ -1,0 +1,16 @@
+# OS and editor artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node / temporary test artifacts
+node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.exe
+*.out
+*.class

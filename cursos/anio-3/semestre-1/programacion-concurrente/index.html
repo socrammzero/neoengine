@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Panel Maestro de Programación Concurrente: Los 7 Temas Oficiales, Reglas de Oro INFO.md, Hojas de Problemas y Simulador de Examen." />
+  <title>Programación Concurrente — Panel Maestro de la Asignatura | Engineering Workbench</title>
+  <link rel="stylesheet" href="../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-index" data-subject-id="programacion-concurrente" data-subject-name="Programación Concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Navegación de Programación Concurrente">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>⚡ Prog. Concurrente</span></div>
+        <span class="sidebar-brand-badge">3º · S1</span>
+      </div>
+
+      <div class="sidebar-selectors">
+        <label for="sidebarSubjectSelect" style="font-size:0.72rem;font-family:var(--f-mono);color:var(--muted);text-transform:uppercase;">Navegación Global</label>
+        <select id="sidebarSubjectSelect" class="sidebar-select"></select>
+      </div>
+
+      <div class="sidebar-section-label">Secciones del Panel</div>
+      <nav aria-label="Secciones del panel de la asignatura">
+        <a href="#sec-info-md" class="active"><span>1. Reglas de Oro (INFO.md)</span><span>⚠️</span></a>
+        <a href="#sec-temario"><span>2. Los 7 Temas y Prácticas</span><span>📘</span></a>
+        <a href="#sec-patrones"><span>3. Patrones Canónicos C/POSIX</span><span>💻</span></a>
+      </nav>
+
+      <div class="sidebar-section-label">Los 7 Temas Oficiales</div>
+      <nav aria-label="Temas de teoría">
+        <a href="./teoria/tema-01.html"><span>T1. Introducción y STR</span><span>→</span></a>
+        <a href="./teoria/tema-02.html"><span>T2. Procesos y Pthreads</span><span>→</span></a>
+        <a href="./teoria/tema-03.html"><span>T3. Memoria Compartida</span><span>→</span></a>
+        <a href="./teoria/tema-04.html"><span>T4. Paso de Mensajes</span><span>→</span></a>
+        <a href="./teoria/tema-05.html"><span>T5. Eventos y Señales</span><span>→</span></a>
+        <a href="./teoria/tema-06.html"><span>T6. Java, C# y FreeRTOS</span><span>→</span></a>
+        <a href="./teoria/tema-07.html"><span>T7. Sistemas Tiempo Real</span><span>→</span></a>
+        <a href="./evaluacion/examen-test.html"><span>⏱ Simulador Examen (21)</span><span>→</span></a>
+      </nav>
+
+      <div class="sidebar-exam-notice">
+        <strong>Recordatorio Crítico</strong>
+        Comprueba siempre los errores de <code>pthread_create</code> y <code>pthread_join</code>, pasa <code>&amp;ids[i]</code> y usa <code>sem_t mutex</code> (nunca <code>volatile</code> ni <code>pthread_mutex_lock</code>).
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Mostrar u ocultar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <span>3er Año · 1er Semestre</span>
+            <span class="sep">/</span>
+            <span class="current">Programación Concurrente</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker">
+            <span>3ER AÑO · 1ER SEMESTRE</span>
+            <span>·</span>
+            <span>INGENIERÍA ELECTRÓNICA DE TELECOMUNICACIÓN</span>
+          </div>
+          <h1>Programación Concurrente: Guía de Estudio, Laboratorio POSIX y Simulación</h1>
+          <p class="lead">
+            Cobertura íntegra de los <strong>7 Temas Oficiales</strong> de la asignatura y de la guía de referencia <code>INFO.md</code>: desde la semántica de entrelazado (<em>interleaving</em>) y Pthreads hasta espera activa (Peterson y Panadería de Lamport), semáforos POSIX (<code>semaphore.h</code>), colas de mensajes (<code>mqueue.h</code> + <code>select</code>), eventos/señales (<code>sigwaitinfo</code>), Java/C#/FreeRTOS y planificación de Tiempo Real (<code>SCHED_FIFO</code>, <code>mlockall</code>, <code>clock_nanosleep</code>).
+          </p>
+          <div class="meta-pills">
+            <span class="pill accent">7 Unidades Teóricas Interactivas</span>
+            <span class="pill ok">7 Hojas de Ejercicios Paso a Paso</span>
+            <span class="pill sig">11 Programas Ejecutables en src-code/</span>
+            <span class="pill">Simulador de Examen de 21 Preguntas</span>
+          </div>
+        </header>
+
+        <!-- SECCIÓN 1: REGLAS DE ORO DE INFO.MD -->
+        <section class="topic-section" id="sec-info-md">
+          <h2><span>1. Directivas Críticas de Codificación y Argumentación (INFO.md)</span><span class="pill sig">Lectura Obligatoria</span></h2>
+          <div class="warn">
+            <strong class="tag">Las 5 Reglas Inquebrantables de Examen (INFO.md)</strong>
+            <ul style="margin:0.4rem 0 0;padding-left:1.25rem;">
+              <li><strong>1. PROHIBICIÓN ABSOLUTA DE <code>volatile</code>:</strong> En la asignatura jamás se usa la palabra clave <code>volatile</code> (ni en espera activa, ni en semáforos, ni en manejadores). Toda variable compartida se declara como variable global normal (<code>int</code>, <code>unsigned</code>, <code>long</code>).</li>
+              <li><strong>2. OBLIGATORIO COMPROBAR ERRORES:</strong> Toda llamada a <code>pthread_create</code> y <code>pthread_join</code> debe validar su valor devuelto con <code>if (pthread_create(...) != 0) { perror(...); exit(-1); }</code>.</li>
+              <li><strong>3. PROHIBIDO EL USO DE <code>pthread_mutex_lock</code>:</strong> Debe usarse siempre un semáforo binario <code>sem_t mutex</code> inicializado con <code>sem_init(&amp;mutex, 0, 1)</code> y operado con <code>sem_wait(&amp;mutex)</code> y <code>sem_post(&amp;mutex)</code>.</li>
+              <li><strong>4. PROHIBIDO EL USO DE <code>(void*)(intptr_t)i</code> EN <code>pthread_create</code>:</strong> Debe declararse <code>int ids[MAX]</code> en un bucle <code>for</code> asignando <code>ids[i] = i;</code> y pasando <code>&amp;ids[i]</code> en <code>pthread_create(&amp;th[i], NULL, Tarea, &amp;ids[i])</code>.</li>
+              <li><strong>5. DISTINCIÓN SECCIÓN CRÍTICA (SC) VS REGIÓN CRÍTICA (RC):</strong> La <em>Sección Crítica (SC)</em> es el bloque de código cuya exclusión mutua gestiona explícitamente el programador; la <em>Región Crítica (RC)</em> es una construcción sintáctica de alto nivel donde el compilador/runtime garantiza automáticamente la exclusión mutua.</li>
+            </ul>
+          </div>
+          <div class="short">
+            Para validar formalmente cualquier solución concurrente en un examen se deben justificar siempre 4 propiedades: <strong>(1) Seguridad / Exclusión Mutua</strong> ∀e. (SC<sub>i</sub> → SC<sub>j</sub>) ∨ (SC<sub>j</sub> → SC<sub>i</sub>), <strong>(2) Ausencia de Interbloqueo (Deadlock-freedom)</strong>, <strong>(3) Justicia / Ausencia de Inanición (Starvation-freedom)</strong> y <strong>(4) Control de errores y paso de <code>&amp;ids[i]</code></strong>.
+          </div>
+        </section>
+
+        <!-- SECCIÓN 2: MAPA DE LOS 7 TEMAS Y SUS PRÁCTICAS -->
+        <section class="topic-section" id="sec-temario">
+          <h2><span>2. Unidades Didácticas Oficiales (Temas 1 a 7) y Laboratorios de Problemas</span><span class="pill accent">Temario Completo</span></h2>
+          <div class="grid-2">
+            <article class="card" style="margin-bottom:0;">
+              <span class="pill accent">TEMA 01 · PÁGS. 1–47 PDF</span>
+              <h3 style="margin:0.5rem 0 0.35rem;">Introducción a la Programación Concurrente</h3>
+              <p style="font-size:0.88rem;color:var(--muted);">Programación secuencial vs concurrente, operador <code>||</code>, procesadores lógicos, entrelazado (<em>interleaving</em>), fórmula <code>(m+n)!/(m!n!)</code>, orden parcial, taquillas de teatro, instrucciones atómicas, sección crítica, plataformas y Sistemas de Tiempo Real (STR).</p>
+              <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">
+                <a href="./teoria/tema-01.html" class="btn-action">📘 Teoría Tema 1</a>
+                <a href="./ejercicios/practica-tema-01.html" class="btn-secondary">🧪 Práctica Tema 1</a>
+              </div>
+            </article>
+
+            <article class="card" style="margin-bottom:0;">
+              <span class="pill accent">TEMA 02 · PÁGS. 1–41 PDF</span>
+              <h3 style="margin:0.5rem 0 0.35rem;">Representación de Procesos y Soporte de la Concurrencia</h3>
+              <p style="font-size:0.88rem;color:var(--muted);">Estructura estática/dinámica, jerarquía padre/hijo, representación C vs Ada, modelo de procesos y hebras en UNIX, estándar IEEE POSIX 1003.1c (Pthreads), ciclo de vida, <code>pthread_create</code>, <code>pthread_join</code>, <code>pthread_exit</code>, atributos y paso seguro <code>&amp;ids[i]</code>.</p>
+              <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">
+                <a href="./teoria/tema-02.html" class="btn-action">📘 Teoría Tema 2</a>
+                <a href="./ejercicios/practica-tema-02.html" class="btn-secondary">🧪 Práctica Tema 2</a>
+              </div>
+            </article>
+
+            <article class="card" style="margin-bottom:0;">
+              <span class="pill accent">TEMA 03 · PÁGS. 1–184 PDF (3, 3_1, 3_2, 3_3)</span>
+              <h3 style="margin:0.5rem 0 0.35rem;">Comunicación y Sincronización en Memoria Compartida</h3>
+              <p style="font-size:0.88rem;color:var(--muted);">Problema de los jardines, espera activa (Intentos 1-3, Algoritmo de Peterson, Panadería de Lamport), seguridad/viveza/justicia, Semáforos POSIX (<code>sem_t</code>), Productor/Consumidor circular, Lectores/Escritores justo, Filósofos con sillas, Monitores, Barbero Dormilón, <code>test_and_set</code> y temporizadores.</p>
+              <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">
+                <a href="./teoria/tema-03.html" class="btn-action">📘 Teoría Tema 3</a>
+                <a href="./ejercicios/practica-tema-03.html" class="btn-secondary">🧪 Práctica Tema 3</a>
+              </div>
+            </article>
+
+            <article class="card" style="margin-bottom:0;">
+              <span class="pill accent">TEMA 04 · PÁGS. 1–35 PDF</span>
+              <h3 style="margin:0.5rem 0 0.35rem;">Comunicación mediante Paso de Mensajes</h3>
+              <p style="font-size:0.88rem;color:var(--muted);">Sistemas débilmente acoplados, direccionamiento directo/indirecto, sincronización asíncrona, síncrona (cita/<em>rendezvous</em>) y síncrona extendida, colas POSIX (<code>&lt;mqueue.h&gt;</code>: <code>mq_open</code>, <code>mq_send</code>, <code>mq_receive</code>, <code>mq_unlink</code>) y espera selectiva con <code>select()</code>, guardas <code>when</code>, <code>terminate</code> y <code>else</code>.</p>
+              <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">
+                <a href="./teoria/tema-04.html" class="btn-action">📘 Teoría Tema 4</a>
+                <a href="./ejercicios/practica-tema-04.html" class="btn-secondary">🧪 Práctica Tema 4</a>
+              </div>
+            </article>
+
+            <article class="card" style="margin-bottom:0;">
+              <span class="pill accent">TEMA 05 · PÁGS. 1–35 PDF</span>
+              <h3 style="margin:0.5rem 0 0.35rem;">Programación Dirigida por Eventos y Señales POSIX</h3>
+              <p style="font-size:0.88rem;color:var(--muted);">Hebras vs Eventos, bucle de eventos (<em>dispatcher</em>), colas de eventos, MOM y <em>Publish/Subscribe</em>, señales POSIX (<code>&lt;signal.h&gt;</code>), estados de señal, eventos síncronos/asíncronos, <code>kill</code>/<code>sigqueue</code>, máscaras <code>pthread_sigmask</code>, <code>sigaction</code> (<code>SA_SIGINFO</code>) y espera síncrona <code>sigwait</code>/<code>sigwaitinfo</code>.</p>
+              <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">
+                <a href="./teoria/tema-05.html" class="btn-action">📘 Teoría Tema 5</a>
+                <a href="./ejercicios/practica-tema-05.html" class="btn-secondary">🧪 Práctica Tema 5</a>
+              </div>
+            </article>
+
+            <article class="card" style="margin-bottom:0;">
+              <span class="pill accent">TEMA 06 · PÁGS. 1–74 PDF</span>
+              <h3 style="margin:0.5rem 0 0.35rem;">La Concurrencia en Otros Lenguajes y FreeRTOS</h3>
+              <p style="font-size:0.88rem;color:var(--muted);">Hebras y monitores en Java (<code>Thread</code>, <code>Runnable</code>, <code>synchronized</code>, <code>wait</code>/<code>notifyAll</code>, Buffer Acotado), C#/.NET CLR (<code>ThreadStart</code>, <code>Monitor.Enter/Wait/Pulse</code>, <code>lock</code>, <code>AutoResetEvent</code>) y FreeRTOS en Arduino (<code>xTaskCreate</code>, <code>vTaskDelayUntil</code>, colas, <code>heap_1..5</code> e ISR).</p>
+              <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">
+                <a href="./teoria/tema-06.html" class="btn-action">📘 Teoría Tema 6</a>
+                <a href="./ejercicios/practica-tema-06.html" class="btn-secondary">🧪 Práctica Tema 6</a>
+              </div>
+            </article>
+
+            <article class="card" style="margin-bottom:0;grid-column:1 / -1;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+                <span class="pill accent">TEMA 07 · PÁGS. 1–23 PDF</span>
+                <span class="pill sig">Tiempo Real Crítico POSIX</span>
+              </div>
+              <h3 style="margin:0.5rem 0 0.35rem;">Programación de Sistemas de Tiempo Real en POSIX</h3>
+              <p style="font-size:0.88rem;color:var(--muted);">Planificación expulsiva por prioridades fijas (<code>SCHED_FIFO</code>, <code>SCHED_RR</code>, <code>SCHED_OTHER</code>, <code>SCHED_DEADLINE</code>), <code>PTHREAD_EXPLICIT_SCHED</code>, bloqueo de memoria virtual en RAM física (<code>mlock</code>, <code>mlockall</code>), señales RT (<code>SIGRTMIN..SIGRTMAX</code>), tareas periódicas con <code>CLOCK_MONOTONIC</code> + <code>TIMER_ABSTIME</code> + función <code>normalizar(struct timespec*)</code>, e inversión de prioridades en mutex (<code>PTHREAD_PRIO_INHERIT</code> y <code>PTHREAD_PRIO_PROTECT</code>).</p>
+              <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">
+                <a href="./teoria/tema-07.html" class="btn-action">📘 Teoría Tema 7</a>
+                <a href="./ejercicios/practica-tema-07.html" class="btn-secondary">🧪 Práctica Tema 7</a>
+                <a href="./evaluacion/examen-test.html" class="btn-action" style="background:var(--sig);border-color:var(--sig);">⏱ Ir al Simulador de Examen Final (21 Preguntas) →</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- SECCIÓN 3: PATRONES CANÓNICOS EJECUTABLES EN VIVO -->
+        <section class="topic-section" id="sec-patrones">
+          <h2><span>3. Patrones Canónicos de INFO.md Ejecutables en Vivo</span><span class="pill ok">C11 POSIX</span></h2>
+          <p>1. Gestión segura de hebras Pthreads con <code>int ids[NUM_HEBRAS]</code> y comprobación de errores (<code>creacion_hebras_segura.c</code>):</p>
+          <div class="code-execution-box" data-src="./src-code/tema-02/creacion_hebras_segura.c" data-lang="c"></div>
+
+          <p style="margin-top:1.2rem;">2. Espera activa para 2 procesos — Algoritmo de Peterson (<code>peterson.c</code>):</p>
+          <div class="code-execution-box" data-src="./src-code/tema-03/peterson.c" data-lang="c"></div>
+
+          <p style="margin-top:1.2rem;">3. Espera activa para N procesos — Algoritmo de la Panadería de Lamport (<code>panaderia_lamport.c</code>):</p>
+          <div class="code-execution-box" data-src="./src-code/tema-03/panaderia_lamport.c" data-lang="c"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../assets/js/storage.js"></script>
+  <script src="../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../assets/js/code-runner.js"></script>
+</body>
+</html>

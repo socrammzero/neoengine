@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Práctica Tema 4: Colas de Mensajes POSIX y Espera Selectiva | Programación Concurrente</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-practica-04" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice Práctica Tema 4">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>🧪 PC · Práctica T4</span></div>
+        <span class="sidebar-brand-badge" id="exerciseProgressCounter">0 / 5 Resueltos</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Índice de Problemas</div>
+      <nav>
+        <a href="#ex-01" class="active"><span>Ej 01. Borrado de Cola POSIX</span><span class="pill">Traza</span></a>
+        <a href="#ex-02"><span>Ej 02. Primer Parámetro select()</span><span class="pill">Traza</span></a>
+        <a href="#ex-03"><span>Ej 03. Macro de Canal Activo</span><span class="pill">Traza</span></a>
+        <a href="#ex-04"><span>Ej 04. Incompatibilidad select</span><span class="pill">Traza</span></a>
+        <a href="#ex-05"><span>Ej 05. Jardines con mq_* y select</span><span class="pill accent">Código</span></a>
+      </nav>
+      <div class="sidebar-section-label">Navegación</div>
+      <nav>
+        <a href="../index.html"><span>← Panel de la Asignatura</span></a>
+        <a href="../teoria/tema-04.html"><span>📘 Volver a Teoría Tema 4</span></a>
+        <a href="./practica-tema-03.html"><span>← Práctica Tema 3</span></a>
+        <a href="./practica-tema-05.html"><span>Siguiente: Práctica Tema 5 →</span></a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Práctica Tema 4</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" id="allSol" class="btn-top">▼ Mostrar Todas las Soluciones</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker"><span>HOJA DE PROBLEMAS · TEMA 4 (PÁGS. 1–35 PDF)</span><span>·</span><span>COLAS POSIX Y SELECT</span></div>
+          <h1>Práctica Tema 4: Paso de Mensajes, Colas <code>&lt;mqueue.h&gt;</code> y Espera Selectiva</h1>
+          <p class="lead">
+            Ejercicios sobre primitivas de paso de mensajes, atributos de colas POSIX y multiplexación de descriptores con <code>select()</code>.
+          </p>
+        </header>
+
+        <section class="exercise-card" id="ex-01" data-ex-id="pc-t4-e1" data-difficulty="baja" data-type="trace" data-answer="mq_unlink" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 01 · Tema 4, Pág. 18</span><span class="pill">Dificultad: Baja</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Eliminación del Contenido y Nombre de una Cola de Mensajes POSIX</h3>
+          <p>¿Cuál es el nombre exacto de la función de <code>&lt;mqueue.h&gt;</code> que elimina el contenido y el nombre de una cola de mensajes del sistema (Tema 4, pág. 18)?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:240px;" placeholder="Nombre de función" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 4, Pág. 18)</summary>
+            <p>La función es <code>mq_unlink</code> (prototipo: <code>int mq_unlink(const char *name);</code>).</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-02" data-ex-id="pc-t4-e2" data-difficulty="media" data-type="trace" data-answer="cola[1]+1|cola[1] + 1" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 02 · Tema 4, Pág. 29</span><span class="pill">Dificultad: Media</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Primer Argumento <code>nfds</code> en la Llamada a <code>select()</code></h3>
+          <p>En el ejemplo oficial de espera selectiva sobre dos colas <code>mqd_t cola[2];</code> (Tema 4, pág. 29), asumiendo que <code>cola[1] &gt; cola[0]</code>, ¿qué expresión se pasa como primer argumento (<code>nfds</code>) en <code>retval = select(..., &amp;rfds, NULL, NULL, NULL);</code>?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:240px;" placeholder="Ej. cola[1]+1" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 4, Pág. 29)</summary>
+            <div class="formula">retval = select(cola[1]+1, &amp;rfds, NULL, NULL, NULL);</div>
+            <p>El primer argumento de <code>select</code> debe ser el mayor descriptor vigilado más 1 (<code>cola[1]+1</code>).</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-03" data-ex-id="pc-t4-e3" data-difficulty="baja" data-type="trace" data-answer="FD_ISSET" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 03 · Tema 4, Págs. 28 y 30</span><span class="pill">Dificultad: Baja</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Macro para Comprobar si una Cola Tiene Mensaje tras <code>select()</code></h3>
+          <p>Tras retornar <code>select()</code>, ¿qué macro estándar de C se utiliza en el condicional <code>if (___(cola[pos], &amp;rfds))</code> para verificar si el descriptor <code>cola[pos]</code> permanece activo en el conjunto de lectura?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:240px;" placeholder="Nombre de la macro" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 4, Págs. 28 y 30)</summary>
+            <p>La macro es <code>FD_ISSET</code>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-04" data-ex-id="pc-t4-e4" data-difficulty="baja" data-type="trace" data-answer="terminate" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 04 · Tema 4, Pág. 33</span><span class="pill">Dificultad: Baja</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Incompatibilidad con la Alternativa <code>else</code> en Espera Selectiva</h3>
+          <p>Según la página 33 del Tema 4, en una instrucción <code>select</code>, la alternativa <code>else</code> es incompatible con que la hebra sea demonio o con la alternativa: ¿cuál?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:240px;" placeholder="Palabra clave" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 4, Pág. 33)</summary>
+            <p>Es incompatible con la alternativa <code>terminate</code>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-05" data-ex-id="pc-t4-e5" data-difficulty="alta" data-type="code">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 05 · Programación Colas POSIX + select()</span><span class="pill">Dificultad: Alta</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Resolución del Problema de los Jardines con Dos Colas y Espera Selectiva</h3>
+          <p>Ejecuta y valida el código completo de <code>colas_mensajes_mq.c</code> que soluciona la restricción de orden de llegada de la página 25 mediante <code>select()</code>:</p>
+          <div class="code-execution-box" data-src="../src-code/tema-04/colas_mensajes_mq.c" data-lang="c"></div>
+          <button type="button" class="btn-action ex-verify-code-btn">✓ Compilar, Ejecutar y Marcar Ejercicio Resuelto</button>
+          <div class="ex-feedback" style="margin-top:0.75rem;"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/code-runner.js"></script>
+  <script src="../../../../../assets/js/exercise-engine.js"></script>
+</body>
+</html>

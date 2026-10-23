@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 3: Comunicación y Sincronización en Memoria Compartida | Programación Concurrente</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-tema-03" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice del Tema 3">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>⚡ PC · Tema 03</span></div>
+        <span class="sidebar-brand-badge">Págs. 1–184</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Índice del Tema 3</div>
+      <nav aria-label="Secciones del Tema 3">
+        <a href="#sec-jardines-espera" class="active"><span>1. Jardines e Intentos 1–3</span><span>3.0</span></a>
+        <a href="#sec-peterson-lamport"><span>2. Peterson y Panadería Lamport</span><span>3.0</span></a>
+        <a href="#sec-seguridad-justicia"><span>3. Seguridad, Viveza y Justicia</span><span>3.0</span></a>
+        <a href="#sec-semaforos"><span>4. Semáforos y Prod/Cons</span><span>3_1</span></a>
+        <a href="#sec-clasicos"><span>5. Lectores/Escr. y Filósofos</span><span>3_1</span></a>
+        <a href="#sec-monitores-tiempo"><span>6. Monitores, Barbero y Tiempo</span><span>3_2/3</span></a>
+      </nav>
+      <div class="sidebar-section-label">Ruta de la Asignatura</div>
+      <nav>
+        <a href="../index.html"><span>← Panel de la Asignatura</span></a>
+        <a href="./tema-02.html"><span>← Tema 2: Pthreads</span></a>
+        <a href="./tema-04.html"><span>Siguiente: Tema 4 (Mensajes) →</span></a>
+        <a href="../ejercicios/practica-tema-03.html"><span>🧪 Ir a Práctica Tema 3</span></a>
+      </nav>
+      <div class="sidebar-exam-notice">
+        <strong>Prohibición INFO.md #1 y #3</strong>
+        Ni en Peterson, ni en Lamport, ni en Semáforos se usa jamás <code>volatile</code>. Y para exclusión mutua en código C se usa siempre <code>sem_t mutex</code> con <code>sem_wait(&amp;mutex)</code> y <code>sem_post(&amp;mutex)</code>.
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Tema 3: Sincronización en Memoria Compartida</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" id="markTopicReadBtn" class="btn-top">○ Marcar como Leído</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker"><span>TEMA 03 COMPLETO · PARTES 3, 3_1, 3_2 Y 3_3 (184 DIAPOSITIVAS)</span><span>·</span><span>NÚCLEO DE EXAMEN</span></div>
+          <h1>Tema 3: Comunicación y Sincronización en Memoria Compartida</h1>
+          <p class="lead">
+            Estudio exhaustivo de los cuatro bloques del Tema 3: <strong>Espera Activa</strong> (Jardines, Intentos 1–3, Algoritmo de Peterson, Panadería de Lamport, Seguridad/Viveza/Justicia), <strong>Semáforos POSIX</strong> (Productor/Consumidor circular, Lectores/Escritores justo, Cena de los Filósofos), <strong>Regiones Críticas y Monitores</strong> (Variables de Condición y Barbero Dormilón) e <strong>Implementación Hardware y Manejo del Tiempo</strong> (<code>test_and_set</code>, <code>swap</code>, relojes y temporizadores).
+          </p>
+        </header>
+
+        <!-- BLOQUE 1 -->
+        <section class="topic-section" id="sec-jardines-espera">
+          <h2><span>1. Problema de los Jardines y los Tres Intentos Fallidos de Espera Activa (Págs. 3–29)</span><span class="pill">Espera Activa</span></h2>
+          <div class="short">
+            En el <strong>Problema de los Jardines</strong> (págs. 4–15), dos puertas incrementan una variable global <code>cont++</code> compilada en tres instrucciones máquina: <code>load cont</code>, <code>inc 1</code>, <code>store cont</code>. Si ambas hebras leen <code>cont = 0</code> antes de almacenar, tras dos entradas el contador vale <code>1</code> en vez de <code>2</code>.
+          </div>
+          <div class="scroll">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th>Intento (Págs. 23–29)</th>
+                  <th>Preprotocolo / Postprotocolo</th>
+                  <th>¿Cumple R1 (Exclusión Mutua)?</th>
+                  <th>Defecto Fatal (Contraejemplo de Traza)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Primer Intento (Págs. 23–25)</strong></td>
+                  <td><code>f[miId]=1; while(f[otra]);</code> / <code>f[miId]=0;</code></td>
+                  <td><strong>SÍ</strong> (P<sub>i</sub> en SC<sub>i</sub> ⇒ f[i]==1)</td>
+                  <td><strong>Viola R2 (Sufre Livelock):</strong> Si p0 hace <code>f[0]=1</code> y p1 hace <code>f[1]=1</code> simultáneamente, ambos quedan atrapados en el <code>while</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong>Segundo Intento (Págs. 26–27)</strong></td>
+                  <td><code>while(f[otra]); f[miId]=1;</code> / <code>f[miId]=0;</code></td>
+                  <td><strong>NO (ERROR GRAVE)</strong></td>
+                  <td><strong>Viola R1 (Exclusión Mutua):</strong> Ambos evalúan <code>f[otra]==0</code>, ambos ponen <code>f[i]=1</code> y entran juntos en la Sección Crítica.</td>
+                </tr>
+                <tr>
+                  <td><strong>Tercer Intento (Págs. 28–29)</strong></td>
+                  <td><code>while(turno==otra);</code> / <code>turno=otra;</code></td>
+                  <td><strong>SÍ</strong> (turno vale 0 o 1)</td>
+                  <td><strong>Viola R3 (Alternancia Estricta):</strong> Si sólo p0 quiere entrar dos veces seguidas y p1 está en su SNC, p0 queda bloqueado porque <code>turno==1</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- BLOQUE 2 -->
+        <section class="topic-section" id="sec-peterson-lamport">
+          <h2><span>2. Solución de Peterson (2 Procesos) y Panadería de Lamport (N Procesos) (Págs. 30–52)</span><span class="pill accent">Algoritmos Canónicos</span></h2>
+          <div class="short">
+            <strong>Peterson</strong> combina el array de intención <code>unsigned f[2] = {0, 0};</code> del Intento 1 con la variable de desempate <code>int turno = 0;</code> del Intento 3: cada hebra declara su intención (<code>f[miId] = 1;</code>) y cede caballerosamente el turno a la otra (<code>turno = otra;</code>), esperando mientras <code>while (f[otra] &amp;&amp; turno == otra);</code>. Satisface R1, R2, R3 y R4 (Justicia).
+          </div>
+          <div class="code-execution-box" data-src="../src-code/tema-03/peterson.c" data-lang="c"></div>
+
+          <h3 style="margin-top:1.35rem;">Algoritmo de la Panadería de Lamport para N ≥ 2 Procesos (Págs. 36–52)</h3>
+          <p>
+            Cada cliente <code>id</code> levanta la bandera <code>pidiendoTurno[id] = 1</code>, calcula su ticket <code>turno[id] = siguiente()</code> (el máximo actual más 1), baja <code>pidiendoTurno[id] = 0</code> y luego comprueba contra cada cliente <code>j</code>: primero espera a que <code>j</code> termine de escoger ticket (<code>while (pidiendoTurno[j]);</code>) y después espera según el <strong>orden lexicográfico</strong> en <code>while (!meToca(id, j));</code>:
+          </p>
+          <div class="formula">
+            Orden Lexicográfico en meToca(id, i): &nbsp; Pasa antes i que id &nbsp;⇔&nbsp; (turno[i] &gt; 0 ∧ turno[i] &lt; turno[id]) ∨ (turno[i] == turno[id] ∧ i &lt; id)
+          </div>
+          <div class="code-execution-box" data-src="../src-code/tema-03/panaderia_lamport.c" data-lang="c"></div>
+        </section>
+
+        <!-- BLOQUE 3 -->
+        <section class="topic-section" id="sec-seguridad-justicia">
+          <h2><span>3. Propiedades de Seguridad, Viveza y Justicia del Planificador (Págs. 53–55)</span><span class="pill">Verificación Formal</span></h2>
+          <div class="grid-2">
+            <div class="card" style="margin-bottom:0;">
+              <span class="pill accent">PROPIEDADES DE SEGURIDAD VS VIVEZA (Pág. 53)</span>
+              <ul style="font-size:0.9rem;margin-top:0.6rem;">
+                <li><strong>Seguridad (<em>Safety</em> — "Nunca ocurre nada malo"):</strong> Exclusión mutua (R1), condiciones de sincronización del productor/consumidor y ausencia de <em>deadlock</em>.</li>
+                <li><strong>Viveza (<em>Liveness</em> — "En algún momento ocurre algo bueno"):</strong> Ausencia de <em>livelock</em> (R2), progreso individual (R3) y ausencia de inanición o postergación indefinida (<em>starvation</em>, R4).</li>
+              </ul>
+            </div>
+            <div class="card" style="margin-bottom:0;">
+              <span class="pill sig">PLANIFICADOR DÉBIL VS FUERTEMENTE JUSTO (Pág. 55)</span>
+              <ul style="font-size:0.9rem;margin-top:0.6rem;">
+                <li><strong>Débilmente justo:</strong> Si un proceso mantiene una petición <em>de forma continua</em>, en algún momento será atendida.</li>
+                <li><strong>Fuertemente justo:</strong> Si una condición de petición se hace verdadera <em>con infinita frecuencia</em> (aunque se active y desactive en bucle como <code>fin1=1; fin1=0;</code>), en algún momento será atendida.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- BLOQUE 4 -->
+        <section class="topic-section" id="sec-semaforos">
+          <h2><span>4. Semáforos POSIX (<code>semaphore.h</code>) y Productor/Consumidor Circular (Págs. 65–89)</span><span class="pill">Tema 3_1</span></h2>
+          <div class="short">
+            Un semáforo POSIX <code>sem_t</code> representa un número natural de permisos disponibles, manipulado atómicamente mediante <code>sem_init(&amp;s, 0, val)</code>, <code>sem_wait(&amp;s)</code> (decrementa o suspende la hebra si vale 0) y <code>sem_post(&amp;s)</code> (incrementa o despierta a una hebra bloqueada).
+          </div>
+          <div class="warn">
+            <strong class="tag">Regla Crítica de Orden en el Preprotocolo (Pág. 89)</strong>
+            En el Productor/Consumidor es <strong>obligatorio</strong> esperar primero por el semáforo de condición (<code>sem_wait(&amp;Hay_espacio)</code> o <code>sem_wait(&amp;Hay_Datos)</code>) y <strong>después</strong> tomar la exclusión mutua (<code>sem_wait(&amp;mutex)</code>). Si se invierte el orden (tomando primero <code>mutex</code>), el consumidor con el buffer vacío retiene <code>mutex = 0</code> y se bloquea en <code>Hay_Datos</code>, provocando un <strong>interbloqueo (deadlock)</strong> total.
+          </div>
+          <div class="code-execution-box" data-src="../src-code/tema-03/productor_consumidor_sem.c" data-lang="c"></div>
+        </section>
+
+        <!-- BLOQUE 5 -->
+        <section class="topic-section" id="sec-clasicos">
+          <h2><span>5. Problemas Clásicos con Semáforos: Lectores/Escritores y Cena de los Filósofos (Págs. 90–115)</span><span class="pill">Problemas de Examen</span></h2>
+          <p>
+            <strong>A) Lectores/Escritores con Justicia para Escritores (Págs. 101–108):</strong> En la versión básica (un solo <code>mutex</code> y <code>escribiendo</code>), el <em>despertado en cascada</em> de los lectores puede causar inanición indefinida a los escritores. La versión justa añade <code>leyendo</code> (cerrado por el primer escritor con <code>if (nEscritores == 1) sem_wait(&amp;leyendo);</code>) y un tercer cerrojo <code>mutex3</code> en la entrada de los lectores para que en la cola de <code>leyendo</code> nunca haya más de un lector compitiendo con el escritor:
+          </p>
+          <div class="code-execution-box" data-src="../src-code/tema-03/lectores_escritores_sem.c" data-lang="c"></div>
+
+          <p style="margin-top:1.25rem;">
+            <strong>B) Cena de los 5 Filósofos sin Deadlock mediante Semáforo de Sillas (Págs. 109–115):</strong> Si los 5 filósofos toman a la vez su tenedor izquierdo <code>sem_wait(&amp;ten[id])</code>, el sistema se bloquea. Inicializando un semáforo general <code>sem_init(&amp;sillas, 0, 4)</code> que deja sentarse a lo sumo a 4 filósofos simultáneamente, por el principio del palomar al menos uno podrá adquirir sus 2 tenedores y comer:
+          </p>
+          <div class="code-execution-box" data-src="../src-code/tema-03/filosofos_sillas.c" data-lang="c"></div>
+        </section>
+
+        <!-- BLOQUE 6 -->
+        <section class="topic-section" id="sec-monitores-tiempo">
+          <h2><span>6. Regiones Críticas, Monitores, Barbero Dormilón e Instrucciones Atómicas (Págs. 117–184)</span><span class="pill">Temas 3_2 y 3_3</span></h2>
+          <div class="short">
+            En el problema del <strong>Barbero Dormilón</strong> (págs. 150–160), el ciclo completo <em>barbero disponible → cliente se sienta → barbero pela → barbero abre puerta de salida → cliente sale y cierra puerta → barbero disponible</em> exige exactamente <strong>4 condiciones de sincronización</strong>: <code>cblibre</code> (<code>blibre</code>), <code>csocupada</code> (<code>socupada</code>), <code>cpabierta</code> (<code>pabierta</code>) y <code>cciclo</code>.
+          </div>
+          <div class="formula">
+            Implementación hardware de semáforos con test_and_set(&amp;valor_s) (Págs. 166–169):<br/>
+            int test_and_set(int *valor) { int temp = *valor; *valor = 1; return temp; } &nbsp;[Ejecutado atómicamente por la CPU]
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/code-runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Práctica Tema 7: Programación de Sistemas de Tiempo Real en POSIX | Programación Concurrente</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-practica-07" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice Práctica Tema 7">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>🧪 PC · Práctica T7</span></div>
+        <span class="sidebar-brand-badge" id="exerciseProgressCounter">0 / 5 Resueltos</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Índice de Problemas</div>
+      <nav>
+        <a href="#ex-01" class="active"><span>Ej 01. Prioridad Máxima Linux RT</span><span class="pill">Cálculo</span></a>
+        <a href="#ex-02"><span>Ej 02. Normalización timespec</span><span class="pill">Cálculo</span></a>
+        <a href="#ex-03"><span>Ej 03. Alineamiento mlock()</span><span class="pill">Cálculo</span></a>
+        <a href="#ex-04"><span>Ej 04. Protocolo Herencia Mutex</span><span class="pill">Traza</span></a>
+        <a href="#ex-05"><span>Ej 05. Tarea Periódica TR C11</span><span class="pill accent">Código</span></a>
+      </nav>
+      <div class="sidebar-section-label">Navegación</div>
+      <nav>
+        <a href="../index.html"><span>← Panel de la Asignatura</span></a>
+        <a href="../teoria/tema-07.html"><span>📘 Volver a Teoría Tema 7</span></a>
+        <a href="./practica-tema-06.html"><span>← Práctica Tema 6</span></a>
+        <a href="../evaluacion/examen-test.html"><span>⏱ Simulador de Examen Final →</span></a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Práctica Tema 7</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" id="allSol" class="btn-top">▼ Mostrar Todas las Soluciones</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker"><span>HOJA DE PROBLEMAS · TEMA 7 (PÁGS. 1–23 PDF)</span><span>·</span><span>TIEMPO REAL POSIX</span></div>
+          <h1>Práctica Tema 7: Planificación <code>SCHED_FIFO/RR</code>, <code>mlock</code>, <code>normalizar()</code> y Mutex TR</h1>
+          <p class="lead">
+            Problemas numéricos y de trazado sobre planificación expulsiva en Linux, alineamiento de páginas en <code>lock_memory</code>, normalización de tiempos en nanosegundos y protocolos contra la inversión de prioridades.
+          </p>
+        </header>
+
+        <section class="exercise-card" id="ex-01" data-ex-id="pc-t7-e1" data-difficulty="baja" data-type="calc" data-answer="99" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 01 · Tema 7, Pág. 3</span><span class="pill">Dificultad: Baja</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Nivel Máximo de Prioridad en Linux para <code>SCHED_FIFO</code> y <code>SCHED_RR</code></h3>
+          <p>Según la página 3 del Tema 7, aunque el estándar POSIX exige al menos 32 niveles de prioridad fija, en Linux el rango va desde 0 (para <code>SCHED_OTHER</code>) hasta un valor máximo para hebras de tiempo real. ¿Cuál es ese valor máximo entero?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:200px;" placeholder="Prioridad máxima" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 7, Pág. 3)</summary>
+            <p>En Linux el valor máximo de prioridad para <code>SCHED_FIFO</code> y <code>SCHED_RR</code> es <strong>99</strong>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-02" data-ex-id="pc-t7-e2" data-difficulty="media" data-type="calc" data-answer="14" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 02 · Tema 7, Pág. 20</span><span class="pill">Dificultad: Media</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Traza de la Función <code>normalizar(struct timespec *tm)</code></h3>
+          <p>Dada una estructura <code>struct timespec tm</code> con valores iniciales <code>tm.tv_sec = 12</code> y <code>tm.tv_nsec = 2450000000L</code> (2,450,000,000 ns), calcula el valor final de <code>tm.tv_sec</code> tras invocar <code>normalizar(&amp;tm)</code> (Tema 7, pág. 20):</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:200px;" placeholder="Valor de tv_sec" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada Paso a Paso (Tema 7, Pág. 20)</summary>
+            <div class="formula">
+              Como tv_nsec = 2,450,000,000 ≥ 1,000,000,000:<br/>
+              tv_sec += 2,450,000,000 / 1,000,000,000 = 12 + 2 = 14 s<br/>
+              tv_nsec = 2,450,000,000 % 1,000,000,000 = 450,000,000 ns
+            </div>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-03" data-ex-id="pc-t7-e3" data-difficulty="media" data-type="calc" data-answer="2548" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 03 · Tema 7, Pág. 9</span><span class="pill">Dificultad: Media</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Ajuste de Tamaño a Frontera de Página en <code>lock_memory(addr, size)</code></h3>
+          <p>En la función <code>lock_memory</code> de la página 9 del Tema 7, se solicita bloquear un buffer de <code>DATA_SIZE = 2048</code> bytes cuya dirección de inicio tiene un desplazamiento respecto al inicio de página de <code>page_offset = 500</code> bytes. Tras ejecutar <code>addr -= page_offset; size += page_offset;</code>, ¿qué valor en bytes tiene el parámetro <code>size</code> que se pasa a <code>mlock(addr, size)</code>?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:200px;" placeholder="Bytes en size" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada Paso a Paso (Tema 7, Pág. 9)</summary>
+            <div class="formula">size_final = size + page_offset = 2048 + 500 = 2548 bytes</div>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-04" data-ex-id="pc-t7-e4" data-difficulty="media" data-type="trace" data-answer="PTHREAD_PRIO_INHERIT" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 04 · Tema 7, Pág. 22</span><span class="pill">Dificultad: Media</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Protocolo de Herencia de Prioridad en Mutex POSIX</h3>
+          <p>Escribe el nombre exacto de la constante POSIX que se pasa a <code>pthread_mutexattr_setprotocol(&amp;attr, ...)</code> para activar el protocolo de <strong>herencia de prioridad</strong> (Tema 7, pág. 22):</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:280px;" placeholder="Constante protocolo" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 7, Pág. 22)</summary>
+            <p>La constante es <code>PTHREAD_PRIO_INHERIT</code> (mientras que el techo de prioridad es <code>PTHREAD_PRIO_PROTECT</code>).</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-05" data-ex-id="pc-t7-e5" data-difficulty="alta" data-type="code">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 05 · Programación Tiempo Real POSIX (Págs. 18–20)</span><span class="pill">Dificultad: Alta</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Tarea Periódica con <code>SCHED_FIFO</code>, <code>mlockall</code>, <code>normalizar</code> y <code>TIMER_ABSTIME</code></h3>
+          <p>Ejecuta y valida el código completo de <code>tarea_periodica_tr.c</code>:</p>
+          <div class="code-execution-box" data-src="../src-code/tema-07/tarea_periodica_tr.c" data-lang="c"></div>
+          <button type="button" class="btn-action ex-verify-code-btn">✓ Compilar, Ejecutar y Marcar Ejercicio Resuelto</button>
+          <div class="ex-feedback" style="margin-top:0.75rem;"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/code-runner.js"></script>
+  <script src="../../../../../assets/js/exercise-engine.js"></script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 7: Programación de Sistemas de Tiempo Real en POSIX | Programación Concurrente</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-tema-07" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice del Tema 7">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>⚡ PC · Tema 07</span></div>
+        <span class="sidebar-brand-badge">Págs. 1–23</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Índice del Tema 7</div>
+      <nav aria-label="Secciones del Tema 7">
+        <a href="#sec-planificacion-tr" class="active"><span>1. Planificación SCHED_FIFO/RR</span><span>01</span></a>
+        <a href="#sec-memoria-senales" class="vertical"><span>2. Memoria Física y Señales RT</span><span>02</span></a>
+        <a href="#sec-relojes-normalizar"><span>3. Relojes y Normalización</span><span>03</span></a>
+        <a href="#sec-mutex-tr"><span>4. Mutex TR e Inversión Prioridad</span><span>04</span></a>
+        <a href="#sec-codigo-t7"><span>5. Tarea Periódica TR en Vivo</span><span>▶</span></a>
+      </nav>
+      <div class="sidebar-section-label">Ruta de la Asignatura</div>
+      <nav>
+        <a href="../index.html"><span>← Panel de la Asignatura</span></a>
+        <a href="./tema-06.html"><span>← Tema 6: Java, C# y FreeRTOS</span></a>
+        <a href="../ejercicios/practica-tema-07.html"><span>🧪 Ir a Práctica Tema 7</span></a>
+        <a href="../evaluacion/examen-test.html"><span>⏱ Simulador de Examen Final</span></a>
+      </nav>
+      <div class="sidebar-exam-notice">
+        <strong>Aviso de Examen (Págs. 5 y 10)</strong>
+        1) No olvides nunca <code>PTHREAD_EXPLICIT_SCHED</code> al fijar <code>SCHED_FIFO</code>.<br/>
+        2) En <code>SIGRTMIN..SIGRTMAX</code>, el número de señal <strong>más bajo</strong> tiene <strong>más prioridad</strong>.
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Tema 7: Programación de Sistemas de Tiempo Real</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" id="markTopicReadBtn" class="btn-top">○ Marcar como Leído</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker"><span>TEMA 07 · DIAPOSITIVAS OFICIALES PÁGS. 1–23</span><span>·</span><span>TIEMPO REAL POSIX</span></div>
+          <h1>Tema 7: Programación de Sistemas de Tiempo Real en POSIX</h1>
+          <p class="lead">
+            Los cinco pilares para lograr determinismo temporal en aplicaciones POSIX: políticas de planificación expulsivas por prioridades fijas (<code>SCHED_FIFO</code> y <code>SCHED_RR</code>), bloqueo de páginas en memoria física (<code>mlock</code>/<code>mlockall</code>), señales de tiempo real encoladas por prioridad, tareas periódicas con <code>CLOCK_MONOTONIC</code> y <code>TIMER_ABSTIME</code>, y protocolos de mutex contra la inversión de prioridades.
+          </p>
+        </header>
+
+        <section class="topic-section" id="sec-planificacion-tr">
+          <h2><span>1. Políticas de Planificación de Tiempo Real en POSIX (Págs. 3–7)</span><span class="pill">sched.h</span></h2>
+          <div class="short">
+            Linux ofrece 99 niveles de prioridad de tiempo real (de <strong>1 a 99</strong>, donde 99 es la máxima prioridad) para las políticas expulsivas <code>SCHED_FIFO</code> (FIFO a igual prioridad) y <code>SCHED_RR</code> (Round-Robin con rodaja de tiempo a igual prioridad), mientras que <code>SCHED_OTHER</code> gestiona los procesos convencionales de tiempo compartido con prioridad 0.
+          </div>
+          <div class="formula">
+            Secuencia obligatoria de configuración en atributos de hebra (Págs. 4–5):<br/>
+            pthread_attr_init(&amp;attr);<br/>
+            pthread_attr_setinheritsched(&amp;attr, PTHREAD_EXPLICIT_SCHED); /* Obligatorio en Linux */<br/>
+            pthread_attr_setschedpolicy(&amp;attr, SCHED_FIFO);<br/>
+            param.sched_priority = 1;<br/>
+            pthread_attr_setschedparam(&amp;attr, &amp;param);
+          </div>
+          <div class="warn">
+            <strong class="tag">Precaución al Crear Varias Hebras de Tiempo Real desde main (Pág. 6)</strong>
+            Si <code>main()</code> crea en bucle varias hebras con más prioridad que la propia hebra <code>main</code>, tras el primer <code>pthread_create</code> la nueva hebra expulsará inmediatamente a <code>main</code> y no se crearán las demás hasta que acabe la primera. <strong>Solución:</strong> elevar antes la prioridad de la hebra <code>main</code> con <code>pthread_setschedparam(pthread_self(), SCHED_RR, &amp;param);</code>.
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-memoria-senales">
+          <h2><span>2. Bloqueo de Memoria Virtual y Señales de Tiempo Real (Págs. 8–16)</span><span class="pill">sys/mman.h</span></h2>
+          <div class="grid-2">
+            <div class="card" style="margin-bottom:0;">
+              <span class="pill accent">BLOQUEO EN MEMORIA FÍSICA (Págs. 8–9)</span>
+              <p style="font-size:0.88rem;">La paginación bajo demanda y el <em>swap</em> introducen fallos de página impredecibles. Con <code>&lt;sys/mman.h&gt;</code> anclamos páginas en RAM física mediante <code>mlock(addr, len)</code> / <code>munlock(addr, len)</code> (ajustando <code>addr</code> al múltiplo de <code>sysconf(_SC_PAGE_SIZE)</code>) o bloqueando todo el espacio del proceso con <code>mlockall(MCL_CURRENT | MCL_FUTURE)</code>.</p>
+            </div>
+            <div class="card" style="margin-bottom:0;">
+              <span class="pill sig">SEÑALES DE TIEMPO REAL (Págs. 10–16)</span>
+              <p style="font-size:0.88rem;">Comprenden el rango <code>SIGRTMIN</code> a <code>SIGRTMAX</code>: <strong>se encolan</strong> (no se pierden si llegan varias seguidas), permiten adjuntar un entero o puntero con <code>sigqueue(pid, sig, union sigval)</code> y <strong>se entregan por orden de prioridad: el número de señal más bajo (<code>SIGRTMIN</code>) tiene más prioridad</strong>.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-relojes-normalizar">
+          <h2><span>3. Tareas Periódicas con <code>clock_nanosleep</code> y Normalización de <code>timespec</code> (Págs. 17–20)</span><span class="pill">time.h</span></h2>
+          <div class="short">
+            Para ejecutar una tarea periódica sin deriva acumulativa se lee el instante inicial con <code>clock_gettime(CLOCK_MONOTONIC, &amp;next_activation)</code> y en cada iteración se suma el periodo, se normaliza la estructura <code>struct timespec</code> (garantizando <code>0 ≤ tv_nsec &lt; 10<sup>9</sup></code>) y se duerme hasta el tiempo absoluto con <code>clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &amp;next_activation, NULL)</code>.
+          </div>
+
+          <div class="lab">
+            <div class="lab-header">
+              <div class="lab-title">🎛️ Verificador Interactivo de la Función <code>normalizar(struct timespec *tm)</code> (Pág. 20)</div>
+              <span class="pill accent">Cálculo Exacto</span>
+            </div>
+            <div class="controls-grid">
+              <div class="ctrl-field">
+                <label for="normSec"><span>Segundos Iniciales (tv_sec)</span><span id="normSecVal">10 s</span></label>
+                <input type="range" id="normSec" min="-5" max="30" step="1" value="10" />
+              </div>
+              <div class="ctrl-field">
+                <label for="normNsec"><span>Nanosegundos (tv_nsec)</span><span id="normNsecVal">2,350,000,000 ns</span></label>
+                <input type="range" id="normNsec" min="-1500000000" max="3500000000" step="50000000" value="2350000000" />
+              </div>
+            </div>
+            <div class="ro-grid">
+              <div class="ro good"><span class="ro-label">tv_sec Normalizado</span><div class="ro-val" id="roNormSec">12 s</div></div>
+              <div class="ro good"><span class="ro-label">tv_nsec Normalizado</span><div class="ro-val" id="roNormNsec">350,000,000 ns</div></div>
+              <div class="ro"><span class="ro-label">Invariante assert() Pág. 20</span><div class="ro-val" id="roNormAssert">✓ CUMPLIDO</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-mutex-tr">
+          <h2><span>4. Mutex de Tiempo Real e Inversión de Prioridades (Págs. 21–22)</span><span class="pill">Protocolos RT</span></h2>
+          <div class="scroll">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th>Protocolo (<code>pthread_mutexattr_setprotocol</code>)</th>
+                  <th>Comportamiento frente a la Inversión de Prioridades</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><code>PTHREAD_PRIO_NONE</code></strong></td>
+                  <td>Comportamiento estándar sin protección: una hebra de prioridad media puede expulsar a la de baja prioridad que retiene el recurso, bloqueando indirectamente a la de alta prioridad.</td>
+                </tr>
+                <tr class="hi">
+                  <td><strong><code>PTHREAD_PRIO_INHERIT</code></strong></td>
+                  <td><strong>Herencia de Prioridad:</strong> Cuando una hebra de alta prioridad se bloquea en el mutex, la hebra de baja prioridad que lo posee hereda temporalmente su prioridad alta hasta liberar el mutex.</td>
+                </tr>
+                <tr class="hi">
+                  <td><strong><code>PTHREAD_PRIO_PROTECT</code></strong></td>
+                  <td><strong>Techo de Prioridad Inmediato (<code>prioceiling</code>):</strong> Configurado con <code>pthread_mutexattr_setprioceiling(&amp;attr, prioceiling)</code>; cualquier hebra que adquiera el mutex eleva automáticamente su prioridad al techo fijado.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-codigo-t7">
+          <h2><span>5. Código Ejecutable: Tarea Periódica de Tiempo Real con <code>TIMER_ABSTIME</code> y <code>normalizar()</code></span><span class="pill ok">C11 POSIX</span></h2>
+          <div class="code-execution-box" data-src="../src-code/tema-07/tarea_periodica_tr.c" data-lang="c"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/code-runner.js"></script>
+  <script>
+    (function () {
+      "use strict";
+      function updateNormLab() {
+        const sEl = document.getElementById("normSec");
+        const nEl = document.getElementById("normNsec");
+        if (!sEl || !nEl) return;
+        let sec = parseInt(sEl.value, 10);
+        let nsec = parseInt(nEl.value, 10);
+
+        document.getElementById("normSecVal").textContent = sec + " s";
+        document.getElementById("normNsecVal").textContent = nsec.toLocaleString() + " ns";
+
+        const BILLION = 1000000000;
+        if (nsec >= BILLION) {
+          sec += Math.trunc(nsec / BILLION);
+          nsec = nsec % BILLION;
+        } else if (nsec <= -BILLION) {
+          sec += -Math.trunc(-nsec / BILLION);
+          nsec = -(-nsec % BILLION);
+        }
+        if (sec > 0 && nsec < 0) {
+          nsec += BILLION;
+          sec -= 1;
+        } else if (sec < 0 && nsec > 0) {
+          nsec -= BILLION;
+          sec += 1;
+        }
+
+        document.getElementById("roNormSec").textContent = sec + " s";
+        document.getElementById("roNormNsec").textContent = nsec.toLocaleString() + " ns";
+      }
+      ["normSec", "normNsec"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener("input", updateNormLab);
+      });
+      updateNormLab();
+    })();
+  </script>
+</body>
+</html>

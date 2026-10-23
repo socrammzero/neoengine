@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 6: La Concurrencia en Otros Lenguajes y FreeRTOS | Programación Concurrente</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-tema-06" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice del Tema 6">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>⚡ PC · Tema 06</span></div>
+        <span class="sidebar-brand-badge">Págs. 1–74</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Índice del Tema 6</div>
+      <nav aria-label="Secciones del Tema 6">
+        <a href="#sec-java" class="active"><span>1. Concurrencia en Java</span><span>01</span></a>
+        <a href="#sec-csharp" class="vertical"><span>2. Concurrencia en C# / .NET</span><span>02</span></a>
+        <a href="#sec-freertos-tareas"><span>3. FreeRTOS: Kernel y Tareas</span><span>03</span></a>
+        <a href="#sec-freertos-colas"><span>4. Colas, Mutex, Heap e ISR</span><span>04</span></a>
+        <a href="#sec-codigo-t6"><span>5. Monitor Buffer Acotado Java</span><span>▶</span></a>
+      </nav>
+      <div class="sidebar-section-label">Ruta de la Asignatura</div>
+      <nav>
+        <a href="../index.html"><span>← Panel de la Asignatura</span></a>
+        <a href="./tema-05.html"><span>← Tema 5: Eventos y Señales</span></a>
+        <a href="./tema-07.html"><span>Siguiente: Tema 7 (Tiempo Real) →</span></a>
+        <a href="../ejercicios/practica-tema-06.html"><span>🧪 Ir a Práctica Tema 6</span></a>
+      </nav>
+      <div class="sidebar-exam-notice">
+        <strong>Aviso de Examen (Pág. 68)</strong>
+        En FreeRTOS, a diferencia de los semáforos binarios convencionales, los <strong>mutex</strong> creados con <code>xSemaphoreCreateMutex()</code> incorporan un mecanismo de <strong>herencia de prioridad</strong>.
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Tema 6: Java, C# (.NET) y FreeRTOS</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" id="markTopicReadBtn" class="btn-top">○ Marcar como Leído</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker"><span>TEMA 06 · DIAPOSITIVAS OFICIALES PÁGS. 1–74</span><span>·</span><span>JAVA, C#/.NET Y FREERTOS</span></div>
+          <h1>Tema 6: La Concurrencia en Otros Lenguajes y Sistemas Empotrados FreeRTOS</h1>
+          <p class="lead">
+            Mecanismos de alto nivel orientados a objetos en <strong>Java</strong> (<code>Thread</code>, <code>synchronized</code>, <code>wait/notifyAll</code>) y <strong>C# / .NET CLR</strong> (<code>ThreadStart</code>, <code>Monitor</code>, <code>lock</code>, <code>AutoResetEvent</code>), junto al microkernel de tiempo real <strong>FreeRTOS</strong> para sistemas empotrados y Arduino (tareas, retardos absolutos, colas, semáforos/mutex con herencia de prioridad, esquemas <code>heap_1..5</code> e interrupciones).
+          </p>
+        </header>
+
+        <section class="topic-section" id="sec-java">
+          <h2><span>1. Concurrencia y Monitores en Java (Págs. 3–28)</span><span class="pill">Java Monitors</span></h2>
+          <div class="short">
+            En Java las hebras se crean heredando de <code>java.lang.Thread</code> o implementando la interfaz <code>Runnable</code>, e inician su ejecución llamando a <code>start()</code> (que invoca a <code>run()</code>). La exclusión mutua sigue el modelo de monitores mediante <code>synchronized</code> (en métodos o bloques sobre objetos) y la sincronización condicional usa <code>wait()</code>, <code>notify()</code> y <code>notifyAll()</code> siempre dentro de un bucle <code>while (!condicion)</code>.
+          </div>
+          <ul>
+            <li><strong>Regla de Instancia (Págs. 14–15):</strong> Sólo una hebra puede estar ejecutando a la vez un método o bloque <code>synchronized</code> de una misma instancia de objeto, pero otras hebras pueden invocar simultáneamente métodos <em>no sincronizados</em> de esa misma instancia.</li>
+            <li><strong>Control de Terminación (Págs. 8–10):</strong> Puede realizarse mediante espera activa con <code>while (s[0].isAlive() || s[1].isAlive());</code> o de forma bloqueante eficiente mediante <code>join()</code>.</li>
+          </ul>
+        </section>
+
+        <section class="topic-section" id="sec-csharp">
+          <h2><span>2. Concurrencia en C# y Plataforma .NET / CLR (Págs. 29–46)</span><span class="pill">C# / .NET</span></h2>
+          <div class="scroll">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th>Componente C# / .NET</th>
+                  <th>Primitiva / Clase</th>
+                  <th>Función Técnica (Págs. 34–45)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Creación de Hebras</strong></td>
+                  <td><code>ThreadStart</code> + <code>Thread</code></td>
+                  <td><code>ThreadStart ts = new ThreadStart(t.Run); Thread th = new Thread(ts); th.Start(); th.Join();</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Prioridades</strong></td>
+                  <td><code>ThreadPriority</code></td>
+                  <td><code>Highest</code>, <code>AboveNormal</code>, <code>Normal</code>, <code>BelowNormal</code>, <code>Lowest</code>.</td>
+                </tr>
+                <tr class="hi">
+                  <td><strong>Exclusión y Condición</strong></td>
+                  <td><code>Monitor</code> / <code>lock (this)</code></td>
+                  <td><code>Monitor.Enter(this)</code> / <code>Monitor.Exit(this)</code> (equivalente a <code>lock(this) { ... }</code>) y coordinación con <code>Monitor.Wait(this)</code> / <code>Monitor.Pulse(this)</code> / <code>PulseAll</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong>Eventos y Atómicas</strong></td>
+                  <td><code>AutoResetEvent</code>, <code>Interlocked</code></td>
+                  <td><code>mievento.WaitOne()</code> y <code>mievento.Set()</code>; operaciones atómicas ligeras con <code>Interlocked.Increment(ref i)</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-freertos-tareas">
+          <h2><span>3. FreeRTOS: Arquitectura del Kernel y Gestión de Tareas (Págs. 47–60)</span><span class="pill">FreeRTOS Kernel</span></h2>
+          <div class="short">
+            El núcleo de FreeRTOS está compuesto por sólo <strong>3 ficheros C</strong> en <code>FreeRTOS/Source</code>: <code>list.c</code>, <code>queue.c</code> y <code>tasks.c</code>, configurados mediante <code>FreeRTOSConfig.h</code>. Planifica tareas (<em>Tasks</em>) de forma apropiativa por prioridades (de <code>0</code> a <code>configMAX_PRIORITIES - 1</code>, siendo 4 en Arduino) y aplica Round-Robin entre tareas de igual prioridad.
+          </div>
+          <div class="formula">
+            Creación: BaseType_t xTaskCreate(pvTaskCode, pcName, usStackDepth, pvParameters, uxPriority, pxCreatedTask);<br/>
+            Retardo Relativo: vTaskDelay(250 / portTICK_PERIOD_MS);<br/>
+            Espera Absoluta Periódica: xLastWakeTime = xTaskGetTickCount(); &nbsp;→&nbsp; vTaskDelayUntil(&amp;xLastWakeTime, (250 / portTICK_PERIOD_MS));
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-freertos-colas">
+          <h2><span>4. Colas, Mutex, los 5 Esquemas de Memoria e Interrupciones en FreeRTOS (Págs. 61–73)</span><span class="pill sig">Sistemas Empotrados</span></h2>
+          <div class="grid-2">
+            <div>
+              <h3>Colas, Semáforos y Rutinas ISR</h3>
+              <ul>
+                <li><strong>Colas por copia de valor (Págs. 61–67):</strong> <code>xQueueCreate(len, size)</code>, <code>xQueueSendToBack</code>, <code>xQueueSendToFront</code>, <code>xQueueReceive</code>, <code>xQueuePeek</code> y <code>uxQueueMessagesWaiting</code>.</li>
+                <li><strong>Mutex con Herencia de Prioridad (Págs. 68–70):</strong> <code>xSemaphoreCreateMutex()</code>, tomado con <code>xSemaphoreTake(xMutex, portMAX_DELAY)</code> y liberado con <code>xSemaphoreGive(xMutex)</code>.</li>
+                <li><strong>Interrupciones Seguras (Págs. 72–73):</strong> Dentro de una ISR se usan versiones terminadas en <code>FromISR</code> como <code>xQueueSendToBackFromISR(xQueue, &amp;num, &amp;xHigherPriorityTaskWoken)</code> y si despierta a una tarea más prioritaria se invoca <code>vPortYield()</code>.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Los 5 Esquemas de Memoria (<code>MemMang</code>, Pág. 71)</h3>
+              <ul>
+                <li><strong><code>heap_1.c</code>:</strong> Asignar sin permitir liberación (<code>pvPortFree</code> no hace nada).</li>
+                <li><strong><code>heap_2.c</code>:</strong> Asignar y liberar por mejor ajuste, pero <em>sin compactación</em> de bloques contiguos.</li>
+                <li><strong><code>heap_3.c</code>:</strong> Wrappers seguros (<em>thread-safe</em>) alrededor de <code>malloc()</code> y <code>free()</code> estándar (usado en el porting de Arduino).</li>
+                <li><strong><code>heap_4.c</code>:</strong> Asignar y liberar <strong>con compactación</strong> (fusión) de bloques libres adyacentes.</li>
+                <li><strong><code>heap_5.c</code>:</strong> Como <code>heap_4</code>, pero permite abarcar múltiples regiones de RAM física no contiguas.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-codigo-t6">
+          <h2><span>5. Ejemplo Oficial Ejecutable: Monitor de Buffer Acotado en Java (Págs. 23–28)</span><span class="pill ok">Java Monitor</span></h2>
+          <div class="code-execution-box" data-src="../src-code/tema-06/BufferAcotado.java" data-lang="java"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/code-runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+[
+  {
+    "id": "nav-home",
+    "title": "Dashboard Principal — Engineering Workbench",
+    "category": "Vista Global",
+    "subject": "Plataforma",
+    "keywords": ["inicio", "dashboard", "progreso", "programacion concurrente", "info.md"],
+    "path": "index.html"
+  },
+  {
+    "id": "pc-idx",
+    "title": "Programación Concurrente — Panel Maestro y Reglas de Oro (INFO.md)",
+    "category": "Asignatura Activa (3º S1)",
+    "subject": "Programación Concurrente",
+    "keywords": ["programacion concurrente", "info.md", "volatile", "sem_t", "pthread_create", "ids"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/index.html"
+  },
+  {
+    "id": "pc-t1",
+    "title": "Tema 01: Introducción a la Programación Concurrente",
+    "category": "Teoría Interactiva",
+    "subject": "Programación Concurrente",
+    "keywords": ["interleaving", "entrelazado", "orden parcial", "seccion critica", "exclusion mutua", "taquillas", "str", "tiempo real"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-01.html"
+  },
+  {
+    "id": "pc-t2",
+    "title": "Tema 02: Representación de Procesos y Soporte de la Concurrencia (Pthreads)",
+    "category": "Teoría Interactiva",
+    "subject": "Programación Concurrente",
+    "keywords": ["unix", "pthreads", "posix", "pthread_create", "pthread_join", "pthread_exit", "joinable", "detached", "ids"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-02.html"
+  },
+  {
+    "id": "pc-t3",
+    "title": "Tema 03: Comunicación y Sincronización en Memoria Compartida (Espera Activa, Semáforos y Monitores)",
+    "category": "Teoría Interactiva",
+    "subject": "Programación Concurrente",
+    "keywords": ["jardines", "peterson", "panaderia", "lamport", "semaforos", "sem_wait", "sem_post", "productor consumidor", "lectores escritores", "filosofos", "barbero", "monitores", "test_and_set"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-03.html"
+  },
+  {
+    "id": "pc-t4",
+    "title": "Tema 04: Comunicación mediante Paso de Mensajes (Colas POSIX y Espera Selectiva)",
+    "category": "Teoría Interactiva",
+    "subject": "Programación Concurrente",
+    "keywords": ["mqueue", "mq_open", "mq_send", "mq_receive", "mq_unlink", "select", "fd_set", "guardas", "when", "cita", "rendezvous"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-04.html"
+  },
+  {
+    "id": "pc-t5",
+    "title": "Tema 05: Programación Dirigida por Eventos y Señales POSIX",
+    "category": "Teoría Interactiva",
+    "subject": "Programación Concurrente",
+    "keywords": ["eventos", "dispatcher", "mom", "publish subscribe", "signal", "sigaction", "pthread_sigmask", "sigwait", "sigwaitinfo", "sigqueue", "sigrtmin"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-05.html"
+  },
+  {
+    "id": "pc-t6",
+    "title": "Tema 06: La Concurrencia en Otros Lenguajes (Java, C#/.NET) y FreeRTOS",
+    "category": "Teoría Interactiva",
+    "subject": "Programación Concurrente",
+    "keywords": ["java", "synchronized", "wait", "notifyall", "c#", "monitor", "lock", "autoresetevent", "freertos", "xtaskcreate", "vtaskdelayuntil", "xqueuecreate", "arduino"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-06.html"
+  },
+  {
+    "id": "pc-t7",
+    "title": "Tema 07: Programación de Sistemas de Tiempo Real en POSIX",
+    "category": "Teoría Interactiva",
+    "subject": "Programación Concurrente",
+    "keywords": ["sched_fifo", "sched_rr", "mlock", "mlockall", "clock_monotonic", "clock_nanosleep", "timer_abstime", "normalizar", "timespec", "prio_inherit", "prio_protect", "prioceiling"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-07.html"
+  },
+  {
+    "id": "pc-e1",
+    "title": "Práctica Tema 01: Entrelazado, Trazas e Instrucciones Atómicas",
+    "category": "Laboratorio de Ejercicios",
+    "subject": "Programación Concurrente",
+    "keywords": ["ejercicios tema 1", "trazas", "interleaving", "factorial", "busqueda lineal"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-01.html"
+  },
+  {
+    "id": "pc-e2",
+    "title": "Práctica Tema 02: Creación Segura de Hebras Pthreads y Paso de Parámetros",
+    "category": "Laboratorio de Ejercicios",
+    "subject": "Programación Concurrente",
+    "keywords": ["ejercicios tema 2", "pthreads", "ids", "join", "control de errores"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-02.html"
+  },
+  {
+    "id": "pc-e3",
+    "title": "Práctica Tema 03: Peterson, Panadería de Lamport, Semáforos y Problemas Clásicos",
+    "category": "Laboratorio de Ejercicios",
+    "subject": "Programación Concurrente",
+    "keywords": ["ejercicios tema 3", "peterson", "lamport", "productor consumidor", "lectores escritores", "filosofos"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-03.html"
+  },
+  {
+    "id": "pc-e4",
+    "title": "Práctica Tema 04: Colas de Mensajes POSIX (mq_*) y Espera Selectiva (select)",
+    "category": "Laboratorio de Ejercicios",
+    "subject": "Programación Concurrente",
+    "keywords": ["ejercicios tema 4", "mqueue", "select", "fd_isset", "jardines"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-04.html"
+  },
+  {
+    "id": "pc-e5",
+    "title": "Práctica Tema 05: Máscaras de Señales, sigaction y Espera Síncrona sigwait",
+    "category": "Laboratorio de Ejercicios",
+    "subject": "Programación Concurrente",
+    "keywords": ["ejercicios tema 5", "señales", "sigwait", "sigwaitinfo", "pthread_sigmask"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-05.html"
+  },
+  {
+    "id": "pc-e6",
+    "title": "Práctica Tema 06: Monitores en Java, Delegados C# y Tareas/Colas en FreeRTOS",
+    "category": "Laboratorio de Ejercicios",
+    "subject": "Programación Concurrente",
+    "keywords": ["ejercicios tema 6", "java", "c#", "freertos", "heap_1", "heap_4", "fromisr"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-06.html"
+  },
+  {
+    "id": "pc-e7",
+    "title": "Práctica Tema 07: Planificación SCHED_FIFO/RR, mlockall, TIMER_ABSTIME y Mutex TR",
+    "category": "Laboratorio de Ejercicios",
+    "subject": "Programación Concurrente",
+    "keywords": ["ejercicios tema 7", "tiempo real", "normalizar", "clock_nanosleep", "inversion de prioridad"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-07.html"
+  },
+  {
+    "id": "pc-ex",
+    "title": "Simulador de Examen Final: Programación Concurrente (21 Preguntas Oficiales)",
+    "category": "Simulador Test",
+    "subject": "Programación Concurrente",
+    "keywords": ["examen", "test", "evaluacion", "programacion concurrente", "penalizacion"],
+    "path": "cursos/anio-3/semestre-1/programacion-concurrente/evaluacion/examen-test.html"
+  }
+]

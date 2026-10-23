@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Práctica Tema 2: Creación Segura de Hebras Pthreads | Programación Concurrente</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-practica-02" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice Práctica Tema 2">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>🧪 PC · Práctica T2</span></div>
+        <span class="sidebar-brand-badge" id="exerciseProgressCounter">0 / 5 Resueltos</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Índice de Problemas</div>
+      <nav>
+        <a href="#ex-01" class="active"><span>Ej 01. Estándar IEEE Pthreads</span><span class="pill">Traza</span></a>
+        <a href="#ex-02"><span>Ej 02. Atributo Joinable</span><span class="pill">Traza</span></a>
+        <a href="#ex-03"><span>Ej 03. Retorno Exitoso POSIX</span><span class="pill">Cálculo</span></a>
+        <a href="#ex-04"><span>Ej 04. Desreferencia demiId</span><span class="pill">Traza</span></a>
+        <a href="#ex-05"><span>Ej 05. Patrón Canónico Hebras</span><span class="pill accent">Código</span></a>
+      </nav>
+      <div class="sidebar-section-label">Navegación</div>
+      <nav>
+        <a href="../index.html"><span>← Panel de la Asignatura</span></a>
+        <a href="../teoria/tema-02.html"><span>📘 Volver a Teoría Tema 2</span></a>
+        <a href="./practica-tema-01.html"><span>← Práctica Tema 1</span></a>
+        <a href="./practica-tema-03.html"><span>Siguiente: Práctica Tema 3 →</span></a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Práctica Tema 2</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" id="allSol" class="btn-top">▼ Mostrar Todas las Soluciones</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker"><span>HOJA DE PROBLEMAS · TEMA 2 (PÁGS. 1–41 PDF) + INFO.MD</span><span>·</span><span>PTHREADS</span></div>
+          <h1>Práctica Tema 2: Creación y Gestión Segura de Hebras en POSIX</h1>
+          <p class="lead">
+            Ejercicios sobre el modelo de procesos y hebras en UNIX, estándar IEEE POSIX 1003.1c, ciclo de vida y cumplimiento estricto de las directivas de <code>INFO.md</code> (Sección 3.1).
+          </p>
+        </header>
+
+        <section class="exercise-card" id="ex-01" data-ex-id="pc-t2-e1" data-difficulty="baja" data-type="trace" data-answer="1003.1c|POSIX.4a" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 01 · Tema 2, Págs. 17 y 20</span><span class="pill">Dificultad: Baja</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Identificador del Estándar IEEE POSIX para Hebras (Pthreads)</h3>
+          <p>Según la página 17 del Tema 2, ¿cuál es el código numérico del estándar IEEE POSIX (año 1995) que especifica la interfaz de programación de hebras Pthreads (ej. <code>1003.1c</code>)?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:220px;" placeholder="Ej. 1003.1c" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 2, Págs. 17 y 20)</summary>
+            <p>El estándar es <strong>IEEE POSIX 1003.1c</strong> (también denominado <strong>POSIX.4a</strong> en la tabla de estándares base de la página 20).</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-02" data-ex-id="pc-t2-e2" data-difficulty="media" data-type="trace" data-answer="PTHREAD_CREATE_JOINABLE" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 02 · Tema 2, Págs. 37 y 39</span><span class="pill">Dificultad: Media</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Constante de Atributo para Permitir <code>pthread_join</code></h3>
+          <p>Escribe el nombre exacto de la constante de POSIX que se pasa a <code>pthread_attr_setdetachstate(&amp;attr, ...)</code> para indicar explícitamente que una hebra es acoplable mediante <code>pthread_join</code> (Tema 2, págs. 37 y 39):</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:300px;" placeholder="Constante POSIX" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 2, Págs. 37 y 39)</summary>
+            <p>La constante es <code>PTHREAD_CREATE_JOINABLE</code> (frente a <code>PTHREAD_CREATE_DETACHED</code>).</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-03" data-ex-id="pc-t2-e3" data-difficulty="baja" data-type="calc" data-answer="0" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 03 · INFO.md Sección 3.1</span><span class="pill">Dificultad: Baja</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Valor de Retorno Exitoso en <code>pthread_create</code> y <code>pthread_join</code></h3>
+          <p>¿Qué valor numérico entero devuelven las funciones <code>pthread_create</code> y <code>pthread_join</code> cuando se ejecutan con éxito sin errores?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:200px;" placeholder="Valor entero" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (INFO.md Sección 3.1)</summary>
+            <p>Devuelven exactamente <strong>0</strong> en caso de éxito, y un código de error distinto de cero en caso de fallo (por eso se comprueba <code>if (pthread_create(...) != 0)</code>).</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-04" data-ex-id="pc-t2-e4" data-difficulty="media" data-type="trace" data-answer="*(int *)param|*((int *)param)" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 04 · INFO.md Sección 3.1</span><span class="pill">Dificultad: Media</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Extracción Canónica del Identificador en <code>void *HTarea(void *param)</code></h3>
+          <p>En el patrón canónico de <code>INFO.md</code> (línea 59), ¿qué expresión en C se asigna a <code>int miId = ...;</code> para recuperar el entero apuntado por <code>void *param</code>?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:260px;" placeholder="Ej. *(int *)param" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (INFO.md Línea 59)</summary>
+            <div class="formula">int miId = *(int *)param;</div>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-05" data-ex-id="pc-t2-e5" data-difficulty="alta" data-type="code">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 05 · Programación C11 POSIX (INFO.md 3.1)</span><span class="pill">Dificultad: Alta</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Verificación del Patrón Canónico de Creación y Recolección de Hebras</h3>
+          <p>Ejecuta y valida el código canónico de <code>creacion_hebras_segura.c</code> asegurándote de que asigna <code>ids[i] = i;</code> antes de <code>pthread_create</code> y comprueba errores tanto en la creación como en el <code>pthread_join</code>:</p>
+          <div class="code-execution-box" data-src="../src-code/tema-02/creacion_hebras_segura.c" data-lang="c"></div>
+          <button type="button" class="btn-action ex-verify-code-btn">✓ Compilar, Ejecutar y Marcar Ejercicio Resuelto</button>
+          <div class="ex-feedback" style="margin-top:0.75rem;"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/code-runner.js"></script>
+  <script src="../../../../../assets/js/exercise-engine.js"></script>
+</body>
+</html>

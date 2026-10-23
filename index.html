@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es" data-root="./">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Plataforma Web Interactiva de Estudio, Laboratorio de Código C/POSIX y Simulación Técnica." />
+  <title>Engineering Workbench — Plataforma Interactiva de Estudio (Programación Concurrente)</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="stylesheet" href="./assets/css/app.css" />
+</head>
+<body data-page-id="dashboard-root" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice y navegación global">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>⚡ EngWorkbench</span></div>
+        <span class="sidebar-brand-badge">PWA v2.5</span>
+      </div>
+
+      <div class="sidebar-selectors">
+        <label for="sidebarSubjectSelect" style="font-size:0.72rem;font-family:var(--f-mono);color:var(--muted);text-transform:uppercase;">Asignatura Activa (3º · S1)</label>
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Seleccionar asignatura"></select>
+      </div>
+
+      <div class="sidebar-section-label">Índice del Panel</div>
+      <nav aria-label="Secciones del dashboard">
+        <a href="#sec-foco" class="active"><span>1. Programación Concurrente</span><span class="pill accent">7 Temas</span></a>
+        <a href="#sec-reglas-info"><span>2. Reglas de Oro (INFO.md)</span><span>⚠️</span></a>
+        <a href="#sec-simulador"><span>3. Simulador Interleaving</span><span>📈</span></a>
+        <a href="#sec-sandbox"><span>4. Sandbox C11 POSIX en Vivo</span><span>▶</span></a>
+        <a href="#sec-mapa"><span>5. Mapa de Asignaturas</span><span>📚</span></a>
+        <a href="#sec-analiticas"><span>6. Analíticas e Historial</span><span>📊</span></a>
+      </nav>
+
+      <div class="sidebar-section-label">Temario Programación Concurrente</div>
+      <nav aria-label="Temas de Programación Concurrente">
+        <a href="./cursos/anio-3/semestre-1/programacion-concurrente/index.html"><span>⚡ Panel de la Asignatura</span><span>→</span></a>
+        <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-01.html"><span>T1. Introducción y STR</span><span>→</span></a>
+        <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-02.html"><span>T2. Procesos y Pthreads</span><span>→</span></a>
+        <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-03.html"><span>T3. Memoria Compartida</span><span>→</span></a>
+        <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-04.html"><span>T4. Paso de Mensajes</span><span>→</span></a>
+        <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-05.html"><span>T5. Eventos y Señales</span><span>→</span></a>
+        <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-06.html"><span>T6. Java, C# y FreeRTOS</span><span>→</span></a>
+        <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-07.html"><span>T7. Sistemas Tiempo Real</span><span>→</span></a>
+        <a href="./cursos/anio-3/semestre-1/programacion-concurrente/evaluacion/examen-test.html"><span>⏱ Simulador Examen (21)</span><span>→</span></a>
+      </nav>
+
+      <div class="sidebar-exam-notice">
+        <strong>Directiva Crítica INFO.md</strong>
+        Prohibido <code>volatile</code>, prohibido <code>pthread_mutex_lock</code> (usar <code>sem_t mutex</code>) y prohibido <code>(void*)(intptr_t)i</code> (usar <code>&amp;ids[i]</code>).
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Mostrar u ocultar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <span class="current">Engineering Workbench</span>
+            <span class="sep">/</span>
+            <span>3er Año · 1er Semestre · Programación Concurrente</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" class="cmd-trigger" aria-label="Abrir barra de comandos">
+            <span>⌕ Buscar tema, algoritmo o primitiva POSIX...</span>
+            <kbd>Ctrl K</kbd>
+          </button>
+          <button type="button" id="themeToggle" class="btn-top" aria-label="Cambiar tema claro u oscuro">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker">
+            <span>PLATAFORMA INTERACTIVA DE ESTUDIO</span>
+            <span>·</span>
+            <span>FOCO ACTIVO: PROGRAMACIÓN CONCURRENTE (TEMAS 1 A 7)</span>
+          </div>
+          <h1>Engineering Workbench: Programación Concurrente y Sistemas de Tiempo Real</h1>
+          <p class="lead">
+            Entorno técnico interactivo construido bajo el estándar <code>html-maker</code> y las reglas estrictas de <code>INFO.md</code>. Incluye los 7 temas completos de teoría interactiva, 7 hojas de ejercicios paso a paso, 11 programas C11 POSIX y Java ejecutables en el navegador con auditor automático de reglas de examen, y simulador tipo test con penalización.
+          </p>
+          <div class="meta-pills">
+            <span class="pill accent">✓ 7 Temas Oficiales Completos</span>
+            <span class="pill ok">✓ Auditor INFO.md Integrado en Compilador</span>
+            <span class="pill sig">✓ 11 Archivos Reales en src-code/</span>
+            <span class="pill">Atajo Global: Ctrl + K</span>
+          </div>
+
+          <div class="ro-grid" style="margin-top:1.25rem;">
+            <div class="ro">
+              <span class="ro-label">Temas Estudiados</span>
+              <div class="ro-val" id="dashTopicsCount">0 / 7</div>
+            </div>
+            <div class="ro">
+              <span class="ro-label">Ejercicios Resueltos</span>
+              <div class="ro-val" id="dashExercisesCount">0 / 35</div>
+            </div>
+            <div class="ro good">
+              <span class="ro-label">Nota Media Simuladores</span>
+              <div class="ro-val" id="dashAvgExamScore">—</div>
+            </div>
+            <div class="ro">
+              <span class="ro-label">Simulacros Realizados</span>
+              <div class="ro-val" id="dashExamsCount">0</div>
+            </div>
+            <div class="ro">
+              <span class="ro-label">Scripts Editados en Vivo</span>
+              <div class="ro-val" id="dashSnippetsCount">0</div>
+            </div>
+          </div>
+        </header>
+
+        <!-- SECCIÓN 1: PROGRAMACIÓN CONCURRENTE (MÓDULO COMPLETO) -->
+        <section class="topic-section" id="sec-foco">
+          <h2>
+            <span>1. Asignatura Desplegada: Programación Concurrente (3er Año · 1er Semestre)</span>
+            <a href="./cursos/anio-3/semestre-1/programacion-concurrente/index.html" class="btn-action">Abrir Panel de la Asignatura →</a>
+          </h2>
+          <div class="short">
+            Accede directamente a cualquiera de los <strong>7 Temas de Teoría Interactiva</strong>, sus respectivas <strong>7 Hojas de Problemas Resueltos Paso a Paso</strong> o al <strong>Simulador de Examen Final</strong>.
+          </div>
+
+          <div class="grid-2">
+            <div class="card" style="margin-bottom:0;">
+              <span class="pill accent">TEORÍA INTERACTIVA (TEMAS 1 A 7)</span>
+              <h3 style="margin:0.6rem 0;">Cuadernos Interactivos con Simuladores SVG y Código Real</h3>
+              <div style="display:flex;flex-direction:column;gap:0.45rem;font-size:0.88rem;">
+                <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-01.html" class="btn-secondary" style="justify-content:space-between;">
+                  <span>📘 Tema 1: Introducción a la Programación Concurrente y STR</span><span>→</span>
+                </a>
+                <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-02.html" class="btn-secondary" style="justify-content:space-between;">
+                  <span>📘 Tema 2: Representación de Procesos y Hebras POSIX (Pthreads)</span><span>→</span>
+                </a>
+                <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-03.html" class="btn-secondary" style="justify-content:space-between;">
+                  <span>📘 Tema 3: Memoria Compartida (Peterson, Lamport, Semáforos, Monitores)</span><span>→</span>
+                </a>
+                <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-04.html" class="btn-secondary" style="justify-content:space-between;">
+                  <span>📘 Tema 4: Paso de Mensajes (Colas POSIX mqueue.h y Select)</span><span>→</span>
+                </a>
+                <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-05.html" class="btn-secondary" style="justify-content:space-between;">
+                  <span>📘 Tema 5: Programación Dirigida por Eventos y Señales POSIX</span><span>→</span>
+                </a>
+                <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-06.html" class="btn-secondary" style="justify-content:space-between;">
+                  <span>📘 Tema 6: Otros Lenguajes (Java, C#/.NET) y FreeRTOS</span><span>→</span>
+                </a>
+                <a href="./cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-07.html" class="btn-secondary" style="justify-content:space-between;">
+                  <span>📘 Tema 7: Programación de Sistemas de Tiempo Real en POSIX</span><span>→</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="card" style="margin-bottom:0;display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <span class="pill ok">LABORATORIO DE EJERCICIOS Y EVALUACIÓN</span>
+                <h3 style="margin:0.6rem 0;">Hojas de Problemas por Tema y Simulador Tipo Test</h3>
+                <div style="display:flex;flex-direction:column;gap:0.45rem;font-size:0.88rem;">
+                  <a href="./cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-01.html" class="btn-secondary" style="justify-content:space-between;">
+                    <span>🧪 Práctica Tema 1: Trazas de Entrelazado, Atomicidad y STR</span><span>→</span>
+                  </a>
+                  <a href="./cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-02.html" class="btn-secondary" style="justify-content:space-between;">
+                    <span>🧪 Práctica Tema 2: Creación Pthreads, Paso de &amp;ids[i] y Join</span><span>→</span>
+                  </a>
+                  <a href="./cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-03.html" class="btn-secondary" style="justify-content:space-between;">
+                    <span>🧪 Práctica Tema 3: Peterson, Panadería, Semáforos y Filósofos</span><span>→</span>
+                  </a>
+                  <a href="./cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-04.html" class="btn-secondary" style="justify-content:space-between;">
+                    <span>🧪 Práctica Tema 4: Colas mq_* y Espera Selectiva con select()</span><span>→</span>
+                  </a>
+                  <a href="./cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-05.html" class="btn-secondary" style="justify-content:space-between;">
+                    <span>🧪 Práctica Tema 5: Máscaras pthread_sigmask, sigaction y sigwait</span><span>→</span>
+                  </a>
+                  <a href="./cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-06.html" class="btn-secondary" style="justify-content:space-between;">
+                    <span>🧪 Práctica Tema 6: Monitores Java, C# y Tareas/Colas FreeRTOS</span><span>→</span>
+                  </a>
+                  <a href="./cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-07.html" class="btn-secondary" style="justify-content:space-between;">
+                    <span>🧪 Práctica Tema 7: SCHED_FIFO, mlockall, normalizar y Mutex TR</span><span>→</span>
+                  </a>
+                </div>
+              </div>
+              <div style="margin-top:0.85rem;padding-top:0.75rem;border-top:1px solid var(--line);">
+                <a href="./cursos/anio-3/semestre-1/programacion-concurrente/evaluacion/examen-test.html" class="btn-action" style="width:100%;justify-content:center;">
+                  ⏱ Iniciar Simulador de Examen Final (21 Preguntas Oficiales) →
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECCIÓN 2: DIRECTIVAS CRÍTICAS DE CODIFICACIÓN (INFO.MD) -->
+        <section class="topic-section" id="sec-reglas-info">
+          <h2>
+            <span>2. Directivas Críticas de Codificación para Examen (Estándar INFO.md)</span>
+            <span class="pill sig">Cumplimiento Estricto</span>
+          </h2>
+          <div class="warn">
+            <strong class="tag">Prohibiciones Estrictas que Invalidan un Ejercicio de Examen</strong>
+            <ol style="margin:0.4rem 0 0;padding-left:1.2rem;">
+              <li><strong>PROHIBICIÓN ABSOLUTA DE <code>volatile</code>:</strong> Jamás se utiliza la palabra clave <code>volatile</code> en ninguna variable, parámetro o puntero (ni en espera activa, ni en semáforos, ni en ninguna parte). Toda variable compartida se define como global estándar (<code>int</code>, <code>unsigned</code>, <code>long</code>).</li>
+              <li><strong>PROHIBIDO EL USO DE <code>pthread_mutex_lock</code>:</strong> Para exclusión mutua debe usarse obligatoriamente un semáforo <code>sem_t mutex</code> inicializado con <code>sem_init(&amp;mutex, 0, 1)</code> y operado con <code>sem_wait(&amp;mutex)</code> y <code>sem_post(&amp;mutex)</code>.</li>
+              <li><strong>PROHIBIDO EL USO DE <code>(void*)(intptr_t)i</code> EN <code>pthread_create</code>:</strong> Debe declararse <code>int ids[MAX]</code>, asignar en bucle <code>ids[i] = i;</code> y pasar <code>&amp;ids[i]</code> en <code>pthread_create(&amp;th[i], NULL, Tarea, &amp;ids[i])</code>.</li>
+              <li><strong>OBLIGATORIO COMPROBAR ERRORES:</strong> Toda llamada a <code>pthread_create</code> y <code>pthread_join</code> debe validar su valor devuelto (<code>if (pthread_create(...) != 0) { perror(...); exit(-1); }</code>).</li>
+            </ol>
+          </div>
+          <div class="formula">
+            Compilación Oficial POSIX: &nbsp; gcc -Wall -Wextra -std=c11 -pthread programa.c -o programa -lrt
+          </div>
+        </section>
+
+        <!-- SECCIÓN 3: SIMULADOR INTERACTIVO DE ENTRELAZADO (TEMA 1, PÁG. 16) -->
+        <section class="topic-section" id="sec-simulador">
+          <h2>
+            <span>3. Simulador Interactivo: Explosión Combinatoria de Trazas de Entrelazado (Interleaving)</span>
+            <span class="pill sig">Tema 1 · Pág. 16</span>
+          </h2>
+          <p>
+            Si el proceso <strong>P = p<sub>1</sub> → p<sub>2</sub> → … → p<sub>n</sub></strong> tiene <strong>n</strong> instrucciones atómicas y el proceso <strong>Q = q<sub>1</sub> → q<sub>2</sub> → … → q<sub>m</sub></strong> tiene <strong>m</strong> instrucciones atómicas, el número total de trazas posibles de <strong>P || Q</strong> conservando el orden parcial interno es:
+          </p>
+          <div class="formula">
+            N<sub>trazas</sub>(n, m) = (m + n)! / (m! · n!) &nbsp;&nbsp;|&nbsp;&nbsp; Para k procesos de n instrucciones: (k · n)! / (n!)<sup>k</sup>
+          </div>
+
+          <div class="lab">
+            <div class="lab-header">
+              <div class="lab-title">🎛️ Calculadora y Curva de Crecimiento de Trazas en P || Q</div>
+              <span class="pill accent">Interactivo en Vivo</span>
+            </div>
+            <div class="controls-grid">
+              <div class="ctrl-field">
+                <label for="simInstrN"><span>Instrucciones de P (n)</span><span id="simInstrNVal">2</span></label>
+                <input type="range" id="simInstrN" min="1" max="8" step="1" value="2" />
+              </div>
+              <div class="ctrl-field">
+                <label for="simInstrM"><span>Instrucciones de Q (m)</span><span id="simInstrMVal">3</span></label>
+                <input type="range" id="simInstrM" min="1" max="8" step="1" value="3" />
+              </div>
+            </div>
+            <div class="svgbox" id="dashInterleavingPlot"></div>
+            <div class="ro-grid">
+              <div class="ro good"><span class="ro-label">Total de Trazas Posibles P || Q</span><div class="ro-val" id="roTotalTraces">10 trazas</div></div>
+              <div class="ro"><span class="ro-label">Longitud de Cada Traza (n + m)</span><div class="ro-val" id="roTraceLen">5 pasos</div></div>
+              <div class="ro"><span class="ro-label">Condición de Corrección</span><div class="ro-val">100% de las trazas válidas</div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECCIÓN 4: SANDBOX DE CÓDIGO REAL EN EL DASHBOARD -->
+        <section class="topic-section" id="sec-sandbox">
+          <h2>
+            <span>4. Motor de Ejecución C11 POSIX con Auditor INFO.md en Vivo</span>
+            <span class="pill ok">Conectado a src-code/</span>
+          </h2>
+          <p>
+            Prueba en vivo el patrón canónico de <strong>Productor/Consumidor con Semáforos POSIX</strong> (<code>INFO.md</code> Sección 3.4). Si pruebas a escribir <code>volatile</code> o <code>pthread_mutex_lock</code> en el editor y pulsas <strong>▶ Compilar y Ejecutar</strong>, comprobarás cómo el auditor integrado detecta la infracción:
+          </p>
+          <div
+            class="code-execution-box"
+            data-src="./cursos/anio-3/semestre-1/programacion-concurrente/src-code/tema-03/productor_consumidor_sem.c"
+            data-lang="c"
+          ></div>
+        </section>
+
+        <!-- SECCIÓN 5: MAPA DE ASIGNATURAS DE LA CARRERA -->
+        <section class="topic-section" id="sec-mapa">
+          <h2>
+            <span>5. Mapa de Asignaturas por Año y Semestre</span>
+            <span class="pill">Plan de Estudio Real</span>
+          </h2>
+          <div class="filter-bar">
+            <div class="filter-group">
+              <button type="button" class="filter-btn" data-year-tab="all">Todos los Años</button>
+              <button type="button" class="filter-btn" data-year-tab="anio-1">1er Año</button>
+              <button type="button" class="filter-btn" data-year-tab="anio-2">2º Año</button>
+              <button type="button" class="filter-btn active" data-year-tab="anio-3">3er Año · 1er Semestre (Foco)</button>
+            </div>
+            <div style="min-width:240px;flex:1;max-width:340px;">
+              <input type="search" id="curriculumFilterInput" class="sidebar-select" placeholder="Filtrar asignatura..." aria-label="Filtrar asignaturas" />
+            </div>
+          </div>
+          <div id="curriculumMapContainer" class="grid-2"></div>
+        </section>
+
+        <!-- SECCIÓN 6: ANALÍTICAS E HISTORIAL -->
+        <section class="topic-section" id="sec-analiticas">
+          <h2>
+            <span>6. Registro de Evaluaciones y Persistencia Local</span>
+            <button type="button" id="resetStorageBtn" class="btn-secondary" style="font-size:0.76rem;padding:0.3rem 0.65rem;">↺ Reiniciar Progreso Local</button>
+          </h2>
+          <div class="scroll">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Asignatura</th>
+                  <th>Modalidad</th>
+                  <th>Aciertos</th>
+                  <th>Errores</th>
+                  <th>Calificación (sobre 10)</th>
+                </tr>
+              </thead>
+              <tbody id="globalExamHistoryBody">
+                <tr>
+                  <td colspan="6" style="text-align:center;color:var(--muted);">Realiza un simulacro en Programación Concurrente para visualizar el histórico de rendimiento.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="./assets/js/storage.js"></script>
+  <script src="./assets/js/core-shell.js"></script>
+  <script src="./assets/js/code-runner.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      function fact(k) {
+        let r = 1;
+        for (let i = 2; i <= k; i++) r *= i;
+        return r;
+      }
+
+      function combTraces(n, m) {
+        return Math.round(fact(n + m) / (fact(n) * fact(m)));
+      }
+
+      function renderInterleavingLab() {
+        const nEl = document.getElementById("simInstrN");
+        const mEl = document.getElementById("simInstrM");
+        if (!nEl || !mEl || !window.WorkbenchCharts) return;
+
+        const n = parseInt(nEl.value, 10);
+        const m = parseInt(mEl.value, 10);
+        const total = combTraces(n, m);
+
+        document.getElementById("simInstrNVal").textContent = n;
+        document.getElementById("simInstrMVal").textContent = m;
+        document.getElementById("roTotalTraces").textContent = total.toLocaleString() + " trazas";
+        document.getElementById("roTraceLen").textContent = (n + m) + " pasos";
+
+        window.WorkbenchCharts.plot(
+          "dashInterleavingPlot",
+          [
+            {
+              label: `Trazas (m+n)!/(m!n!) para n=${n} fijo`,
+              fn: (x) => combTraces(n, Math.round(x)),
+              color: "#3cc9b8"
+            }
+          ],
+          {
+            xMin: 1,
+            xMax: 8,
+            yMin: 0,
+            yMax: Math.max(50, combTraces(n, 8)),
+            xLabel: "Instrucciones del proceso Q (m)",
+            yLabel: "N.º de trazas posibles",
+            xDecimals: 0,
+            yDecimals: 0
+          }
+        );
+      }
+
+      ["simInstrN", "simInstrM"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener("input", renderInterleavingLab);
+      });
+      window.redrawCharts = renderInterleavingLab;
+
+      function refreshDashboardTelemetry() {
+        if (!window.WorkbenchStorage) return;
+        const stats = window.WorkbenchStorage.getStats();
+        const setTxt = (id, v) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = v;
+        };
+        setTxt("dashTopicsCount", `${stats.topicsCount} / 7`);
+        setTxt("dashExercisesCount", `${stats.exercisesCount} / 35`);
+        setTxt("dashAvgExamScore", stats.avgScore === "—" ? "—" : `${stats.avgScore} / 10`);
+        setTxt("dashExamsCount", stats.examsCount);
+        setTxt("dashSnippetsCount", stats.savedSnippetsCount);
+
+        const hist = window.WorkbenchStorage.getExamHistory();
+        const tbody = document.getElementById("globalExamHistoryBody");
+        if (tbody && hist.length > 0) {
+          tbody.innerHTML = hist
+            .slice(0, 10)
+            .map(
+              (h) => `
+              <tr class="${h.score >= 5 ? "hi" : ""}">
+                <td>${new Date(h.date).toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short" })}</td>
+                <td>${h.subjectName}</td>
+                <td>${h.mode.toUpperCase()}</td>
+                <td>${h.correct} / ${h.total}</td>
+                <td>${h.wrong}</td>
+                <td><strong>${Number(h.score).toFixed(2)} / 10</strong></td>
+              </tr>`
+            )
+            .join("");
+        }
+      }
+
+      const resetBtn = document.getElementById("resetStorageBtn");
+      if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+          if (window.WorkbenchStorage) {
+            window.WorkbenchStorage.resetAll();
+            refreshDashboardTelemetry();
+          }
+        });
+      }
+
+      window.addEventListener("workbench:storage-updated", refreshDashboardTelemetry);
+
+      let curriculumData = null;
+      let selectedYear = "anio-3";
+      let filterTerm = "";
+
+      function renderCurriculumCards() {
+        const container = document.getElementById("curriculumMapContainer");
+        if (!container || !curriculumData) return;
+
+        const q = filterTerm.trim().toLowerCase();
+        const years = curriculumData.years.filter(
+          (y) => selectedYear === "all" || y.id === selectedYear
+        );
+
+        let html = "";
+        years.forEach((yr) => {
+          yr.semesters.forEach((sem) => {
+            const matchedSubjects = sem.subjects.filter((s) => {
+              if (!q) return true;
+              return `${s.name} ${s.area}`.toLowerCase().includes(q);
+            });
+            if (matchedSubjects.length === 0) return;
+
+            html += `
+              <div class="card" style="margin-bottom:0;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+                  <span class="pill ${sem.isFocus ? "accent" : ""}">${yr.label} · ${sem.label}</span>
+                  <span class="pill">${sem.isFocus ? "Foco Activo" : "Planificado"}</span>
+                </div>
+                <h3 style="font-size:1.15rem;margin-bottom:0.75rem;">${yr.title} (${sem.label})</h3>
+                <div style="display:flex;flex-direction:column;gap:0.45rem;">
+                  ${matchedSubjects
+                    .map((sub, i) => {
+                      if (sub.path) {
+                        return `
+                          <a href="./${sub.path}" style="display:flex;justify-content:space-between;align-items:center;padding:0.55rem 0.75rem;border-radius:6px;background:var(--accent-soft);border:1px solid var(--accent);text-decoration:none;">
+                            <span><strong>0${i + 1}. ${sub.name}</strong> <span style="color:var(--muted);font-size:0.78rem;">(${sub.area})</span></span>
+                            <span class="pill ok">Activa →</span>
+                          </a>`;
+                      }
+                      return `
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.7rem;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);font-size:0.86rem;">
+                          <span><strong>0${i + 1}. ${sub.name}</strong> <span style="color:var(--muted);font-size:0.78rem;">(${sub.area})</span></span>
+                          <span class="pill">Pendiente</span>
+                        </div>`;
+                    })
+                    .join("")}
+                </div>
+              </div>
+            `;
+          });
+        });
+
+        container.innerHTML =
+          html || `<div style="color:var(--muted);padding:1rem;">No se encontraron asignaturas con ese filtro.</div>`;
+      }
+
+      fetch("./data/curriculum.json")
+        .then((r) => r.json())
+        .then((data) => {
+          curriculumData = data;
+          renderCurriculumCards();
+        })
+        .catch(() => {});
+
+      document.querySelectorAll("[data-year-tab]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("[data-year-tab]").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          selectedYear = btn.getAttribute("data-year-tab");
+          renderCurriculumCards();
+        });
+      });
+
+      const currInput = document.getElementById("curriculumFilterInput");
+      if (currInput) {
+        currInput.addEventListener("input", (e) => {
+          filterTerm = e.target.value;
+          renderCurriculumCards();
+        });
+      }
+
+      refreshDashboardTelemetry();
+      renderInterleavingLab();
+    })();
+  </script>
+</body>
+</html>

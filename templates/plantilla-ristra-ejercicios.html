@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Práctica Tema 1: Entrelazado, Trazas e Instrucciones Atómicas | Programación Concurrente</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-practica-01" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice Práctica Tema 1">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>🧪 PC · Práctica T1</span></div>
+        <span class="sidebar-brand-badge" id="exerciseProgressCounter">0 / 5 Resueltos</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Índice de Problemas</div>
+      <nav>
+        <a href="#ex-01" class="active"><span>Ej 01. Trazas P(2) || Q(3)</span><span class="pill">Cálculo</span></a>
+        <a href="#ex-02"><span>Ej 02. Trazas P(4) || Q(3)</span><span class="pill">Cálculo</span></a>
+        <a href="#ex-03"><span>Ej 03. Permutaciones x||y||z</span><span class="pill">Cálculo</span></a>
+        <a href="#ex-04"><span>Ej 04. Instrucciones Máquina</span><span class="pill">Traza</span></a>
+        <a href="#ex-05"><span>Ej 05. Búsqueda Concurrente C</span><span class="pill accent">Código</span></a>
+      </nav>
+      <div class="sidebar-section-label">Navegación</div>
+      <nav>
+        <a href="../index.html"><span>← Panel de la Asignatura</span></a>
+        <a href="../teoria/tema-01.html"><span>📘 Volver a Teoría Tema 1</span></a>
+        <a href="./practica-tema-02.html"><span>Siguiente: Práctica Tema 2 →</span></a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Práctica Tema 1</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" id="allSol" class="btn-top">▼ Mostrar Todas las Soluciones</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker"><span>HOJA DE PROBLEMAS · TEMA 1 (PÁGS. 1–47 PDF)</span><span>·</span><span>RESOLUCIÓN PASO A PASO</span></div>
+          <h1>Práctica Tema 1: Entrelazado, Orden Parcial, Atomicidad y STR</h1>
+          <p class="lead">
+            Ejercicios resueltos de principio a fin sin omitir pasos algebraicos, referenciando exactamente las diapositivas oficiales del Tema 1 y las reglas de <code>INFO.md</code>.
+          </p>
+        </header>
+
+        <div class="filter-bar">
+          <div class="filter-group">
+            <button type="button" class="filter-btn active" data-filter-difficulty="all">Todas</button>
+            <button type="button" class="filter-btn" data-filter-difficulty="baja">Baja</button>
+            <button type="button" class="filter-btn" data-filter-difficulty="media">Media</button>
+            <button type="button" class="filter-btn" data-filter-difficulty="alta">Alta</button>
+          </div>
+          <div class="filter-group">
+            <button type="button" class="filter-btn active" data-filter-status="all">Todos</button>
+            <button type="button" class="filter-btn" data-filter-status="pending">Pendientes</button>
+            <button type="button" class="filter-btn" data-filter-status="solved">Resueltos</button>
+          </div>
+          <input type="search" id="exerciseLiveSearch" class="sidebar-select" style="max-width:220px;" placeholder="Filtrar ejercicio..." aria-label="Filtrar ejercicios" />
+        </div>
+
+        <section class="exercise-card" id="ex-01" data-ex-id="pc-t1-e1" data-difficulty="baja" data-type="calc" data-answer="10" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 01 · Tema 1, Págs. 11–16</span><span class="pill">Dificultad: Baja</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Número de Trazas en el Árbol de Entrelazado P(n=2) || Q(m=3)</h3>
+          <p>Dados los procesos secuenciales <strong>P = p<sub>1</sub> → p<sub>2</sub></strong> (n = 2 instrucciones atómicas) y <strong>Q = q<sub>1</sub> → q<sub>2</sub> → q<sub>3</sub></strong> (m = 3 instrucciones atómicas), calcula el número total de trazas posibles de <strong>P || Q</strong> sobre un monoprocesador sin solapamientos.</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:200px;" placeholder="N.º de trazas" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada Paso a Paso (Tema 1, Págs. 11, 12 y 16)</summary>
+            <div class="formula">
+              N<sub>trazas</sub> = (m + n)! / (m! · n!) = (3 + 2)! / (3! · 2!) = 5! / (6 · 2) = 120 / 12 = 10 trazas
+            </div>
+            <p>Las 10 trazas conservan el orden parcial relativo p<sub>1</sub> → p<sub>2</sub> y q<sub>1</sub> → q<sub>2</sub> → q<sub>3</sub> (ejemplos similares en diapositivas 11 y 12 del Tema 1).</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-02" data-ex-id="pc-t1-e2" data-difficulty="media" data-type="calc" data-answer="35" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 02 · Tema 1, Pág. 16</span><span class="pill">Dificultad: Media</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Cálculo Combinatorio de Trazas para P(n=4) || Q(m=3)</h3>
+          <p>Si el proceso P ejecuta <strong>n = 4</strong> instrucciones máquina atómicas y el proceso Q ejecuta <strong>m = 3</strong> instrucciones máquina atómicas, ¿cuántas trazas de ejecución posibles deben ser correctas para garantizar que el programa concurrente <strong>P || Q</strong> sea correcto?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:200px;" placeholder="N.º de trazas" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada Paso a Paso (Tema 1, Pág. 16)</summary>
+            <div class="formula">
+              N<sub>trazas</sub> = (3 + 4)! / (3! · 4!) = 7! / (6 · 24) = 5040 / 144 = 35 trazas
+            </div>
+            <p>Según la página 16 del Tema 1 ("Para que un programa P||Q sea correcto deben serlo todas sus trazas de ejecución"), las <strong>35 trazas</strong> deben ser válidas.</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-03" data-ex-id="pc-t1-e3" data-difficulty="baja" data-type="calc" data-answer="6" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 03 · Tema 1, Págs. 7–8</span><span class="pill">Dificultad: Baja</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Permutaciones de Asignaciones Independientes (<code>x = 0 || y = 0 || z = 0</code>)</h3>
+          <p>Dada la expresión concurrente de tres instrucciones atómicas independientes <code>x = 0 || y = 0 || z = 0</code> (Tema 1, págs. 7–8), ¿de cuántas formas secuenciales distintas puede ejecutarse?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:200px;" placeholder="Formas posibles" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada Paso a Paso (Tema 1, Págs. 7–8)</summary>
+            <div class="formula">P<sub>3</sub> = 3! = 3 × 2 × 1 = 6 formas distintas</div>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-04" data-ex-id="pc-t1-e4" data-difficulty="media" data-type="trace" data-answer="4" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 04 · Tema 1, Págs. 29–32</span><span class="pill">Dificultad: Media</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Instrucciones Máquina de la Sección Crítica en las Taquillas</h3>
+          <p>En la descomposición en ensamblador del código de las máquinas vendedoras de entradas (Tema 1, págs. 29–32), ¿cuántas instrucciones máquina componen el bloque azul marcado como <strong>Sección Crítica</strong> (desde <code>load asiento[a] to CPU register</code> hasta <code>set asiento[a] to true</code> inclusive)?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:200px;" placeholder="N.º instrucciones" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada Paso a Paso (Tema 1, Págs. 29–32)</summary>
+            <p>Las <strong>4 instrucciones máquina</strong> de la Sección Crítica son: (1) <code>load asiento[a] to CPU register</code>, (2) <code>test the value of CPU register</code>, (3) <code>jump to L1 if true</code>, y (4) <code>set asiento[a] to true</code>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-05" data-ex-id="pc-t1-e5" data-difficulty="alta" data-type="code">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 05 · Tema 1, Págs. 18–21 + INFO.md</span><span class="pill">Dificultad: Alta</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Implementación y Ejecución de la Búsqueda Lineal Concurrente</h3>
+          <p>Verifica y ejecuta el código C de búsqueda lineal concurrente sobre dos particiones del array (<code>[0..4]</code> y <code>[5..9]</code>) cumpliendo el control obligatorio de errores en <code>pthread_create</code> y <code>pthread_join</code> de <code>INFO.md</code>:</p>
+          <div class="code-execution-box" data-src="../src-code/tema-01/busqueda_concurrente.c" data-lang="c"></div>
+          <button type="button" class="btn-action ex-verify-code-btn">✓ Compilar, Ejecutar y Marcar Ejercicio Resuelto</button>
+          <div class="ex-feedback" style="margin-top:0.75rem;"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/code-runner.js"></script>
+  <script src="../../../../../assets/js/exercise-engine.js"></script>
+</body>
+</html>

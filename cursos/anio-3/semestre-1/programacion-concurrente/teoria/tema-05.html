@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 5: Programación Dirigida por Eventos y Señales POSIX | Programación Concurrente</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-tema-05" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice del Tema 5">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>⚡ PC · Tema 05</span></div>
+        <span class="sidebar-brand-badge">Págs. 1–35</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Índice del Tema 5</div>
+      <nav aria-label="Secciones del Tema 5">
+        <a href="#sec-eventos-vs-hebras" class="active"><span>1. Eventos vs Hebras y MOM</span><span>01</span></a>
+        <a href="#sec-senales-estados"><span>2. Señales POSIX y Estados</span><span>02</span></a>
+        <a href="#sec-sigaction-sigwait"><span>3. sigaction vs sigwait</span><span>03</span></a>
+        <a href="#sec-codigo-t5"><span>4. Hebra Manejadora de Eventos</span><span>▶</span></a>
+      </nav>
+      <div class="sidebar-section-label">Ruta de la Asignatura</div>
+      <nav>
+        <a href="../index.html"><span>← Panel de la Asignatura</span></a>
+        <a href="./tema-04.html"><span>← Tema 4: Paso de Mensajes</span></a>
+        <a href="./tema-06.html"><span>Siguiente: Tema 6 (Java/FreeRTOS) →</span></a>
+        <a href="../ejercicios/practica-tema-05.html"><span>🧪 Ir a Práctica Tema 5</span></a>
+      </nav>
+      <div class="sidebar-exam-notice">
+        <strong>Aviso de Examen (Págs. 32–34)</strong>
+        Para usar <code>sigwait</code> o <code>sigwaitinfo</code> en una hebra dedicada, es obligatorio bloquear antes la señal en <code>main()</code> con <code>pthread_sigmask(SIG_BLOCK, &amp;sigset, NULL)</code> para que todas las hebras hereden la máscara.
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Tema 5: Programación Dirigida por Eventos y Señales</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" id="markTopicReadBtn" class="btn-top">○ Marcar como Leído</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker"><span>TEMA 05 · DIAPOSITIVAS OFICIALES PÁGS. 1–35</span><span>·</span><span>EVENTOS Y SEÑALES POSIX</span></div>
+          <h1>Tema 5: Introducción a la Programación Dirigida por Eventos y Señales POSIX</h1>
+          <p class="lead">
+            Comparativa arquitectónica entre el modelo basado en hebras y el modelo dirigido por eventos (<em>dispatcher</em>, colas de eventos, MOM y <em>Publish/Subscribe</em>), y tratamiento de eventos en POSIX mediante señales (<code>&lt;signal.h&gt;</code>), máscaras de bloqueo, manejadores asíncronos (<code>sigaction</code>) y espera síncrona en hebra dedicada (<code>sigwait</code> / <code>sigwaitinfo</code>).
+          </p>
+        </header>
+
+        <section class="topic-section" id="sec-eventos-vs-hebras">
+          <h2><span>1. Eventos vs. Concurrencia con Hebras y Sistemas MOM (Págs. 3–15)</span><span class="pill">Arquitectura Reactiva</span></h2>
+          <div class="short">
+            En el <strong>modelo de eventos</strong> un proceso consiste en un bucle <em>dispatcher</em> que extrae eventos de una cola y ejecuta su manejador (<code>handler</code>): en cualquier instante <strong>sólo se está procesando un evento</strong>, evitando la sobrecarga de cambios de contexto y sincronización cuando el número de clientes concurrentes escala masivamente (pág. 8).
+          </div>
+          <div class="scroll">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th>Característica (Págs. 10–11)</th>
+                  <th>Modelo Dirigido por Eventos</th>
+                  <th>Modelo Basado en Hebras</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Estructura de Control</strong></td>
+                  <td>Un manejador por evento invocado por el <em>dispatcher</em>.</td>
+                  <td>Una hebra por petición con flujo secuencial propio.</td>
+                </tr>
+                <tr>
+                  <td><strong>Rendimiento a Alta Carga (Pág. 8)</strong></td>
+                  <td><strong>Alto y estable:</strong> el throughput se mantiene constante sin colapsar por cambios de contexto.</td>
+                  <td><strong>Degradación severa</strong> al superar decenas/cientos de hebras activas.</td>
+                </tr>
+                <tr>
+                  <td><strong>Sincronización y Modularidad</strong></td>
+                  <td>No requiere exclusión mutua si es mono-hilo, pero produce <em>pérdida del flujo de control</em> (difícil de modularizar).</td>
+                  <td>Mejor modularización y facilidad de programación, pero alta complejidad de sincronización.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-senales-estados">
+          <h2><span>2. Señales POSIX: Estados, Eventos Síncronos/Asíncronos y Máscaras (Págs. 16–25)</span><span class="pill">signal.h</span></h2>
+          <div class="short">
+            Una señal atraviesa los estados: <strong>Evento → Señal generada → (Retenida si la señal está bloqueada en la máscara) → Señal depositada → Señal atrapada (ejecución del manejador)</strong> (pág. 18). Bloquear una señal significa que <strong>no se pierde</strong>, sino que se posterga su atención hasta que se desbloquee.
+          </div>
+          <div class="formula">
+            Configuración de Máscara por Hebra (Págs. 24–25):<br/>
+            int sigemptyset(sigset_t *set); &nbsp;&nbsp;|&nbsp;&nbsp; int sigaddset(sigset_t *set, int signo);<br/>
+            int pthread_sigmask(int how, const sigset_t *restrict set, sigset_t *restrict oset); &nbsp;[how: SIG_BLOCK | SIG_UNBLOCK]
+          </div>
+          <ul>
+            <li><strong>Eventos síncronos (Pág. 19):</strong> Producidos por estados anómalos de la propia ejecución (división por cero, fallo de página); se manejan en la misma hebra que generó el evento.</li>
+            <li><strong>Eventos asíncronos (Pág. 19):</strong> Generados explícitamente desde fuera (<code>kill</code>, <code>sigsend</code>, <code>sigqueue</code>, temporizadores); los recibe el proceso y los atiende la hebra que esté esperando en <code>sigwait</code> o la que no tenga la señal bloqueada en su máscara.</li>
+          </ul>
+        </section>
+
+        <section class="topic-section" id="sec-sigaction-sigwait">
+          <h2><span>3. Manejo Asíncrono (<code>sigaction</code>) vs Espera Síncrona en Hebra (<code>sigwait</code> / <code>sigwaitinfo</code>) (Págs. 26–34)</span><span class="pill sig">Patrón de Examen</span></h2>
+          <div class="grid-2">
+            <div class="card" style="margin-bottom:0;">
+              <span class="pill accent">ESQUEMA 1: MANEJADOR ASÍNCRONO (Págs. 26–31)</span>
+              <p style="font-size:0.88rem;">Usa <code>struct sigaction act;</code> con <code>act.sa_sigaction = ManejadorSig; act.sa_flags = SA_SIGINFO;</code>. En el manejador se inspecciona <code>info-&gt;si_signo</code>, <code>info-&gt;si_value.sival_int</code> e <code>info-&gt;si_code</code> (<code>SI_USER</code>, <code>SI_TIMER</code>, <code>SI_QUEUE</code>, <code>SI_ASYNCIO</code>, <code>SI_MESGQ</code>). El manejador debe ser muy corto porque las funciones del SO no son reentrantes.</p>
+            </div>
+            <div class="card" style="margin-bottom:0;">
+              <span class="pill ok">ESQUEMA 2: HEBRA COMO MANEJADOR (Págs. 32–34)</span>
+              <p style="font-size:0.88rem;">Se bloquea la señal en <code>main</code> con <code>pthread_sigmask(SIG_BLOCK, &amp;sigset, NULL)</code> (las hebras hijas heredan la máscara) y una hebra dedicada invoca en bucle <code>sigwait(&amp;sigset, &amp;info)</code> o <code>sigwaitinfo(&amp;sigset, &amp;info)</code>, que <strong>atómicamente</strong> desbloquea el conjunto, espera la señal y restaura el bloqueo.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-codigo-t5">
+          <h2><span>4. Código Ejecutable: Hebra Manejadora de Señales RT con <code>sigwaitinfo</code> y <code>sigqueue</code></span><span class="pill ok">C11 POSIX</span></h2>
+          <div class="code-execution-box" data-src="../src-code/tema-05/senales_sigwait.c" data-lang="c"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/code-runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 1: Introducción a la Programación Concurrente | Programación Concurrente</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-tema-01" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice del Tema 1">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>⚡ PC · Tema 01</span></div>
+        <span class="sidebar-brand-badge">Págs. 1–47</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Índice del Tema 1</div>
+      <nav aria-label="Secciones del Tema 1">
+        <a href="#sec-secuencial-concurrente" class="active"><span>1. Secuencial vs Concurrente</span><span>01</span></a>
+        <a href="#sec-interleaving"><span>2. Entrelazado y Orden Parcial</span><span>02</span></a>
+        <a href="#sec-taquillas-atomicas"><span>3. Taquillas, Atomicidad y SC</span><span>03</span></a>
+        <a href="#sec-plataformas-str"><span>4. Plataformas y Sistemas TR</span><span>04</span></a>
+        <a href="#sec-codigo-t1"><span>5. Búsqueda Lineal Concurrente</span><span>▶</span></a>
+      </nav>
+      <div class="sidebar-section-label">Ruta de la Asignatura</div>
+      <nav>
+        <a href="../index.html"><span>← Panel de la Asignatura</span></a>
+        <a href="./tema-02.html"><span>Siguiente: Tema 2 (Pthreads) →</span></a>
+        <a href="../ejercicios/practica-tema-01.html"><span>🧪 Ir a Práctica Tema 1</span></a>
+        <a href="../evaluacion/examen-test.html"><span>⏱ Simulador de Examen</span></a>
+      </nav>
+      <div class="sidebar-exam-notice">
+        <strong>Aviso de Examen</strong>
+        Para demostrar que un programa concurrente <code>P || Q</code> es <strong>incorrecto</strong> basta con exhibir <strong>una sola traza</strong> errónea; para demostrar que es <strong>correcto</strong> deben serlo <strong>todas</strong> sus <code>(m+n)!/(m!n!)</code> trazas.
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Tema 1: Introducción a la Programación Concurrente</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" id="markTopicReadBtn" class="btn-top">○ Marcar como Leído</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker"><span>TEMA 01 · DIAPOSITIVAS OFICIALES PÁGS. 1–47</span><span>·</span><span>FUNDAMENTOS Y STR</span></div>
+          <h1>Tema 1: Introducción a la Programación Concurrente</h1>
+          <p class="lead">
+            Paso de la programación secuencial determinista (máquina de Von Neumann) a la composición concurrente <code>P || Q</code>, semántica de entrelazado (<em>interleaving</em>), orden parcial, instrucciones máquina atómicas, sección crítica, exclusión mutua, plataformas de ejecución y Sistemas de Tiempo Real (STR).
+          </p>
+        </header>
+
+        <section class="topic-section" id="sec-secuencial-concurrente">
+          <h2><span>1. De la Programación Secuencial a la Concurrente (Págs. 3–10)</span><span class="pill">Operador ||</span></h2>
+          <div class="short">
+            En un programa secuencial <strong>P = p<sub>1</sub>; p<sub>2</sub>; …; p<sub>n</sub></strong> las instrucciones están <strong>totalmente ordenadas</strong> y la ejecución es <strong>determinista</strong>: si 0 &lt; i &lt; j ≤ n, entonces ∀e. (p<sub>i</sub> → p<sub>j</sub>). En cambio, el operador concurrente <strong>P || Q</strong> indica que existe alguna ejecución válida en la que ambos códigos se solapan o entrelazan en el tiempo.
+          </div>
+          <div class="formula">
+            Secuencial: ∀e. (p<sub>1</sub> → p<sub>2</sub>) ∧ (p<sub>2</sub> → p<sub>3</sub>) ∧ … ∧ (p<sub>n−1</sub> → p<sub>n</sub>) &nbsp;&nbsp;|&nbsp;&nbsp; Concurrente P || Q: ∃e. ¬(P → Q) ∧ ¬(Q → P)
+          </div>
+          <p>
+            Para independizar el razonamiento del número de núcleos físicos de la máquina, asignamos a cada proceso un <strong>procesador lógico</strong>. Si sólo disponemos de un único procesador físico, la concurrencia se implementa intercalando las instrucciones de P y Q (<strong>semántica de entrelazado o <em>interleaving</em></strong>, pág. 15), sin poder hacer ninguna suposición sobre las velocidades relativas de los procesadores lógicos.
+          </p>
+        </section>
+
+        <section class="topic-section" id="sec-interleaving">
+          <h2><span>2. Semántica de Entrelazado (Interleaving), Árbol de Ejecución y Orden Parcial (Págs. 11–16)</span><span class="pill">Combinatoria</span></h2>
+          <div class="short">
+            Una ejecución válida de <strong>P || Q</strong> conserva el orden interno de P y de Q, pero no impone orden entre instrucciones de procesos distintos: las instrucciones de <strong>P || Q</strong> están <strong>parcialmente ordenadas</strong> y la ejecución paralela es, por definición, <strong>INDETERMINISTA</strong>.
+          </div>
+          <div class="formula">
+            Conservación interna (i &lt; j): ∀e. (p<sub>i</sub> → p<sub>j</sub>) ∧ (q<sub>i</sub> → q<sub>j</sub>) &nbsp;&nbsp;|&nbsp;&nbsp; Entre procesos: ∀e. (p<sub>i</sub> → q<sub>j</sub>) ∨ (q<sub>j</sub> → p<sub>i</sub>)
+          </div>
+          <div class="formula">
+            N.º total de trazas posibles sin solapamiento de P (n instr.) || Q (m instr.) = (m + n)! / (m! · n!)
+          </div>
+          <div class="tip">
+            <strong class="tag">Ejemplo Clásico de Examen (Diapositivas 11–12 y 16)</strong>
+            Si <strong>P = p<sub>1</sub> → p<sub>2</sub></strong> (n = 2) y <strong>Q = q<sub>1</sub> → q<sub>2</sub> → q<sub>3</sub></strong> (m = 3), el árbol de ejecución tiene exactamente <strong>(3 + 2)! / (3! · 2!) = 120 / (6 · 2) = 10 trazas posibles</strong>. La ejecución puramente secuencial <code>P; Q</code> (p<sub>1</sub> → p<sub>2</sub> → q<sub>1</sub> → q<sub>2</sub> → q<sub>3</sub>) es simplemente una traza particular dentro de las 10 posibles.
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-taquillas-atomicas">
+          <h2><span>3. Problema de las Taquillas, Instrucciones Atómicas y Sección Crítica (Págs. 24–32)</span><span class="pill">Exclusión Mutua</span></h2>
+          <div class="short">
+            Sólo las <strong>instrucciones máquina</strong> (<code>load</code>, <code>test</code>, <code>jump</code>, <code>set/store</code>) son atómicas. Una sentencia de alto nivel como <code>if (!asientos[a]) { asientos[a] = 1; }</code> se compila en múltiples instrucciones máquina, permitiendo que dos taquillas T<sub>i</sub> y T<sub>j</sub> vendan el mismo asiento 22.
+          </div>
+          <div class="formula">
+            Condición formal de Exclusión Mutua entre SC<sub>i</sub> y SC<sub>j</sub> (Pág. 32): &nbsp;&nbsp; ∀e. (SC<sub>i</sub> → SC<sub>j</sub>) ∨ (SC<sub>j</sub> → SC<sub>i</sub>)
+          </div>
+          <div class="lab">
+            <div class="lab-header">
+              <div class="lab-title">🎛️ Simulador de Traza de Interferencia vs Ejecución en Exclusión Mutua (Taquillas T<sub>i</sub> y T<sub>j</sub>)</div>
+              <div style="display:flex;gap:0.4rem;">
+                <button type="button" class="filter-btn active" id="btnTraceBad">Traza Errónea (Sin Exclusión Mutua)</button>
+                <button type="button" class="filter-btn" id="btnTraceOk">Traza Correcta (Con Sección Crítica Atómica)</button>
+              </div>
+            </div>
+            <div class="svgbox" id="taquillasWaveBox"></div>
+            <div class="ro-grid">
+              <div class="ro" id="roSeatStatusCard"><span class="ro-label">Estado Asiento 22</span><div class="ro-val" id="roSeatStatus">VENDIDO 2 VECES (ERROR)</div></div>
+              <div class="ro"><span class="ro-label">Propiedad Violada</span><div class="ro-val" id="roPropStatus">Solapamiento SC_i y SC_j</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-plataformas-str">
+          <h2><span>4. Plataformas Concurrentes y Sistemas de Tiempo Real (STR) (Págs. 33–46)</span><span class="pill">STR y SOTR</span></h2>
+          <div class="grid-2">
+            <div>
+              <h3>Plataformas de Ejecución (Págs. 33–35)</h3>
+              <ul>
+                <li><strong>Monoprocesadores:</strong> Concurrencia por entrelazado (<em>interleaving</em>), aprovecha tiempos de E/S, comunicación natural por memoria compartida.</li>
+                <li><strong>Multiprocesadores fuertemente acoplados:</strong> Paralelismo real sobre una RAM común compartida; bajo coste de comunicación.</li>
+                <li><strong>Multiprocesadores débilmente acoplados (Distribuidos):</strong> Cada nodo posee su propia RAM privada; comunicación natural mediante <strong>paso de mensajes</strong> con sobrecoste en la red.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Sistemas de Tiempo Real (Págs. 36–46)</h3>
+              <div class="formula">Corrección en STR = Corrección Funcional + Corrección Temporal</div>
+              <ul>
+                <li><strong>Tiempo Real Crítico (Hard):</strong> Una sola respuesta fuera de plazo hace que el sistema sea incorrecto (ej. ABS, planta química).</li>
+                <li><strong>Tiempo Real Real:</strong> Crítico con tiempos de respuesta extremadamente cortos (ej. guiado de misiles).</li>
+                <li><strong>Tiempo Real Acrítico (Soft):</strong> Tolera sobrepasar algún plazo ocasionalmente.</li>
+                <li><strong>Tiempo Real Firme (Firm):</strong> Acrítico pero sin ningún beneficio si el servicio llega con retraso.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-codigo-t1">
+          <h2><span>5. Ejemplo Oficial Ejecutable: Búsqueda Lineal Aplicando Concurrencia (Págs. 18–21)</span><span class="pill ok">C11 POSIX</span></h2>
+          <p>
+            División del array <code>v[0..9]</code> en dos sub-rangos <code>[0..4]</code> y <code>[5..9]</code> procesados en paralelo por dos hebras Pthreads, adaptada estrictamente a las directivas de control de errores de <code>INFO.md</code>:
+          </p>
+          <div class="code-execution-box" data-src="../src-code/tema-01/busqueda_concurrente.c" data-lang="c"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/code-runner.js"></script>
+  <script>
+    (function () {
+      "use strict";
+      let mode = "bad";
+      function drawTaquillas() {
+        if (!window.WorkbenchCharts) return;
+        const card = document.getElementById("roSeatStatusCard");
+        const st = document.getElementById("roSeatStatus");
+        const pr = document.getElementById("roPropStatus");
+
+        if (mode === "bad") {
+          card.className = "ro badv";
+          st.textContent = "VENDIDO A 2 CLIENTES (ERROR)";
+          pr.textContent = "¬(SC_i → SC_j) ∧ ¬(SC_j → SC_i)";
+          window.WorkbenchCharts.drawWave("taquillasWaveBox", [
+            { name: "TAQUILLA_Ti", v: ["LOAD_0", "TEST_FREE", "SET_1", "EMIT_OK", "IDLE", "IDLE"], bus: true, col: "state" },
+            { name: "TAQUILLA_Tj", v: ["IDLE", "LOAD_0", "TEST_FREE", "SET_1", "EMIT_ERR!", "IDLE"], bus: true, col: "sig" },
+            { name: "ASIENTO_22", v: [0, 0, 1, 1, 1, 1], bus: false, col: "clk" }
+          ]);
+        } else {
+          card.className = "ro good";
+          st.textContent = "1 VENTA + 1 AVISO OCUPADO (OK)";
+          pr.textContent = "∀e. (SC_i → SC_j) Cumplido";
+          window.WorkbenchCharts.drawWave("taquillasWaveBox", [
+            { name: "TAQUILLA_Ti", v: ["LOAD_0", "SET_1", "EMIT_OK", "IDLE", "IDLE", "IDLE"], bus: true, col: "state" },
+            { name: "TAQUILLA_Tj", v: ["WAIT_EM", "WAIT_EM", "LOAD_1", "OCUPADO", "RETRY", "IDLE"], bus: true, col: "sig" },
+            { name: "ASIENTO_22", v: [0, 1, 1, 1, 1, 1], bus: false, col: "clk" }
+          ]);
+        }
+      }
+
+      const bBad = document.getElementById("btnTraceBad");
+      const bOk = document.getElementById("btnTraceOk");
+      if (bBad && bOk) {
+        bBad.addEventListener("click", () => {
+          mode = "bad";
+          bBad.classList.add("active");
+          bOk.classList.remove("active");
+          drawTaquillas();
+        });
+        bOk.addEventListener("click", () => {
+          mode = "ok";
+          bOk.classList.add("active");
+          bBad.classList.remove("active");
+          drawTaquillas();
+        });
+      }
+      window.redrawCharts = drawTaquillas;
+      drawTaquillas();
+    })();
+  </script>
+</body>
+</html>

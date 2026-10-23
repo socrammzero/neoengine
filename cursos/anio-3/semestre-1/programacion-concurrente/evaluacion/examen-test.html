@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador de Examen Final: Programación Concurrente (Temas 1 a 7 + INFO.md)</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-examen" data-subject-id="programacion-concurrente" data-subject-name="Programación Concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Navegación del Simulador de Examen">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>⏱ Examen Oficial</span></div>
+        <span class="sidebar-brand-badge">21 Cuestiones</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Matriz de Preguntas (P1–P21)</div>
+      <div style="padding:0.4rem 0.85rem;">
+        <div id="examQuestionMatrix" class="q-matrix"></div>
+      </div>
+
+      <div class="sidebar-section-label">Navegación Rápida</div>
+      <nav>
+        <a href="#examSimulatorRoot" class="active"><span>1. Cuestionario Oficial</span></a>
+        <a href="#sec-historial"><span>2. Historial de Calificaciones</span></a>
+        <a href="../index.html"><span>← Volver al Panel de la Asignatura</span></a>
+      </nav>
+
+      <div class="sidebar-exam-notice">
+        <strong>Criterio de Calificación</strong>
+        Fórmula con penalización: <code>Nota = max(0, (A - E/3) · 10/21)</code>.
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Simulador de Examen Final</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <span class="pill sig mono" id="examTimerDisplay" style="font-size:0.88rem;font-weight:700;">25:00</span>
+          <button type="button" id="allSol" class="btn-top">▼ Mostrar Todas las Soluciones</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner" id="examScoreboard">
+          <div class="hero-kicker"><span>BANCO DE VALIDACIÓN · SIMULADOR DE EVALUACIÓN</span><span>·</span><span>PROGRAMACIÓN CONCURRENTE</span></div>
+          <h1>Simulador de Examen Final: Programación Concurrente (Temas 1 a 7 + INFO.md)</h1>
+          <p class="lead">
+            Banco de <strong>21 cuestiones técnicas de examen</strong> que evalúan rigurosamente los 7 temas de la asignatura y las prohibiciones estrictas de <code>INFO.md</code>. Elige <strong>Modo Práctica</strong> para corrección y explicación inmediata, o <strong>Modo Examen</strong> para simulación cronometrada con barajado aleatorio.
+          </p>
+          <div class="formula">
+            Calificación = max( 0, ( A − E / 3 ) × ( 10 / 21 ) ) &nbsp;&nbsp;[ k = 4 opciones, N = 21 preguntas ]
+          </div>
+
+          <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:1rem;">
+            <button type="button" id="modePracticaBtn" class="filter-btn active">📘 Modo Práctica (Feedback Inmediato)</button>
+            <button type="button" id="modeExamenBtn" class="filter-btn">⏱ Modo Examen (Cronometrado + Barajado)</button>
+            <button type="button" id="examShuffleBtn" class="btn-secondary">🔀 Barajar Preguntas</button>
+            <button type="button" id="examFinishBtn" class="btn-action">✓ Finalizar y Calificar Examen</button>
+          </div>
+
+          <div class="ro-grid" style="margin-top:1.1rem;">
+            <div class="ro"><span class="ro-label">Total Preguntas (N)</span><div class="ro-val" id="statTotalQ">21</div></div>
+            <div class="ro good"><span class="ro-label">Aciertos (A)</span><div class="ro-val" id="statHits">0</div></div>
+            <div class="ro badv"><span class="ro-label">Errores (E)</span><div class="ro-val" id="statErrors">0</div></div>
+            <div class="ro"><span class="ro-label">En Blanco</span><div class="ro-val" id="statBlank">21</div></div>
+            <div class="ro"><span class="ro-label">Penalización (−E/3)</span><div class="ro-val" id="statPenalty">-0.00</div></div>
+            <div class="ro good" id="statScoreCard"><span class="ro-label">Calificación Final</span><div class="ro-val" id="statFinalScore">0.00 / 10</div></div>
+          </div>
+        </header>
+
+        <section id="examSimulatorRoot" data-bank="./banco-preguntas.json">
+          <div id="examQuestionsList"></div>
+        </section>
+
+        <section class="topic-section" id="sec-historial">
+          <h2><span>2. Historial Local de Evaluaciones en Programación Concurrente</span><span class="pill">Persistencia Local</span></h2>
+          <div class="scroll">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Modalidad</th>
+                  <th>Aciertos</th>
+                  <th>Errores</th>
+                  <th>En Blanco</th>
+                  <th>Calificación</th>
+                </tr>
+              </thead>
+              <tbody id="examHistoryTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/exam-engine.js"></script>
+</body>
+</html>

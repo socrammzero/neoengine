@@ -1,0 +1,117 @@
+{
+  "platform": {
+    "title": "Engineering Workbench",
+    "subtitle": "Plataforma Interactiva de Estudio, Laboratorio de Código y Simulación Técnica",
+    "version": "2.5.0",
+    "activeFocus": {
+      "yearId": "anio-3",
+      "semesterId": "semestre-1",
+      "subjectId": "programacion-concurrente"
+    }
+  },
+  "years": [
+    {
+      "id": "anio-1",
+      "number": 1,
+      "label": "1er Año",
+      "title": "Fundamentos Matemáticos y Físicos de Ingeniería",
+      "semesters": [
+        {
+          "id": "semestre-1",
+          "number": 1,
+          "label": "Semestre 1",
+          "subjects": [
+            { "id": "matematicas-1", "name": "Matemáticas 1 (Números Complejos, Funciones Reales, Campos Escalares, Integrales, Series y EDO)", "area": "Matemáticas", "credits": 6, "status": "planned" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "anio-2",
+      "number": 2,
+      "label": "2º Año",
+      "title": "Señales, Redes, Microprocesadores y Comunicaciones",
+      "semesters": [
+        {
+          "id": "semestre-1",
+          "number": 1,
+          "label": "Semestre 1",
+          "subjects": [
+            { "id": "matematicas-3", "name": "Matemáticas 3", "area": "Matemáticas", "credits": 6, "status": "planned" },
+            { "id": "programacion-2", "name": "Programación 2", "area": "Programación", "credits": 6, "status": "planned" },
+            { "id": "redes-2", "name": "Redes 2", "area": "Redes", "credits": 6, "status": "planned" },
+            { "id": "senales-sistemas", "name": "Señales y Sistemas", "area": "Procesado de Señal", "credits": 6, "status": "planned" }
+          ]
+        },
+        {
+          "id": "semestre-2",
+          "number": 2,
+          "label": "Semestre 2",
+          "subjects": [
+            { "id": "matematicas-4", "name": "Matemáticas 4", "area": "Matemáticas", "credits": 6, "status": "planned" },
+            { "id": "microc-microp", "name": "Microcontroladores y Microprocesadores", "area": "Sistemas Digitales", "credits": 6, "status": "planned" },
+            { "id": "propagacion-ondas", "name": "Propagación de Ondas", "area": "Electromagnetismo", "credits": 6, "status": "planned" },
+            { "id": "sistemas-comunicaciones", "name": "Sistemas de Comunicaciones", "area": "Comunicaciones", "credits": 6, "status": "planned" },
+            { "id": "software-comunicaciones", "name": "Software de Comunicaciones", "area": "Software y Redes", "credits": 6, "status": "planned" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "anio-3",
+      "number": 3,
+      "label": "3er Año",
+      "title": "Sistemas Concurrentes, Electrónica Digital, Microelectrónica y Subsistemas Analógicos",
+      "semesters": [
+        {
+          "id": "semestre-1",
+          "number": 1,
+          "label": "Semestre 1",
+          "isFocus": true,
+          "subjects": [
+            {
+              "id": "programacion-concurrente",
+              "name": "Programación Concurrente",
+              "area": "Sistemas Concurrentes y Tiempo Real",
+              "credits": 6,
+              "status": "active",
+              "languages": ["C11 POSIX", "Pthreads", "Java", "FreeRTOS"],
+              "summary": "Concurrencia e interleaving, procesos y hebras POSIX (Pthreads), exclusión mutua con espera activa (Peterson y Panadería de Lamport), semáforos POSIX (sem_t), regiones críticas y monitores, paso de mensajes (mqueue.h y select), programación dirigida por eventos y señales POSIX (sigaction/sigwait), concurrencia en Java/C#/FreeRTOS y programación de sistemas de tiempo real.",
+              "path": "cursos/anio-3/semestre-1/programacion-concurrente/index.html",
+              "modules": {
+                "teoria": [
+                  { "id": "pc-t1", "title": "Tema 01: Introducción a la Programación Concurrente", "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-01.html" },
+                  { "id": "pc-t2", "title": "Tema 02: Representación de Procesos y Soporte de la Concurrencia (Pthreads)", "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-02.html" },
+                  { "id": "pc-t3", "title": "Tema 03: Comunicación y Sincronización en Memoria Compartida (Espera Activa, Semáforos y Monitores)", "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-03.html" },
+                  { "id": "pc-t4", "title": "Tema 04: Comunicación mediante Paso de Mensajes (Colas POSIX y Espera Selectiva)", "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-04.html" },
+                  { "id": "pc-t5", "title": "Tema 05: Programación Dirigida por Eventos y Señales POSIX", "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-05.html" },
+                  { "id": "pc-t6", "title": "Tema 06: La Concurrencia en Otros Lenguajes (Java, C#/.NET) y FreeRTOS", "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-06.html" },
+                  { "id": "pc-t7", "title": "Tema 07: Programación de Sistemas de Tiempo Real en POSIX", "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-07.html" }
+                ],
+                "ejercicios": [
+                  { "id": "pc-e1", "title": "Práctica Tema 01: Entrelazado, Trazas e Instrucciones Atómicas", "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-01.html" },
+                  { "id": "pc-e2", "title": "Práctica Tema 02: Creación Segura de Hebras Pthreads y Paso de Parámetros", "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-02.html" },
+                  { "id": "pc-e3", "title": "Práctica Tema 03: Peterson, Panadería de Lamport, Semáforos y Problemas Clásicos", "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-03.html" },
+                  { "id": "pc-e4", "title": "Práctica Tema 04: Colas de Mensajes POSIX (mq_*) y Espera Selectiva (select)", "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-04.html" },
+                  { "id": "pc-e5", "title": "Práctica Tema 05: Máscaras de Señales, sigaction y Espera Síncrona sigwait", "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-05.html" },
+                  { "id": "pc-e6", "title": "Práctica Tema 06: Monitores en Java, Delegados C# y Tareas/Colas en FreeRTOS", "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-06.html" },
+                  { "id": "pc-e7", "title": "Práctica Tema 07: Planificación SCHED_FIFO/RR, mlockall, TIMER_ABSTIME y Mutex TR", "path": "cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-07.html" }
+                ],
+                "evaluacion": {
+                  "id": "pc-ex",
+                  "title": "Simulador de Examen Final: Programación Concurrente (Temas 1 a 7 + INFO.md)",
+                  "path": "cursos/anio-3/semestre-1/programacion-concurrente/evaluacion/examen-test.html",
+                  "bankPath": "cursos/anio-3/semestre-1/programacion-concurrente/evaluacion/banco-preguntas.json",
+                  "questionCount": 21
+                }
+              }
+            },
+            { "id": "diseno-microelectronico-1", "name": "Diseño Microelectrónico 1", "area": "Microelectrónica CMOS", "credits": 6, "status": "planned" },
+            { "id": "electronica-digital-2", "name": "Electrónica Digital 2", "area": "Familias Lógicas (CMOS, TTL, ECL)", "credits": 6, "status": "planned" },
+            { "id": "subsistemas-analogicos", "name": "Subsistemas Analógicos", "area": "Electrónica Analógica", "credits": 6, "status": "planned" }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Práctica Tema 6: Java, C# y FreeRTOS | Programación Concurrente</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-practica-06" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice Práctica Tema 6">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>🧪 PC · Práctica T6</span></div>
+        <span class="sidebar-brand-badge" id="exerciseProgressCounter">0 / 5 Resueltos</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Índice de Problemas</div>
+      <nav>
+        <a href="#ex-01" class="active"><span>Ej 01. Ficheros Fuente FreeRTOS</span><span class="pill">Cálculo</span></a>
+        <a href="#ex-02"><span>Ej 02. Prioridades en Arduino</span><span class="pill">Cálculo</span></a>
+        <a href="#ex-03"><span>Ej 03. Espera Absoluta FreeRTOS</span><span class="pill">Traza</span></a>
+        <a href="#ex-04"><span>Ej 04. Esquema Memoria heap_4</span><span class="pill">Traza</span></a>
+        <a href="#ex-05"><span>Ej 05. Monitor Buffer en Java</span><span class="pill accent">Código</span></a>
+      </nav>
+      <div class="sidebar-section-label">Navegación</div>
+      <nav>
+        <a href="../index.html"><span>← Panel de la Asignatura</span></a>
+        <a href="../teoria/tema-06.html"><span>📘 Volver a Teoría Tema 6</span></a>
+        <a href="./practica-tema-05.html"><span>← Práctica Tema 5</span></a>
+        <a href="./practica-tema-07.html"><span>Siguiente: Práctica Tema 7 →</span></a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Práctica Tema 6</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" id="allSol" class="btn-top">▼ Mostrar Todas las Soluciones</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker"><span>HOJA DE PROBLEMAS · TEMA 6 (PÁGS. 1–74 PDF)</span><span>·</span><span>JAVA, C# Y FREERTOS</span></div>
+          <h1>Práctica Tema 6: Monitores en Java, Sincronización en C# y Microkernel FreeRTOS</h1>
+          <p class="lead">
+            Ejercicios sobre métodos <code>synchronized</code> en Java, primitivas de C#/.NET y arquitectura de tareas, colas, memoria e interrupciones en FreeRTOS.
+          </p>
+        </header>
+
+        <section class="exercise-card" id="ex-01" data-ex-id="pc-t6-e1" data-difficulty="baja" data-type="calc" data-answer="3" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 01 · Tema 6, Pág. 49</span><span class="pill">Dificultad: Baja</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Ficheros C Fundamentales del Kernel FreeRTOS</h3>
+          <p>Según la página 49 del Tema 6, ¿por cuántos ficheros principales en <code>FreeRTOS/Source</code> (<code>list.c</code>, <code>queue.c</code> y <code>tasks.c</code>) está formado el núcleo independiente del hardware de FreeRTOS?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:200px;" placeholder="N.º de ficheros" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 6, Pág. 49)</summary>
+            <p>Está formado por <strong>3 ficheros</strong>: <code>list.c</code>, <code>queue.c</code> y <code>tasks.c</code>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-02" data-ex-id="pc-t6-e2" data-difficulty="baja" data-type="calc" data-answer="3" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 02 · Tema 6, Pág. 51</span><span class="pill">Dificultad: Baja</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Prioridad Máxima en el Porting de FreeRTOS para Arduino</h3>
+          <p>Si en el porting de FreeRTOS para Arduino la constante <code>configMAX_PRIORITIES</code> vale <strong>4</strong> (Tema 6, pág. 51), ¿cuál es el valor numérico entero de la prioridad más alta asignable a una tarea?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:200px;" placeholder="Prioridad máxima" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 6, Pág. 51)</summary>
+            <p>Las prioridades van desde <code>0</code> hasta <code>configMAX_PRIORITIES - 1</code> = 4 − 1 = <strong>3</strong>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-03" data-ex-id="pc-t6-e3" data-difficulty="media" data-type="trace" data-answer="vTaskDelayUntil" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 03 · Tema 6, Págs. 59–60</span><span class="pill">Dificultad: Media</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Función de Espera Absoluta para Tareas Periódicas en FreeRTOS</h3>
+          <p>Escribe el nombre exacto de la función de FreeRTOS que recibe <code>&amp;xLastWakeTime</code> (inicializada con <code>xTaskGetTickCount()</code>) para realizar esperas absolutas en tareas periódicas (Tema 6, págs. 59–60):</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:240px;" placeholder="Nombre de función" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 6, Págs. 59–60)</summary>
+            <p>La función es <code>vTaskDelayUntil</code>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-04" data-ex-id="pc-t6-e4" data-difficulty="media" data-type="trace" data-answer="heap_3.c|heap_3" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 04 · Tema 6, Pág. 71</span><span class="pill">Dificultad: Media</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Esquema de Memoria Usado en el Porting de Arduino</h3>
+          <p>Según la página 71 del Tema 6, ¿cuál de los 5 ficheros de esquema de memoria (<code>heap_1.c</code> a <code>heap_5.c</code>) implementa únicamente <em>wrappers</em> seguros alrededor de <code>malloc</code> y <code>free</code> y es el utilizado en el porting de Arduino?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:240px;" placeholder="Ej. heap_3.c" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 6, Pág. 71)</summary>
+            <p>El esquema número 3: <code>heap_3.c</code>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-05" data-ex-id="pc-t6-e5" data-difficulty="alta" data-type="code">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 05 · Programación Java (Tema 6, Págs. 23–28)</span><span class="pill">Dificultad: Alta</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Monitor de Buffer Acotado en Java con <code>synchronized</code>, <code>wait()</code> y <code>notifyAll()</code></h3>
+          <p>Compila y ejecuta el monitor <code>BufferAcotado.java</code>:</p>
+          <div class="code-execution-box" data-src="../src-code/tema-06/BufferAcotado.java" data-lang="java"></div>
+          <button type="button" class="btn-action ex-verify-code-btn">✓ Compilar, Ejecutar y Marcar Ejercicio Resuelto</button>
+          <div class="ex-feedback" style="margin-top:0.75rem;"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/code-runner.js"></script>
+  <script src="../../../../../assets/js/exercise-engine.js"></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tema 4: Comunicación mediante Paso de Mensajes | Programación Concurrente</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-tema-04" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice del Tema 4">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>⚡ PC · Tema 04</span></div>
+        <span class="sidebar-brand-badge">Págs. 1–35</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Índice del Tema 4</div>
+      <nav aria-label="Secciones del Tema 4">
+        <a href="#sec-clasificacion" class="active"><span>1. Clasificación de Primitivas</span><span>01</span></a>
+        <a href="#sec-colas-posix"><span>2. Colas de Mensajes POSIX</span><span>02</span></a>
+        <a href="#sec-espera-selectiva"><span>3. Espera Selectiva y Guardas</span><span>03</span></a>
+        <a href="#sec-codigo-t4"><span>4. Jardines con mq_* y select()</span><span>▶</span></a>
+      </nav>
+      <div class="sidebar-section-label">Ruta de la Asignatura</div>
+      <nav>
+        <a href="../index.html"><span>← Panel de la Asignatura</span></a>
+        <a href="./tema-03.html"><span>← Tema 3: Memoria Compartida</span></a>
+        <a href="./tema-05.html"><span>Siguiente: Tema 5 (Eventos) →</span></a>
+        <a href="../ejercicios/practica-tema-04.html"><span>🧪 Ir a Práctica Tema 4</span></a>
+      </nav>
+      <div class="sidebar-exam-notice">
+        <strong>Aviso de Examen (Pág. 33)</strong>
+        En una instrucción <code>select</code> con alternativa <code>else</code>, el proceso <strong>nunca se bloquea</strong>, y la alternativa <code>else</code> es <strong>incompatible</strong> con la alternativa <code>terminate</code>.
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Tema 4: Comunicación mediante Paso de Mensajes</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" id="markTopicReadBtn" class="btn-top">○ Marcar como Leído</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker"><span>TEMA 04 · DIAPOSITIVAS OFICIALES PÁGS. 1–35</span><span>·</span><span>COLAS POSIX Y SELECT</span></div>
+          <h1>Tema 4: Comunicación mediante Paso de Mensajes</h1>
+          <p class="lead">
+            Comunicación en sistemas débilmente acoplados sin memoria compartida: clasificación por direccionamiento y sincronización (asíncrona, cita síncrona y cita extendida), colas de mensajes POSIX (<code>&lt;mqueue.h&gt;</code>) e instrucción de espera selectiva (<code>select</code> con guardas <code>when</code>, <code>terminate</code> y <code>else</code>).
+          </p>
+        </header>
+
+        <section class="topic-section" id="sec-clasificacion">
+          <h2><span>1. Clasificación de las Primitivas de Paso de Mensajes (Págs. 3–13)</span><span class="pill">Taxonomía</span></h2>
+          <div class="scroll">
+            <table class="tech-table">
+              <thead>
+                <tr>
+                  <th>Criterio</th>
+                  <th>Modalidad</th>
+                  <th>Sintaxis / Comportamiento Técnico</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Identificación (Págs. 4–7)</strong></td>
+                  <td><strong>Directa Simétrica vs Asimétrica</strong></td>
+                  <td>Simétrica: <code>send(ms, pidB)</code> / <code>receive(ms, pidA)</code>. Asimétrica: <code>send(ms, pidB)</code> / <code>receive(ms)</code> (recibe de cualquiera).</td>
+                </tr>
+                <tr>
+                  <td><strong>Identificación (Págs. 4–7)</strong></td>
+                  <td><strong>Indirecta (Buzón / Canal)</strong></td>
+                  <td><code>send(ms, canal)</code> / <code>receive(ms, canal)</code>. Topologías: 1:1 (unidireccional/bidireccional), 1:N, N:1 (cliente/servidor) y N:M.</td>
+                </tr>
+                <tr>
+                  <td><strong>Sincronización (Págs. 8–9)</strong></td>
+                  <td><strong>Comunicación Asíncrona</strong></td>
+                  <td>El emisor no se bloquea (salvo cola llena); el receptor sólo se bloquea si el mensaje aún no está disponible en el canal.</td>
+                </tr>
+                <tr class="hi">
+                  <td><strong>Sincronización (Págs. 10–11)</strong></td>
+                  <td><strong>Síncrona (Cita / Rendezvous)</strong></td>
+                  <td>Tanto emisor como receptor esperan a que el otro esté listo (<em>handshake</em>). No requiere buffer intermedio.</td>
+                </tr>
+                <tr>
+                  <td><strong>Sincronización (Págs. 12–13)</strong></td>
+                  <td><strong>Síncrona Extendida (Cita Extendida)</strong></td>
+                  <td>El emisor espera a que el receptor reciba el mensaje <strong>y además espera bloqueado hasta recibir la respuesta</strong> <code>send(ans, A)</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-colas-posix">
+          <h2><span>2. Colas de Mensajes POSIX (<code>&lt;mqueue.h&gt;</code>) (Págs. 14–25)</span><span class="pill">API POSIX</span></h2>
+          <div class="short">
+            A diferencia de las tuberías (<em>pipes</em>) de UNIX, las colas de mensajes POSIX tienen estructura interna de registros, permiten asignar una <strong>prioridad entera</strong> a cada mensaje y consultar/controlar los atributos de la cola mediante <code>struct mq_attr</code>. Recuerda enlazar siempre con <code>-lrt</code>.
+          </div>
+          <div class="formula">
+            struct mq_attr { long mq_flags; long mq_maxmsg; long mq_msgsize; long mq_curmsgs; };<br/>
+            mqd_t mq_open(const char *name, int oflag, mode_t mode, struct mq_attr *attr);<br/>
+            int mq_send(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned int msg_prio);<br/>
+            ssize_t mq_receive(mqd_t mqdes, char *msg_ptr, size_t msg_len, unsigned int *msg_prio);<br/>
+            int mq_close(mqd_t mqdes); &nbsp;&nbsp;|&nbsp;&nbsp; int mq_unlink(const char *name);
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-espera-selectiva">
+          <h2><span>3. Espera Selectiva: Sintaxis CSP/Ada y Función <code>select()</code> en Linux/C (Págs. 26–34)</span><span class="pill">Select y Guardas</span></h2>
+          <p>
+            Si el proceso servidor <code>IncVisitantes</code> hace <code>mq_receive(idcola, ...)</code> seguido de <code>mq_receive(idcola2, ...)</code> (pág. 25), impone una alternancia rígida entre puertas. Para escuchar simultáneamente por <strong>cualquiera</strong> de los canales que tenga datos listos se emplea la <strong>espera selectiva</strong>:
+          </p>
+          <div class="formula">
+            Notación CSP (Pág. 26): &nbsp; c!ms (envía ms por canal c) &nbsp;|&nbsp; c?v (recibe de canal c en variable v)<br/>
+            Rama con guarda (Pág. 31): &nbsp; [when expBool =&gt;] c?v; &nbsp;→ Abierta sii (expBool == true) ∧ (cita disponible en c)
+          </div>
+          <div class="tip">
+            <strong class="tag">Implementación en Linux/POSIX con Descriptores (Págs. 28–30 y 34)</strong>
+            En Linux, un descriptor <code>mqd_t</code> es internamente un descriptor de fichero, lo que permite usar <code>FD_ZERO(&amp;rfds)</code>, <code>FD_SET(cola[i], &amp;rfds)</code>, <code>select(maxfd + 1, &amp;rfds, NULL, NULL, &amp;tv)</code> y comprobar qué cola tiene mensajes con <code>FD_ISSET(cola[pos], &amp;rfds)</code>. La rama <code>else</code> se simula pasando un <code>struct timeval tv</code> de timeout a <code>select()</code>.
+          </div>
+        </section>
+
+        <section class="topic-section" id="sec-codigo-t4">
+          <h2><span>4. Código Ejecutable: Problema de los Jardines con Colas POSIX y <code>select()</code> (Págs. 22–30)</span><span class="pill ok">C11 POSIX</span></h2>
+          <div class="code-execution-box" data-src="../src-code/tema-04/colas_mensajes_mq.c" data-lang="c"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/code-runner.js"></script>
+</body>
+</html>

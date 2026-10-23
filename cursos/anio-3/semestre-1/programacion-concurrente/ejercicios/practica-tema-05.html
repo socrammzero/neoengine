@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es" data-root="../../../../../">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Práctica Tema 5: Eventos y Señales POSIX | Programación Concurrente</title>
+  <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+</head>
+<body data-page-id="pc-practica-05" data-subject-id="programacion-concurrente">
+  <div class="layout">
+    <aside class="sidebar" aria-label="Índice Práctica Tema 5">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-title"><span>🧪 PC · Práctica T5</span></div>
+        <span class="sidebar-brand-badge" id="exerciseProgressCounter">0 / 5 Resueltos</span>
+      </div>
+      <div class="sidebar-selectors">
+        <select id="sidebarSubjectSelect" class="sidebar-select" aria-label="Navegación"></select>
+      </div>
+      <div class="sidebar-section-label">Índice de Problemas</div>
+      <nav>
+        <a href="#ex-01" class="active"><span>Ej 01. Modelo Publish/Subscribe</span><span class="pill">Traza</span></a>
+        <a href="#ex-02"><span>Ej 02. Envío Señal RT con Valor</span><span class="pill">Traza</span></a>
+        <a href="#ex-03"><span>Ej 03. Flag Modo Extendido</span><span class="pill">Traza</span></a>
+        <a href="#ex-04"><span>Ej 04. Operaciones de sigwait</span><span class="pill">Cálculo</span></a>
+        <a href="#ex-05"><span>Ej 05. Hebra Manejadora C11</span><span class="pill accent">Código</span></a>
+      </nav>
+      <div class="sidebar-section-label">Navegación</div>
+      <nav>
+        <a href="../index.html"><span>← Panel de la Asignatura</span></a>
+        <a href="../teoria/tema-05.html"><span>📘 Volver a Teoría Tema 5</span></a>
+        <a href="./practica-tema-04.html"><span>← Práctica Tema 4</span></a>
+        <a href="./practica-tema-06.html"><span>Siguiente: Práctica Tema 6 →</span></a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
+          <div class="breadcrumbs">
+            <a href="../../../../../index.html">Workbench</a>
+            <span class="sep">/</span>
+            <a href="../index.html">Programación Concurrente</a>
+            <span class="sep">/</span>
+            <span class="current">Práctica Tema 5</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button type="button" id="allSol" class="btn-top">▼ Mostrar Todas las Soluciones</button>
+          <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
+          <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <header class="hero-banner">
+          <div class="hero-kicker"><span>HOJA DE PROBLEMAS · TEMA 5 (PÁGS. 1–35 PDF)</span><span>·</span><span>EVENTOS Y SEÑALES POSIX</span></div>
+          <h1>Práctica Tema 5: Programación Dirigida por Eventos, <code>sigaction</code> y <code>sigwaitinfo</code></h1>
+          <p class="lead">
+            Ejercicios sobre arquitecturas de eventos, máscaras de bloqueo por hebra (<code>pthread_sigmask</code>), manejadores extendidos (<code>SA_SIGINFO</code>) y espera síncrona en hebra dedicada.
+          </p>
+        </header>
+
+        <section class="exercise-card" id="ex-01" data-ex-id="pc-t5-e1" data-difficulty="baja" data-type="trace" data-answer="MOM|publish/subscribe" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 01 · Tema 5, Pág. 15</span><span class="pill">Dificultad: Baja</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Acrónimo de Middleware Orientado a Mensajes</h3>
+          <p>Según la página 15 del Tema 5, ¿qué siglas en inglés identifican al <em>Message-oriented middleware</em> que utiliza habitualmente el modelo <code>publish/subscribe</code> mediante tópicos?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:240px;" placeholder="Ej. MOM" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 5, Pág. 15)</summary>
+            <p>Las siglas son <strong>MOM</strong> (<em>Message-oriented middleware</em>).</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-02" data-ex-id="pc-t5-e2" data-difficulty="media" data-type="trace" data-answer="sigqueue" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 02 · Tema 5, Pág. 23</span><span class="pill">Dificultad: Media</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Función POSIX para Enviar Señales de Tiempo Real Encoladas con Valor</h3>
+          <p>Según la página 23 del Tema 5 (y pág. 16 del Tema 7), ¿con qué función de librería se envían las señales de tiempo real adjuntando una <code>union sigval</code>?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:240px;" placeholder="Nombre de función" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 5, Pág. 23)</summary>
+            <p>La función es <code>sigqueue</code> (ej. <code>sigqueue(getpid(), SIGRTMIN, v);</code>).</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-03" data-ex-id="pc-t5-e3" data-difficulty="media" data-type="trace" data-answer="SA_SIGINFO" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 03 · Tema 5, Págs. 28–29</span><span class="pill">Dificultad: Media</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Bandera <code>sa_flags</code> para Manejador Extendido POSIX 1b</h3>
+          <p>Al configurar <code>struct sigaction act;</code> con un manejador de 3 argumentos <code>act.sa_sigaction = ManejadorSig;</code> (Tema 5, pág. 29), ¿qué constante debe asignarse a <code>act.sa_flags</code> para activar el modo extendido?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:240px;" placeholder="Constante sa_flags" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 5, Pág. 29)</summary>
+            <div class="formula">act.sa_flags = SA_SIGINFO;</div>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-04" data-ex-id="pc-t5-e4" data-difficulty="baja" data-type="calc" data-answer="3" data-tolerance="0">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 04 · Tema 5, Pág. 32</span><span class="pill">Dificultad: Baja</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Operaciones Atómicas Realizadas por <code>sigwait</code> / <code>sigwaitinfo</code></h3>
+          <p>Según la página 32 del Tema 5, ¿cuántas operaciones realiza de forma atómica la función <code>sigwait</code> (desbloquear el conjunto, esperar la señal y restablecer los bloqueos)?</p>
+          <div style="display:flex;gap:0.6rem;align-items:center;margin:0.85rem 0;">
+            <input type="text" class="sidebar-select ex-input" style="max-width:200px;" placeholder="N.º de operaciones" />
+            <button type="button" class="btn-action ex-check-btn">Verificar Respuesta</button>
+          </div>
+          <div class="ex-feedback"></div>
+          <details class="sol" style="margin-top:0.75rem;">
+            <summary>Solución Razonada (Tema 5, Pág. 32)</summary>
+            <p>Realiza exactamente <strong>3 operaciones de forma atómica</strong>.</p>
+          </details>
+        </section>
+
+        <section class="exercise-card" id="ex-05" data-ex-id="pc-t5-e5" data-difficulty="alta" data-type="code">
+          <div class="exercise-header">
+            <div><span class="pill accent">Ejercicio 05 · Programación Señales POSIX (Págs. 33–34)</span><span class="pill">Dificultad: Alta</span></div>
+            <span class="pill ex-status-badge">○ Pendiente</span>
+          </div>
+          <h3>Hebra como Manejador de Eventos con <code>pthread_sigmask</code> y <code>sigwaitinfo</code></h3>
+          <p>Ejecuta y valida el código de <code>senales_sigwait.c</code>:</p>
+          <div class="code-execution-box" data-src="../src-code/tema-05/senales_sigwait.c" data-lang="c"></div>
+          <button type="button" class="btn-action ex-verify-code-btn">✓ Compilar, Ejecutar y Marcar Ejercicio Resuelto</button>
+          <div class="ex-feedback" style="margin-top:0.75rem;"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/core-shell.js"></script>
+  <script src="../../../../../assets/js/code-runner.js"></script>
+  <script src="../../../../../assets/js/exercise-engine.js"></script>
+</body>
+</html>
