@@ -1,7 +1,7 @@
 {
   "id": "./index.html",
-  "name": "NeoEngine v3 — Ingeniería Electrónica de Telecomunicaciones",
-  "short_name": "NeoEngine v3",
+  "name": "NeoEngine",
+  "short_name": "NeoEngine",
   "version": "3.0.0",
   "description": "Plataforma interactiva de estudio, simulación en tiempo real y laboratorio de código para Ingeniería Electrónica de Telecomunicaciones.",
   "start_url": "./index.html",
