@@ -3,9 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Panel Maestro de Programación Concurrente: Los 7 Temas Oficiales, Reglas de Oro INFO.md, Hojas de Problemas y Simulador de Examen." />
-  <title>Programación Concurrente — Panel Maestro de la Asignatura | Engineering Workbench</title>
+  <meta name="description" content="Panel Maestro de Programación Concurrente: Los 7 Temas Oficiales, Reglas de Oro Normativa de Evaluación, Hojas de Problemas y Simulador de Examen." />
+  <title>Programación Concurrente — Panel Maestro de la Asignatura | NeoEngine</title>
   <link rel="stylesheet" href="../../../../assets/css/app.css" />
+  <meta name="theme-color" content="#0d7069" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="NeoEngine" />
+  <link rel="icon" type="image/svg+xml" href="../../../../assets/img/logo-neoengine.svg" />
+  <link rel="apple-touch-icon" href="../../../../assets/img/icon-192.png" />
+  <style id="neo-fouc-shield">
+    html.neo-locked .layout,
+    html.neo-locked .sidebar-backdrop,
+    html.neo-locked #cmdPaletteBackdrop {
+      display: none !important;
+      visibility: hidden !important;
+    }
+  </style>
+  <script id="neo-fouc-script">
+    (function(){
+      try {
+        var raw = localStorage.getItem("neoengine_auth_v1");
+        if (!raw) {
+          var m = document.cookie.match(/(?:^|; )neoengine_auth_v1=([^;]*)/);
+          if (m && m[1]) raw = decodeURIComponent(m[1]);
+        }
+        if (!raw) { document.documentElement.classList.add("neo-locked"); return; }
+        var s = JSON.parse(raw);
+        if (!s || !s.deviceId || !s.issuedAt || !s.syncSeal || !s.hmacSha256) {
+          document.documentElement.classList.add("neo-locked"); return;
+        }
+        var mk = [0x3a,0x91,0xc4,0x57,0x88,0x12,0xe9,0x4f,0x63,0xb8,0x2d,0xa1,0x07,0xf4,0x5e,0xd2,0x79,0x31,0x8c,0x66,0xbe,0x05,0x44,0x9a,0xe1,0x28,0x73,0xdf,0x19,0x6c,0xa8,0x50];
+        var dk = [0x74,0xd4,0x8b,0x12,0xc6,0x55,0xa0,0x01,0x26,0x95,0x69,0xe4,0x51,0xbd,0x1d,0x97,0x54,0x62,0xc5,0x21,0xf0,0x40,0x08,0xd3,0xa3,0x6d,0x27,0x9e,0x5c,0x23,0xe5,0x1e];
+        var str = s.deviceId + "|" + s.issuedAt + "|neoengine-sync-v1";
+        var h1 = 0x811c9dc5, h2 = 0x01000193;
+        for (var i = 0; i < str.length; i++) {
+          var k = (dk[i % 32] ^ mk[i % 32]) & 0xff;
+          var c = str.charCodeAt(i) ^ k;
+          h1 ^= c; h1 = Math.imul(h1, 0x01000193) >>> 0;
+          h2 ^= (c + i) & 0xff; h2 = Math.imul(h2, 0x85ebca6b) >>> 0;
+        }
+        var seal = h1.toString(16).padStart(8, "0") + h2.toString(16).padStart(8, "0");
+        if (seal !== s.syncSeal) document.documentElement.classList.add("neo-locked");
+      } catch(e) {
+        document.documentElement.classList.add("neo-locked");
+      }
+    })();
+  </script>
 </head>
 <body data-page-id="pc-index" data-subject-id="programacion-concurrente" data-subject-name="Programación Concurrente">
   <div class="layout">
@@ -22,7 +65,7 @@
 
       <div class="sidebar-section-label">Secciones del Panel</div>
       <nav aria-label="Secciones del panel de la asignatura">
-        <a href="#sec-info-md" class="active"><span>1. Reglas de Oro (INFO.md)</span><span>⚠️</span></a>
+        <a href="#sec-info-md" class="active"><span>1. Normativa de Evaluación POSIX</span><span>⚠️</span></a>
         <a href="#sec-temario"><span>2. Los 7 Temas y Prácticas</span><span>📘</span></a>
         <a href="#sec-patrones"><span>3. Patrones Canónicos C/POSIX</span><span>💻</span></a>
       </nav>
@@ -50,7 +93,7 @@
         <div class="topbar-left">
           <button type="button" id="toggleSidebar" aria-label="Mostrar u ocultar barra lateral" aria-expanded="true">☰</button>
           <div class="breadcrumbs">
-            <a href="../../../../index.html">Workbench</a>
+            <a href="../../../../index.html">NeoEngine</a>
             <span class="sep">/</span>
             <span>3er Año · 1er Semestre</span>
             <span class="sep">/</span>
@@ -72,21 +115,21 @@
           </div>
           <h1>Programación Concurrente: Guía de Estudio, Laboratorio POSIX y Simulación</h1>
           <p class="lead">
-            Cobertura íntegra de los <strong>7 Temas Oficiales</strong> de la asignatura y de la guía de referencia <code>INFO.md</code>: desde la semántica de entrelazado (<em>interleaving</em>) y Pthreads hasta espera activa (Peterson y Panadería de Lamport), semáforos POSIX (<code>semaphore.h</code>), colas de mensajes (<code>mqueue.h</code> + <code>select</code>), eventos/señales (<code>sigwaitinfo</code>), Java/C#/FreeRTOS y planificación de Tiempo Real (<code>SCHED_FIFO</code>, <code>mlockall</code>, <code>clock_nanosleep</code>).
+            Cobertura íntegra de los <strong>7 Temas Oficiales</strong> de la asignatura y de los criterios oficiales de evaluación: desde la semántica de entrelazado (<em>interleaving</em>) y Pthreads hasta espera activa (Peterson y Panadería de Lamport), semáforos POSIX (<code>semaphore.h</code>), colas de mensajes (<code>mqueue.h</code> + <code>select</code>), eventos/señales (<code>sigwaitinfo</code>), Java/C#/FreeRTOS y planificación de Tiempo Real (<code>SCHED_FIFO</code>, <code>mlockall</code>, <code>clock_nanosleep</code>).
           </p>
           <div class="meta-pills">
             <span class="pill accent">7 Unidades Teóricas Interactivas</span>
             <span class="pill ok">7 Hojas de Ejercicios Paso a Paso</span>
-            <span class="pill sig">11 Programas Ejecutables en src-code/</span>
+            <span class="pill sig">11 Programas Ejecutables C11 POSIX</span>
             <span class="pill">Simulador de Examen de 21 Preguntas</span>
           </div>
         </header>
 
-        <!-- SECCIÓN 1: REGLAS DE ORO DE INFO.MD -->
+        <!-- SECCIÓN 1: Normativa Oficial de Codificación POSIX -->
         <section class="topic-section" id="sec-info-md">
-          <h2><span>1. Directivas Críticas de Codificación y Argumentación (INFO.md)</span><span class="pill sig">Lectura Obligatoria</span></h2>
+          <h2><span>1. Directivas Críticas de Codificación y Argumentación (Normativa de Evaluación)</span><span class="pill sig">Lectura Obligatoria</span></h2>
           <div class="warn">
-            <strong class="tag">Las 5 Reglas Inquebrantables de Examen (INFO.md)</strong>
+            <strong class="tag">Las 5 Reglas Inquebrantables de Examen (Normativa de Evaluación)</strong>
             <ul style="margin:0.4rem 0 0;padding-left:1.25rem;">
               <li><strong>1. PROHIBICIÓN ABSOLUTA DE <code>volatile</code>:</strong> En la asignatura jamás se usa la palabra clave <code>volatile</code> (ni en espera activa, ni en semáforos, ni en manejadores). Toda variable compartida se declara como variable global normal (<code>int</code>, <code>unsigned</code>, <code>long</code>).</li>
               <li><strong>2. OBLIGATORIO COMPROBAR ERRORES:</strong> Toda llamada a <code>pthread_create</code> y <code>pthread_join</code> debe validar su valor devuelto con <code>if (pthread_create(...) != 0) { perror(...); exit(-1); }</code>.</li>
@@ -182,7 +225,7 @@
 
         <!-- SECCIÓN 3: PATRONES CANÓNICOS EJECUTABLES EN VIVO -->
         <section class="topic-section" id="sec-patrones">
-          <h2><span>3. Patrones Canónicos de INFO.md Ejecutables en Vivo</span><span class="pill ok">C11 POSIX</span></h2>
+          <h2><span>3. Patrones Canónicos dy la normativa de evaluación Ejecutables en Vivo</span><span class="pill ok">C11 POSIX</span></h2>
           <p>1. Gestión segura de hebras Pthreads con <code>int ids[NUM_HEBRAS]</code> y comprobación de errores (<code>creacion_hebras_segura.c</code>):</p>
           <div class="code-execution-box" data-src="./src-code/tema-02/creacion_hebras_segura.c" data-lang="c"></div>
 
@@ -197,6 +240,7 @@
   </div>
 
   <script src="../../../../assets/js/storage.js"></script>
+  <script src="../../../../assets/js/security-gate.js"></script>
   <script src="../../../../assets/js/core-shell.js"></script>
   <script src="../../../../assets/js/code-runner.js"></script>
 </body>

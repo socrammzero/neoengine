@@ -1,5 +1,5 @@
 /*
- * Patrón Canónico Oficial (INFO.md Sección 3.2) — Tema 3: Algoritmo de Peterson (2 Procesos)
+ * Patrón Canónico Oficial (Normativa de Evaluación) — Tema 3: Algoritmo de Peterson (2 Procesos)
  * Compilación: gcc -Wall -Wextra -std=c11 -pthread peterson.c -o peterson -lrt
  * Propiedades verificadas:
  *  - R1: Exclusión mutua estricta

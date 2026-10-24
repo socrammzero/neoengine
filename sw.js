@@ -1,15 +1,35 @@
-const CACHE_NAME = 'eng-workbench-v1';
+const CACHE_NAME = 'neoengine-pwa-v2';
 const CORE_ASSETS = [
   './index.html',
+  './portal-totp.html',
   './manifest.json',
+  './assets/img/logo-neoengine.svg',
   './assets/css/app.css',
+  './assets/js/security-gate.js',
   './assets/js/storage.js',
   './assets/js/core-shell.js',
   './assets/js/code-runner.js',
   './assets/js/exercise-engine.js',
   './assets/js/exam-engine.js',
   './data/curriculum.json',
-  './data/search-index.json'
+  './data/search-index.json',
+  './cursos/anio-3/semestre-1/programacion-concurrente/index.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-01.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-02.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-03.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-04.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-05.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-06.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-07.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-01.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-02.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-03.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-04.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-05.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-06.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/ejercicios/practica-tema-07.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/evaluacion/examen-test.html',
+  './cursos/anio-3/semestre-1/programacion-concurrente/evaluacion/banco-preguntas.json'
 ];
 
 self.addEventListener('install', (event) => {

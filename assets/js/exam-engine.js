@@ -1,5 +1,5 @@
 /**
- * ENGINEERING WORKBENCH — EXAM-ENGINE.JS
+ * NeoEngine — EXAM-ENGINE.JS
  * Simulador de Evaluación Tipo Test (evaluacion/examen-test.html):
  *  - Doble Modalidad:
  *      1. Modo Práctica: Corrección inmediata pregunta a pregunta con justificación técnica.

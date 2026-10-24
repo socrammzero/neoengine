@@ -1,5 +1,5 @@
 /**
- * ENGINEERING WORKBENCH — STORAGE.JS
+ * NeoEngine — STORAGE.JS
  * Persistencia local híbrida (localStorage + IndexedDB) para progreso de temas,
  * ejercicios resueltos, código editado en sandboxes e historial de evaluaciones.
  */
@@ -7,7 +7,7 @@
   "use strict";
 
   const STORAGE_KEY = "eng_workbench_state_v1";
-  const DB_NAME = "EngWorkbenchDB";
+  const DB_NAME = "NeoEngineDB";
   const DB_VERSION = 1;
 
   const defaultState = () => ({

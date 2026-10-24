@@ -1,56 +1,21 @@
-# Engineering Workbench — Plataforma Web Interactiva de Estudio e Investigación
+# NeoEngine — Ingeniería Electrónica de Telecomunicaciones
 
-Entorno técnico autónomo de estudio, laboratorio de programación y simulación de evaluación construido bajo arquitectura **Progressive Web App (PWA)** estática para **GitHub Pages**, siguiendo el protocolo de diseño **`html-maker`**, las reglas críticas de **`INFO.md`** y principios estrictos de privacidad, neutralidad y anonimato.
-
----
-
-## 1. Arquitectura Técnica y Características Clave
-
-- **App Shell Persistente y Cierre Hermético (`html-maker`):**
-  - Barra lateral izquierda colapsable al 100% con botón de control (`☰`) en la esquina superior izquierda, selector de asignaturas y seguimiento automático de lectura mediante `IntersectionObserver` (*Scrollspy*).
-  - Detección nativa del esquema de color del sistema operativo (`prefers-color-scheme: dark`) con conmutador manual persistente en `localStorage` y redibujado dinámico de gráficas SVG.
-  - Transiciones suaves entre documentos multi-página mediante la **View Transitions API** (`@view-transition { navigation: auto; }`).
-- **Buscador Global Instantáneo (`Ctrl + K`):**
-  - Paleta de comandos alimentada por `data/search-index.json` para saltar en milisegundos a cualquiera de los 7 temas, hojas de problemas, simulador de examen o archivos de código C11 POSIX / Java.
-- **Motor de Ejecución de Código Real y Auditor `INFO.md` (`assets/js/code-runner.js`):**
-  - Los contenedores `.code-execution-box` cargan mediante `fetch()` los archivos físicos alojados en `src-code/`, permitiendo su edición en vivo y verificando automáticamente las directivas de `INFO.md` (prohibición de `volatile`, prohibición de `pthread_mutex_lock` en favor de `sem_t mutex`, paso obligatorio de `&ids[i]` y control de errores en `pthread_create` y `pthread_join`).
-- **Simulador de Evaluación Tipo Test (`assets/js/exam-engine.js`):**
-  - Doble modalidad (*Modo Práctica* con justificación inmediata y *Modo Examen* con cronómetro y barajado aleatorio desde `banco-preguntas.json`) aplicando la fórmula de penalización:
-    $$\text{Calificación} = \max\left(0, \left(A - \frac{E}{k - 1}\right) \times \frac{10}{N}\right)$$
+Plataforma interactiva de estudio, simulación en tiempo real y laboratorio de código para el Grado en **Ingeniería Electrónica de Telecomunicaciones**, diseñada como **Aplicación Web Progresiva (PWA)** instalable en cualquier dispositivo.
 
 ---
 
-## 2. Estructura del Repositorio (Foco: Programación Concurrente)
+## 1. Características Principales de NeoEngine
 
-```text
-.
-├── index.html                          # Dashboard principal
-├── manifest.json                       # Manifiesto PWA instalable
-├── sw.js                               # Service Worker para caché offline
-├── assets/
-│   ├── css/app.css                     # Sistema de diseño html-maker + View Transitions
-│   └── js/
-│       ├── storage.js                  # Persistencia local híbrida (localStorage + IndexedDB)
-│       ├── core-shell.js               # Sidebar hermético, Scrollspy, Tema, Ctrl+K y SVG Charts
-│       ├── code-runner.js              # Carga fetch(), ejecución C/POSIX/Java y Auditor INFO.md
-│       ├── exercise-engine.js          # Motor de hojas de problemas y filtros dinámicos
-│       └── exam-engine.js              # Motor de exámenes tipo test y analíticas
-├── data/
-│   ├── curriculum.json                 # Mapa curricular real
-│   └── search-index.json               # Índice de búsqueda global para Ctrl+K
-├── templates/                          # Plantillas maestras generadas con html-maker
-│   ├── plantilla-tema-teorico.html
-│   ├── plantilla-ristra-ejercicios.html
-│   └── plantilla-simulador-test.html
-├── scripts/
-│   └── audit-privacy.js                # Auditor pre-commit de privacidad, html-maker e INFO.md
-└── cursos/
-    └── anio-3/
-        └── semestre-1/
-            └── programacion-concurrente/
-                ├── index.html
-                ├── teoria/             # Temas 01 a 07 interactivos
-                ├── ejercicios/         # Prácticas de los Temas 01 a 07
-                ├── evaluacion/         # Simulador de Examen Final + banco-preguntas.json (21 Q)
-                └── src-code/           # 11 programas C11 POSIX y Java reales y ejecutables
-```
+- **Seguridad Criptográfica Integrada (RFC 6238 + HMAC-SHA256):**
+  - Control de acceso mediante código dinámico de 6 dígitos que se renueva cada 30 segundos, calculado en el navegador mediante `crypto.subtle` nativo con ventana de tolerancia de ±1 paso (90 segundos).
+  - Al autenticarse por primera vez, el dispositivo recibe un identificador único de terminal (`deviceId`) firmado mediante `HMAC-SHA256` con clave ofuscada por máscara XOR, recordando la autorización de forma permanente salvo borrado de caché o cierre de sesión manual (10 pulsaciones consecutivas sobre el logotipo de **NeoEngine**).
+  - Verificación síncrona libre de parpadeo (*FOUC-Free*) y bloqueo temporal progresivo tras 5 intentos fallidos consecutivos.
+- **Aplicación Web Instalable (PWA) y Auto-Redimensionado Universal:**
+  - Instalable como aplicación nativa independiente en Windows, macOS, Linux, iOS/iPadOS y Android con soporte offline completo.
+  - Diseño fluido que adapta automáticamente paneles, tablas técnicas, cronogramas SVG y editores de código a cualquier resolución de pantalla.
+- **Buscador Universal Tolerante a Errores (`Ctrl + K`):**
+  - Motor de búsqueda de texto completo sobre todos los temas, secciones, problemas resueltos, código fuente y cuestiones de examen, insensible a tildes, signos de interrogación (`¿?`) y errores ortográficos o tipográficos.
+- **Módulo Desplegado: Programación Concurrente (3er Año · 1er Semestre):**
+  - **7 Temas de Teoría Interactiva** con simuladores SVG reactivos (entrelazado de instrucciones, pila de hebras Pthreads, trazador de Peterson, colas POSIX y planificador de Tiempo Real RMS/EDF).
+  - **11 Programas Ejecutables C11 POSIX y Java** con verificador estático integrado de normativa de evaluación.
+  - **35 Problemas Resueltos Paso a Paso** distribuidos en 7 hojas de prácticas y **Simulador de Examen Final** con 21 cuestiones oficiales.

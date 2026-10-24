@@ -1,6 +1,6 @@
 {
   "platform": {
-    "title": "Engineering Workbench",
+    "title": "NeoEngine",
     "subtitle": "Plataforma Interactiva de Estudio, Laboratorio de Código y Simulación Técnica",
     "version": "2.5.0",
     "activeFocus": {
@@ -99,7 +99,7 @@
                 ],
                 "evaluacion": {
                   "id": "pc-ex",
-                  "title": "Simulador de Examen Final: Programación Concurrente (Temas 1 a 7 + INFO.md)",
+                  "title": "Simulador de Examen Final: Programación Concurrente (Temas 1 a 7 + Normativa POSIX)",
                   "path": "cursos/anio-3/semestre-1/programacion-concurrente/evaluacion/examen-test.html",
                   "bankPath": "cursos/anio-3/semestre-1/programacion-concurrente/evaluacion/banco-preguntas.json",
                   "questionCount": 21

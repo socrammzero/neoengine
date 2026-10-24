@@ -1,5 +1,5 @@
 /*
- * Patrón Canónico Oficial (INFO.md Sección 3.3) — Tema 3: Algoritmo de la Panadería de Lamport (N Procesos)
+ * Patrón Canónico Oficial (Normativa de Evaluación) — Tema 3: Algoritmo de la Panadería de Lamport (N Procesos)
  * Compilación: gcc -Wall -Wextra -std=c11 -pthread panaderia_lamport.c -o panaderia_lamport -lrt
  * Orden lexicográfico: (turno[i], i) < (turno[id], id)
  */

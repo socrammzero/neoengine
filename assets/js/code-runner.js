@@ -1,8 +1,8 @@
 /**
- * ENGINEERING WORKBENCH — CODE-RUNNER.JS
- * Motor de carga (fetch de archivos físicos en src-code/) y ejecución real
- * de código en el navegador para Programación Concurrente (C11 POSIX + Pthreads + Semáforos + Mqueue + RT + Java).
- * Incorpora el Validador Estático de Reglas Críticas de INFO.md:
+ * NEOENGINE — CODE-RUNNER.JS
+ * Motor de carga y ejecución interactiva de código en el navegador para
+ * Programación Concurrente (C11 POSIX + Pthreads + Semáforos + Mqueue + RT + Java).
+ * Incorpora el Verificador Estático de Normativa de Evaluación POSIX:
  *  1. Prohibición absoluta de `volatile`.
  *  2. Prohibición de `pthread_mutex_lock` en problemas generales (obligatorio `sem_t mutex`).
  *  3. Prohibición de `(void*)(intptr_t)i` en `pthread_create` (obligatorio `int ids[MAX]`).
@@ -12,33 +12,32 @@
   "use strict";
 
   /* --------------------------------------------------------------------------
-     Auditor Estático de Cumplimiento de INFO.md para Código C / POSIX
+     Verificador Estático de Normativa de Codificación C / POSIX
      -------------------------------------------------------------------------- */
-  function auditInfoMdCompliance(code, lang) {
+  function auditCodingStandards(code, lang) {
     if (lang !== "c") return { valid: true, warnings: [], errors: [] };
     const errors = [];
     const warnings = [];
 
-    // Ignorar comentarios para no dar falsos positivos si se menciona en un comentario explicativo
     const codeNoComments = code
       .replace(/\/\*[\s\S]*?\*\//g, "")
       .replace(/\/\/.*$/gm, "");
 
     if (/\bvolatile\b/.test(codeNoComments)) {
       errors.push(
-        "❌ [ERROR CRÍTICO INFO.md #1]: Uso detectado de la palabra clave 'volatile'. Está TERMINANTEMENTE PROHIBIDO usar 'volatile' en cualquier variable, parámetro o puntero de la asignatura (calificación: 0)."
+        "❌ [CRITERIO DE EVALUACIÓN #1]: Uso detectado de la palabra clave 'volatile'. Está terminantemente prohibido usar 'volatile' en cualquier variable, parámetro o puntero de la asignatura (calificación: 0)."
       );
     }
 
     if (/\bpthread_mutex_lock\b|\bpthread_mutex_unlock\b/.test(codeNoComments)) {
       errors.push(
-        "❌ [ERROR CRÍTICO INFO.md #3]: Uso detectado de 'pthread_mutex_lock/unlock'. Está prohibido en la codificación de la asignatura; debes usar 'sem_t mutex' con 'sem_wait(&mutex)' y 'sem_post(&mutex)'."
+        "❌ [CRITERIO DE EVALUACIÓN #3]: Uso detectado de 'pthread_mutex_lock/unlock'. En los ejercicios de codificación general debe emplearse 'sem_t mutex' con 'sem_wait(&mutex)' y 'sem_post(&mutex)'."
       );
     }
 
     if (/\(\s*void\s*\*\s*\)\s*\(\s*intptr_t\s*\)/.test(codeNoComments)) {
       errors.push(
-        "❌ [ERROR CRÍTICO INFO.md #4]: Uso prohibido de '(void*)(intptr_t)i'. Debes usar un array 'int ids[MAX]' con 'ids[i] = i' y pasar '&ids[i]' a pthread_create."
+        "❌ [CRITERIO DE EVALUACIÓN #4]: Uso no permitido de '(void*)(intptr_t)i'. Debe declararse un array 'int ids[MAX]' con 'ids[i] = i' y pasar '&ids[i]' a pthread_create."
       );
     }
 
@@ -47,7 +46,7 @@
       !/if\s*\(\s*(?:[a-zA-Z0-9_]+\s*=\s*)?pthread_create/.test(codeNoComments)
     ) {
       warnings.push(
-        "⚠️ [AVISO INFO.md #2]: Toda llamada a 'pthread_create' debe comprobar obligatoriamente su valor de retorno (if (pthread_create(...) != 0))."
+        "⚠️ [CRITERIO DE EVALUACIÓN #2]: Toda llamada a 'pthread_create' debe comprobar obligatoriamente su valor de retorno (if (pthread_create(...) != 0))."
       );
     }
 
@@ -56,7 +55,7 @@
       !/if\s*\(\s*(?:[a-zA-Z0-9_]+\s*=\s*)?pthread_join/.test(codeNoComments)
     ) {
       warnings.push(
-        "⚠️ [AVISO INFO.md #2]: Toda llamada a 'pthread_join' debe comprobar obligatoriamente su valor de retorno (if (pthread_join(...) != 0))."
+        "⚠️ [CRITERIO DE EVALUACIÓN #2]: Toda llamada a 'pthread_join' debe comprobar obligatoriamente su valor de retorno (if (pthread_join(...) != 0))."
       );
     }
 
@@ -76,21 +75,20 @@
     const cleanLang = (lang || "c").toLowerCase();
 
     if (cleanLang === "c") {
-      const audit = auditInfoMdCompliance(code, "c");
+      const audit = auditCodingStandards(code, "c");
       if (!audit.valid) {
         return {
           ok: false,
-          engine: "Auditor Estático INFO.md + GCC 13.2 POSIX",
+          engine: "Verificador Estático POSIX + GCC 13.2",
           timeMs: (performance.now() - t0).toFixed(1),
           output:
             audit.errors.join("\n") +
             (audit.warnings.length ? "\n" + audit.warnings.join("\n") : "") +
-            "\n\nCompilación abortada por infracción de las Reglas de Oro (INFO.md)."
+            "\n\nCompilación detenida por incumplimiento de los Criterios de Evaluación de la asignatura."
         };
       }
     }
 
-    // Extraer constantes #define o asignaciones para que los cambios del usuario se reflejen en vivo
     const defines = {};
     const defRegex = /#define\s+([A-Z0-9_]+)\s+(\d+)/g;
     let m;
@@ -105,10 +103,10 @@
     const out = [];
     if (cleanLang === "c") {
       out.push(`$ gcc -Wall -Wextra -std=c11 -pthread programa.c -o programa -lrt`);
-      out.push(`[Auditor INFO.md] ✓ 0 'volatile' | ✓ Sin pthread_mutex_lock | ✓ Paso seguro &ids[i] | ✓ Control de errores activo`);
+      out.push(`[Verificador POSIX] ✓ 0 'volatile' | ✓ Exclusión mutua sem_t | ✓ Paso seguro &ids[i] | ✓ Control de errores activo`);
       out.push(`--------------------------------------------------------------------------------`);
 
-      // 1. Tema 1: Búsqueda Lineal Concurrente (busqueda_concurrente.c)
+      // 1. Tema 1: Búsqueda Lineal Concurrente
       if (code.includes("busquedaLineal") || code.includes("struct argm")) {
         const target = defines.OBJETIVO || defines.x || 7;
         out.push(`=== EJECUCIÓN: BÚSQUEDA LINEAL CONCURRENTE (2 Hebras Pthreads) ===`);
@@ -126,7 +124,7 @@
         }
         out.push(`[main] pthread_join(th[0]) == 0, pthread_join(th[1]) == 0 -> Fin.`);
       }
-      // 2. Tema 2: Creación y Gestión Segura de Hebras (creacion_hebras_segura.c)
+      // 2. Tema 2: Creación y Gestión Segura de Hebras
       else if (code.includes("HTarea") || code.includes("NUM_HEBRAS")) {
         const nH = Math.min(16, defines.NUM_HEBRAS || 4);
         out.push(`=== EJECUCIÓN: GESTIÓN CANÓNICA DE HEBRAS POSIX (NUM_HEBRAS = ${nH}) ===`);
@@ -139,7 +137,7 @@
         }
         out.push(`Todas las hebras han concluido sin fugas ni estados zombi.`);
       }
-      // 3. Tema 3: Algoritmo de Peterson (peterson.c)
+      // 3. Tema 3: Algoritmo de Peterson
       else if (code.includes("otra = (miId + 1) % 2") || code.includes("otra=(miId+1)%2") || (code.includes("f[2]") && code.includes("turno"))) {
         const iter = Math.min(10, defines.ITERACIONES || 3);
         let cont = 0;
@@ -152,7 +150,7 @@
         }
         out.push(`Resultado Final: cont = ${cont} (Esperado: ${iter * 2}). R1 Exclusión Mutua, R2 Sin Livelock, R3 Progreso y R4 Justicia verificados.`);
       }
-      // 4. Tema 3: Algoritmo de la Panadería de Lamport (panaderia_lamport.c)
+      // 4. Tema 3: Algoritmo de la Panadería de Lamport
       else if (code.includes("pidiendoTurno") || code.includes("meToca")) {
         const maxt = Math.min(15, defines.MAXT || 5);
         const loops = defines.ITERACIONES || 1000;
@@ -162,7 +160,7 @@
         out.push(`[Sección Crítica] Hebra 0 atendida -> turno[0]=0 | Hebra 2 atendida -> turno[2]=0 | Hebra 1 toma turno=2...`);
         out.push(`Resultado tras ${loops} iteraciones por hebra: cont = ${maxt * loops} (Exacto: ${maxt * loops}, 0 colisiones).`);
       }
-      // 5. Tema 3_1: Productor-Consumidor con Semáforos POSIX (productor_consumidor_sem.c)
+      // 5. Tema 3_1: Productor-Consumidor con Semáforos POSIX
       else if (code.includes("Hay_espacio") || code.includes("Hay_Datos")) {
         const tam = defines.MAXT || 5;
         const total = Math.min(12, defines.TOTAL_DATOS || 6);
@@ -175,7 +173,7 @@
         }
         out.push(`Fin: ${total} elementos producidos y consumidos en orden FIFO estricto sin interbloqueo.`);
       }
-      // 6. Tema 3_1: Lectores-Escritores con Semáforos (lectores_escritores_sem.c)
+      // 6. Tema 3_1: Lectores-Escritores con Semáforos
       else if (code.includes("nLectores") || code.includes("escribiendo")) {
         out.push(`=== EJECUCIÓN: LECTORES/ESCRITORES JUSTO CON SEMÁFOROS POSIX ===`);
         out.push(`Semáforos inicializados a 1: escribiendo=1, leyendo=1, mutex1=1, mutex2=1, mutex3=1`);
@@ -185,7 +183,7 @@
         out.push(`[Lector 0,1] saleLector(): nLectores llega a 0 -> Ejecuta sem_post(&escribiendo)`);
         out.push(`[Escritor 0] Adquiere escribiendo en EXCLUSIÓN MUTUA -> Actualiza BD -> saleEscritor(0) abre leyendo y escribiendo.`);
       }
-      // 7. Tema 3_1: Cena de los Filósofos con Semáforo Sillas (filosofos_sillas.c)
+      // 7. Tema 3_1: Cena de los Filósofos con Semáforo Sillas
       else if (code.includes("sillas") || code.includes("ten[")) {
         const nFil = defines.MAXF || 5;
         out.push(`=== EJECUCIÓN: CENA DE LOS ${nFil} FILÓSOFOS (Prevención de Deadlock con Sillas = ${nFil - 1}) ===`);
@@ -195,7 +193,7 @@
         out.push(`[Filósofo 4] Si 4 filósofos ocupan silla, el 5º espera en sem_wait(&sillas), rompiendo la espera circular.`);
         out.push(`[Filósofo 0] Devuelve ten[1], ten[0] y libera sem_post(&sillas). Estado libre de interbloqueo.`);
       }
-      // 8. Tema 4: Colas de Mensajes POSIX y Espera Selectiva (colas_mensajes_mq.c)
+      // 8. Tema 4: Colas de Mensajes POSIX y Espera Selectiva
       else if (code.includes("mq_open") || code.includes("mq_send")) {
         const maxMsg = defines.MAX_MSG || 10;
         out.push(`=== EJECUCIÓN: COLAS DE MENSAJES POSIX (<mqueue.h>) + ESPERA SELECTIVA select() ===`);
@@ -206,7 +204,7 @@
         out.push(`[Servidor] mq_receive extrae los mensajes sin imponer orden rígido entre puertas -> Visitantes totales = 2000.`);
         out.push(`mq_close() y mq_unlink("/PC") ejecutados limpiamente.`);
       }
-      // 9. Tema 5: Señales POSIX y Espera Síncrona sigwait (senales_sigwait.c)
+      // 9. Tema 5: Señales POSIX y Espera Síncrona sigwait
       else if (code.includes("sigwait") || code.includes("pthread_sigmask")) {
         out.push(`=== EJECUCIÓN: MANEJO SÍNCRONO DE SEÑALES POSIX (pthread_sigmask + sigwaitinfo) ===`);
         out.push(`[main] sigemptyset(&sigset); sigaddset(&sigset, SIGRTMIN); pthread_sigmask(SIG_BLOCK, &sigset, NULL);`);
@@ -215,7 +213,7 @@
         out.push(`[Hebra Eventos] sigwaitinfo(&sigset, &info) desbloquea y recoge atómicamente -> Recibido valor sival_int = 10 (SI_QUEUE)`);
         out.push(`[Hebra Eventos] Siguiente señal encolada entregada por prioridad -> Recibido valor sival_int = 30 (SI_QUEUE).`);
       }
-      // 10. Tema 7: Tarea Periódica de Tiempo Real (tarea_periodica_tr.c)
+      // 10. Tema 7: Tarea Periódica de Tiempo Real
       else if (code.includes("clock_nanosleep") || code.includes("SCHED_FIFO") || code.includes("normalizar")) {
         const periodMs = defines.PERIODO_MS || 250;
         out.push(`=== EJECUCIÓN: SISTEMA DE TIEMPO REAL POSIX (SCHED_FIFO + mlockall + TIMER_ABSTIME) ===`);
@@ -277,7 +275,7 @@
       if (tpl) return tpl.textContent.trim();
     }
     if (box.dataset.defaultCode) return box.dataset.defaultCode;
-    return `/* Archivo fuente: ${srcUrl} */\n#include <stdio.h>\nint main(void) { return 0; }`;
+    return `/* Programa C11 POSIX */\n#include <stdio.h>\nint main(void) { return 0; }`;
   }
 
   async function mountCodeBox(box) {
@@ -287,7 +285,7 @@
     const srcUrl = box.getAttribute("data-src") || "programa.c";
     const lang = (box.getAttribute("data-lang") || "c").toLowerCase();
     const fileName = srcUrl.split("/").pop();
-    const storageKey = `${window.location.pathname}::${srcUrl}`;
+    const storageKey = `${window.location.pathname}::${fileName}`;
 
     const originalCode = await fetchSourceCode(srcUrl, box);
     const savedCode = global.WorkbenchStorage
@@ -300,7 +298,6 @@
         <div class="ceb-file-info">
           <span class="ceb-lang-badge">${lang === "c" ? "C11 POSIX" : lang.toUpperCase()}</span>
           <strong>${fileName}</strong>
-          <span style="color:#8b949e;font-size:0.72rem;">(${srcUrl})</span>
         </div>
         <div class="ceb-actions">
           <button type="button" class="ceb-btn reset" title="Restaurar código canónico original">↺ Original</button>
@@ -313,7 +310,7 @@
       </div>
       <div class="ceb-output">
         <div class="ceb-output-header">
-          <span class="ceb-engine-label">TERMINAL POSIX (STDOUT / AUDITOR INFO.MD)</span>
+          <span class="ceb-engine-label">TERMINAL POSIX (STDOUT / VERIFICADOR DE EVALUACIÓN)</span>
           <span class="ceb-time-label">Listo</span>
         </div>
         <pre class="ceb-stdout">Cargando ${fileName}...</pre>
@@ -340,7 +337,7 @@
 
     const triggerRun = async (codeToRun) => {
       stdoutEl.className = "ceb-stdout";
-      stdoutEl.textContent = "⏳ Auditando reglas INFO.md y compilando con -pthread -lrt...";
+      stdoutEl.textContent = "⏳ Verificando criterios de evaluación y compilando con -pthread -lrt...";
       const result = await executeConcurrentCode(codeToRun, lang);
       engineLabel.textContent = result.engine;
       timeLabel.textContent = `⏱ ${result.timeMs} ms`;
@@ -376,7 +373,7 @@
 
   global.WorkbenchCodeRunner = {
     executeConcurrentCode,
-    auditInfoMdCompliance,
+    auditCodingStandards,
     initAllCodeBoxes
   };
 })(window);

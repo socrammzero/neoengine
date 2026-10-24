@@ -1,9 +1,9 @@
 [
   {
     "id": "pc-q01",
-    "topic": "Reglas Críticas INFO.md",
+    "topic": "Normativa Crítica de Evaluación",
     "difficulty": "Alta",
-    "question": "Según la directiva oficial de codificación de la asignatura (INFO.md), ¿cuál de las siguientes declaraciones de variables compartidas para un algoritmo de espera activa o semáforos es la ÚNICA permitida en un examen?",
+    "question": "Según la directiva oficial de codificación de la asignatura (Normativa de Evaluación), ¿cuál de las siguientes declaraciones de variables compartidas para un algoritmo de espera activa o semáforos es la ÚNICA permitida en un examen?",
     "options": [
       "unsigned f[2] = {0, 0}; int turno = 0; (sin usar jamás la palabra clave volatile)",
       "volatile unsigned f[2] = {0, 0}; volatile int turno = 0;",
@@ -11,13 +11,13 @@
       "register int f[2] = {0, 0}; static volatile int turno = 0;"
     ],
     "answer": 0,
-    "explanation": "Directiva Crítica #1 de INFO.md: En la asignatura está terminantemente prohibido el uso de la palabra clave `volatile` en cualquier variable, parámetro o puntero. Toda variable compartida se define como variable global estándar (`int`, `unsigned`, `long`)."
+    "explanation": "Criterio Oficial de Evaluación: En la asignatura está terminantemente prohibido el uso de la palabra clave `volatile` en cualquier variable, parámetro o puntero. Toda variable compartida se define como variable global estándar (`int`, `unsigned`, `long`)."
   },
   {
     "id": "pc-q02",
-    "topic": "Reglas Críticas INFO.md · Pthreads",
+    "topic": "Normativa Crítica de Evaluación · Pthreads",
     "difficulty": "Alta",
-    "question": "Al crear múltiples hebras en un bucle `for (i = 0; i < NUM_HEBRAS; i++)`, ¿cuál es la forma obligatoria de pasar el identificador `i` a cada hebra según INFO.md?",
+    "question": "Al crear múltiples hebras en un bucle `for (i = 0; i < NUM_HEBRAS; i++)`, ¿cuál es la forma obligatoria de pasar el identificador `i` a cada hebra según la normativa de evaluación?",
     "options": [
       "Declarar un array `int ids[NUM_HEBRAS];`, asignar `ids[i] = i;` y llamar a `pthread_create(&hebras[i], NULL, HTarea, &ids[i])` comprobando que devuelve 0.",
       "Hacer un cast directo del entero a puntero: `pthread_create(&hebras[i], NULL, HTarea, (void *)(intptr_t)i)`.",
@@ -25,7 +25,7 @@
       "Asignar el identificador mediante una variable global sin sincronización antes de `pthread_create`."
     ],
     "answer": 0,
-    "explanation": "Directiva Crítica #4 de INFO.md: Está prohibido usar `(void*)(intptr_t)i` y pasar `&i` causa condición de carrera. Es obligatorio usar un array `int ids[NUM_HEBRAS]` con `ids[i] = i` y pasar `&ids[i]`, verificando además el valor de retorno de `pthread_create` y `pthread_join`."
+    "explanation": "Criterio Oficial de Evaluación: Está prohibido usar `(void*)(intptr_t)i` y pasar `&i` causa condición de carrera. Es obligatorio usar un array `int ids[NUM_HEBRAS]` con `ids[i] = i` y pasar `&ids[i]`, verificando además el valor de retorno de `pthread_create` y `pthread_join`."
   },
   {
     "id": "pc-q03",
@@ -45,7 +45,7 @@
     "id": "pc-q04",
     "topic": "Tema 1 · Exclusión Mutua y Sección Crítica",
     "difficulty": "Media",
-    "question": "¿Cuál es la diferencia formal entre Sección Crítica (SC) y Región Crítica (RC) según el Tema 3_2 (pág. 120) e INFO.md?",
+    "question": "¿Cuál es la diferencia formal entre Sección Crítica (SC) y Región Crítica (RC) según el Tema 3_2 (pág. 120) y la normativa de evaluación?",
     "options": [
       "En la Sección Crítica el programador debe gestionar explícitamente la exclusión mutua, mientras que la Región Crítica es una estructura sintáctica de alto nivel donde el compilador garantiza automáticamente la exclusión mutua.",
       "La Sección Crítica sólo existe en Java y la Región Crítica sólo existe en ensamblador.",
@@ -53,7 +53,7 @@
       "Son sinónimos exactos en C11 y no existe distinción teórica ni sintáctica."
     ],
     "answer": 0,
-    "explanation": "Según INFO.md (Sección 2.3) y Tema 3_2 (pág. 120), una Sección Crítica (SC) requiere que el programador asegure explícitamente la exclusión mutua, mientras que una Región Crítica (`region (v) { S; }`) es un constructor del lenguaje que inserta los bloqueos de forma transparente."
+    "explanation": "según la teoría oficial de la asignatura y Tema 3_2 (pág. 120), una Sección Crítica (SC) requiere que el programador asegure explícitamente la exclusión mutua, mientras que una Región Crítica (`region (v) { S; }`) es un constructor del lenguaje que inserta los bloqueos de forma transparente."
   },
   {
     "id": "pc-q05",

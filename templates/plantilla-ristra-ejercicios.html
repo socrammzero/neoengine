@@ -5,6 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Práctica Tema 1: Entrelazado, Trazas e Instrucciones Atómicas | Programación Concurrente</title>
   <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+  <meta name="theme-color" content="#0d7069" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="NeoEngine" />
+  <link rel="icon" type="image/svg+xml" href="../../../../../assets/img/logo-neoengine.svg" />
+  <link rel="apple-touch-icon" href="../../../../../assets/img/icon-192.png" />
+  <style id="neo-fouc-shield">
+    html.neo-locked .layout,
+    html.neo-locked .sidebar-backdrop,
+    html.neo-locked #cmdPaletteBackdrop {
+      display: none !important;
+      visibility: hidden !important;
+    }
+  </style>
+  <script id="neo-fouc-script">
+    (function(){
+      try {
+        var raw = localStorage.getItem("neoengine_auth_v1");
+        if (!raw) {
+          var m = document.cookie.match(/(?:^|; )neoengine_auth_v1=([^;]*)/);
+          if (m && m[1]) raw = decodeURIComponent(m[1]);
+        }
+        if (!raw) { document.documentElement.classList.add("neo-locked"); return; }
+        var s = JSON.parse(raw);
+        if (!s || !s.deviceId || !s.issuedAt || !s.syncSeal || !s.hmacSha256) {
+          document.documentElement.classList.add("neo-locked"); return;
+        }
+        var mk = [0x3a,0x91,0xc4,0x57,0x88,0x12,0xe9,0x4f,0x63,0xb8,0x2d,0xa1,0x07,0xf4,0x5e,0xd2,0x79,0x31,0x8c,0x66,0xbe,0x05,0x44,0x9a,0xe1,0x28,0x73,0xdf,0x19,0x6c,0xa8,0x50];
+        var dk = [0x74,0xd4,0x8b,0x12,0xc6,0x55,0xa0,0x01,0x26,0x95,0x69,0xe4,0x51,0xbd,0x1d,0x97,0x54,0x62,0xc5,0x21,0xf0,0x40,0x08,0xd3,0xa3,0x6d,0x27,0x9e,0x5c,0x23,0xe5,0x1e];
+        var str = s.deviceId + "|" + s.issuedAt + "|neoengine-sync-v1";
+        var h1 = 0x811c9dc5, h2 = 0x01000193;
+        for (var i = 0; i < str.length; i++) {
+          var k = (dk[i % 32] ^ mk[i % 32]) & 0xff;
+          var c = str.charCodeAt(i) ^ k;
+          h1 ^= c; h1 = Math.imul(h1, 0x01000193) >>> 0;
+          h2 ^= (c + i) & 0xff; h2 = Math.imul(h2, 0x85ebca6b) >>> 0;
+        }
+        var seal = h1.toString(16).padStart(8, "0") + h2.toString(16).padStart(8, "0");
+        if (seal !== s.syncSeal) document.documentElement.classList.add("neo-locked");
+      } catch(e) {
+        document.documentElement.classList.add("neo-locked");
+      }
+    })();
+  </script>
 </head>
 <body data-page-id="pc-practica-01" data-subject-id="programacion-concurrente">
   <div class="layout">
@@ -37,7 +80,7 @@
         <div class="topbar-left">
           <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
           <div class="breadcrumbs">
-            <a href="../../../../../index.html">Workbench</a>
+            <a href="../../../../../index.html">NeoEngine</a>
             <span class="sep">/</span>
             <a href="../index.html">Programación Concurrente</a>
             <span class="sep">/</span>
@@ -56,7 +99,7 @@
           <div class="hero-kicker"><span>HOJA DE PROBLEMAS · TEMA 1 (PÁGS. 1–47 PDF)</span><span>·</span><span>RESOLUCIÓN PASO A PASO</span></div>
           <h1>Práctica Tema 1: Entrelazado, Orden Parcial, Atomicidad y STR</h1>
           <p class="lead">
-            Ejercicios resueltos de principio a fin sin omitir pasos algebraicos, referenciando exactamente las diapositivas oficiales del Tema 1 y las reglas de <code>INFO.md</code>.
+            Ejercicios resueltos de principio a fin sin omitir pasos algebraicos, referenciando exactamente las diapositivas oficiales del Tema 1 y las reglas dy la normativa de evaluación.
           </p>
         </header>
 
@@ -155,11 +198,11 @@
 
         <section class="exercise-card" id="ex-05" data-ex-id="pc-t1-e5" data-difficulty="alta" data-type="code">
           <div class="exercise-header">
-            <div><span class="pill accent">Ejercicio 05 · Tema 1, Págs. 18–21 + INFO.md</span><span class="pill">Dificultad: Alta</span></div>
+            <div><span class="pill accent">Ejercicio 05 · Tema 1, Págs. 18–21 + Normativa POSIX</span><span class="pill">Dificultad: Alta</span></div>
             <span class="pill ex-status-badge">○ Pendiente</span>
           </div>
           <h3>Implementación y Ejecución de la Búsqueda Lineal Concurrente</h3>
-          <p>Verifica y ejecuta el código C de búsqueda lineal concurrente sobre dos particiones del array (<code>[0..4]</code> y <code>[5..9]</code>) cumpliendo el control obligatorio de errores en <code>pthread_create</code> y <code>pthread_join</code> de <code>INFO.md</code>:</p>
+          <p>Verifica y ejecuta el código C de búsqueda lineal concurrente sobre dos particiones del array (<code>[0..4]</code> y <code>[5..9]</code>) cumpliendo el control obligatorio de errores en <code>pthread_create</code> y <code>pthread_join</code> dy la normativa de evaluación:</p>
           <div class="code-execution-box" data-src="../src-code/tema-01/busqueda_concurrente.c" data-lang="c"></div>
           <button type="button" class="btn-action ex-verify-code-btn">✓ Compilar, Ejecutar y Marcar Ejercicio Resuelto</button>
           <div class="ex-feedback" style="margin-top:0.75rem;"></div>
@@ -169,6 +212,7 @@
   </div>
 
   <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/security-gate.js"></script>
   <script src="../../../../../assets/js/core-shell.js"></script>
   <script src="../../../../../assets/js/code-runner.js"></script>
   <script src="../../../../../assets/js/exercise-engine.js"></script>

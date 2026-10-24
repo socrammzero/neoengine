@@ -1,5 +1,5 @@
 /**
- * ENGINEERING WORKBENCH — EXERCISE-ENGINE.JS
+ * NeoEngine — EXERCISE-ENGINE.JS
  * Motor interactivo de validación de hojas de problemas (practica-tema-X.html):
  *  - Filtro dinámico por Dificultad, Estado (Todos/Pendientes/Resueltos), Tipo y texto libre.
  *  - Botón maestro #allSol para desplegar/plegar todas las soluciones razonadas (<details class="sol">).
@@ -14,7 +14,32 @@
       .toLowerCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
-      .replace(/\s+/g, " ");
+      .replace(/[¿?¡!.,;:()"'«»\[\]{}]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function toPhonetic(str) {
+    return normalizeText(str)
+      .replace(/h/g, "")
+      .replace(/qu/g, "k")
+      .replace(/c([ei])/g, "s$1")
+      .replace(/c/g, "k")
+      .replace(/z/g, "s")
+      .replace(/v/g, "b")
+      .replace(/ll/g, "y")
+      .replace(/g([ei])/g, "j$1")
+      .replace(/([a-z])\1+/g, "$1");
+  }
+
+  function fuzzyCardMatch(cardText, query) {
+    const q = normalizeText(query);
+    if (!q) return true;
+    const normCard = normalizeText(cardText);
+    if (normCard.includes(q)) return true;
+    const phonCard = toPhonetic(cardText);
+    const tokens = q.split(/\s+/).filter((t) => t.length >= 2);
+    return tokens.every((tok) => normCard.includes(tok) || phonCard.includes(toPhonetic(tok)));
   }
 
   function initExerciseEngine() {
@@ -160,7 +185,7 @@
           activeStatus === "all" ||
           (activeStatus === "solved" && isSolved) ||
           (activeStatus === "pending" && !isSolved);
-        const matchQuery = !q || normalizeText(card.textContent).includes(q);
+        const matchQuery = fuzzyCardMatch(card.textContent, searchQuery);
 
         card.style.display =
           matchDiff && matchType && matchStatus && matchQuery ? "" : "none";
@@ -208,7 +233,7 @@
       });
     }
 
-    // 4. Botón Maestro #allSol (Estándar obligatorio html-maker)
+    // 4. Botón Maestro #allSol (diseño técnico modular)
     const allSolBtn = document.getElementById("allSol");
     if (allSolBtn) {
       let allOpen = false;

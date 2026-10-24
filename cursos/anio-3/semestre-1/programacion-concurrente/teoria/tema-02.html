@@ -5,6 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tema 2: Representación de Procesos y Soporte de la Concurrencia | Programación Concurrente</title>
   <link rel="stylesheet" href="../../../../../assets/css/app.css" />
+  <meta name="theme-color" content="#0d7069" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="NeoEngine" />
+  <link rel="icon" type="image/svg+xml" href="../../../../../assets/img/logo-neoengine.svg" />
+  <link rel="apple-touch-icon" href="../../../../../assets/img/icon-192.png" />
+  <style id="neo-fouc-shield">
+    html.neo-locked .layout,
+    html.neo-locked .sidebar-backdrop,
+    html.neo-locked #cmdPaletteBackdrop {
+      display: none !important;
+      visibility: hidden !important;
+    }
+  </style>
+  <script id="neo-fouc-script">
+    (function(){
+      try {
+        var raw = localStorage.getItem("neoengine_auth_v1");
+        if (!raw) {
+          var m = document.cookie.match(/(?:^|; )neoengine_auth_v1=([^;]*)/);
+          if (m && m[1]) raw = decodeURIComponent(m[1]);
+        }
+        if (!raw) { document.documentElement.classList.add("neo-locked"); return; }
+        var s = JSON.parse(raw);
+        if (!s || !s.deviceId || !s.issuedAt || !s.syncSeal || !s.hmacSha256) {
+          document.documentElement.classList.add("neo-locked"); return;
+        }
+        var mk = [0x3a,0x91,0xc4,0x57,0x88,0x12,0xe9,0x4f,0x63,0xb8,0x2d,0xa1,0x07,0xf4,0x5e,0xd2,0x79,0x31,0x8c,0x66,0xbe,0x05,0x44,0x9a,0xe1,0x28,0x73,0xdf,0x19,0x6c,0xa8,0x50];
+        var dk = [0x74,0xd4,0x8b,0x12,0xc6,0x55,0xa0,0x01,0x26,0x95,0x69,0xe4,0x51,0xbd,0x1d,0x97,0x54,0x62,0xc5,0x21,0xf0,0x40,0x08,0xd3,0xa3,0x6d,0x27,0x9e,0x5c,0x23,0xe5,0x1e];
+        var str = s.deviceId + "|" + s.issuedAt + "|neoengine-sync-v1";
+        var h1 = 0x811c9dc5, h2 = 0x01000193;
+        for (var i = 0; i < str.length; i++) {
+          var k = (dk[i % 32] ^ mk[i % 32]) & 0xff;
+          var c = str.charCodeAt(i) ^ k;
+          h1 ^= c; h1 = Math.imul(h1, 0x01000193) >>> 0;
+          h2 ^= (c + i) & 0xff; h2 = Math.imul(h2, 0x85ebca6b) >>> 0;
+        }
+        var seal = h1.toString(16).padStart(8, "0") + h2.toString(16).padStart(8, "0");
+        if (seal !== s.syncSeal) document.documentElement.classList.add("neo-locked");
+      } catch(e) {
+        document.documentElement.classList.add("neo-locked");
+      }
+    })();
+  </script>
 </head>
 <body data-page-id="pc-tema-02" data-subject-id="programacion-concurrente">
   <div class="layout">
@@ -22,7 +65,7 @@
         <a href="#sec-unix-hebras"><span>2. Modelo Proceso/Hebras UNIX</span><span>02</span></a>
         <a href="#sec-posix-pthreads"><span>3. Estándar POSIX y Ciclo Vida</span><span>03</span></a>
         <a href="#sec-api-pthreads"><span>4. Primitivas y Paso Parámetros</span><span>04</span></a>
-        <a href="#sec-codigo-t2"><span>5. Patrón Canónico INFO.md</span><span>▶</span></a>
+        <a href="#sec-codigo-t2"><span>5. Patrón Canónico Normativa de Evaluación</span><span>▶</span></a>
       </nav>
       <div class="sidebar-section-label">Ruta de la Asignatura</div>
       <nav>
@@ -32,7 +75,7 @@
         <a href="../ejercicios/practica-tema-02.html"><span>🧪 Ir a Práctica Tema 2</span></a>
       </nav>
       <div class="sidebar-exam-notice">
-        <strong>Alerta de Examen (INFO.md #4)</strong>
+        <strong>Alerta de Examen (Normativa de Evaluación)</strong>
         Aunque en las diapositivas 33 y 37 del Tema 2 aparece <code>(void *)t</code>, en examen está <strong>TERMINANTEMENTE PROHIBIDO</strong>. Usa siempre <code>int ids[NUM_HEBRAS]; ids[i] = i;</code> y pasa <code>&amp;ids[i]</code>.
       </div>
     </aside>
@@ -42,7 +85,7 @@
         <div class="topbar-left">
           <button type="button" id="toggleSidebar" aria-label="Alternar barra lateral" aria-expanded="true">☰</button>
           <div class="breadcrumbs">
-            <a href="../../../../../index.html">Workbench</a>
+            <a href="../../../../../index.html">NeoEngine</a>
             <span class="sep">/</span>
             <a href="../index.html">Programación Concurrente</a>
             <span class="sep">/</span>
@@ -58,7 +101,7 @@
 
       <div class="page-wrap">
         <header class="hero-banner">
-          <div class="hero-kicker"><span>TEMA 02 · DIAPOSITIVAS OFICIALES PÁGS. 1–41 + INFO.MD</span><span>·</span><span>POSIX PTHREADS</span></div>
+          <div class="hero-kicker"><span>TEMA 02 · DIAPOSITIVAS OFICIALES PÁGS. 1–41 + Normativa POSIX</span><span>·</span><span>POSIX PTHREADS</span></div>
           <h1>Tema 2: Representación de Procesos y Soporte de la Concurrencia</h1>
           <p class="lead">
             Propiedades estructurales de los procesos (estática vs dinámica, jerarquía padre/hijo, creación y representación explícita/implícita), arquitectura de memoria compartida y privada de las hebras en UNIX, estándar IEEE POSIX 1003.1c (Pthreads), estados del ciclo de vida y patrón canónico obligatorio de creación y recolección.
@@ -144,19 +187,19 @@
         </section>
 
         <section class="topic-section" id="sec-api-pthreads">
-          <h2><span>4. Primitivas Pthreads, Paso de Parámetros y Prohibiciones de Examen (Págs. 25–39 + INFO.md)</span><span class="pill sig">Reglas de Examen</span></h2>
+          <h2><span>4. Primitivas Pthreads, Paso de Parámetros y Prohibiciones de Examen (Págs. 25–39 + Normativa POSIX)</span><span class="pill sig">Reglas de Examen</span></h2>
           <div class="formula">
             int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);<br/>
             int pthread_join(pthread_t thread, void **value_ptr); &nbsp;&nbsp;|&nbsp;&nbsp; void pthread_exit(void *value_ptr);
           </div>
           <div class="warn">
-            <strong class="tag">Aviso sobre las Transparencias 33 y 37 del Tema 2 (Regla de Oro #4 de INFO.md)</strong>
+            <strong class="tag">Aviso sobre las Transparencias 33 y 37 del Tema 2 (Regla de Oro #4 dy la normativa de evaluación)</strong>
             En las páginas 33 y 37 de las diapositivas aparece el ejemplo introductorio con <code>pthread_create(&amp;threads[t], NULL, Hebra, (void *)t);</code>. <strong>¡CUIDADO! En los exámenes de la asignatura está TERMINANTEMENTE PROHIBIDO hacer ese cast directo</strong> (ni <code>(void *)t</code> ni <code>(void *)(intptr_t)i</code>). Siempre debes declarar <code>int ids[NUM_HEBRAS];</code>, asignar <code>ids[i] = i;</code> dentro del bucle <code>for</code> y pasar <code>&amp;ids[i]</code>, comprobando además los errores de <code>pthread_create</code> y <code>pthread_join</code>.
           </div>
         </section>
 
         <section class="topic-section" id="sec-codigo-t2">
-          <h2><span>5. Patrón Canónico Oficial de Creación y Recolección de Hebras (INFO.md Sección 3.1)</span><span class="pill ok">C11 POSIX</span></h2>
+          <h2><span>5. Patrón Canónico Oficial de Creación y Recolección de Hebras (Normativa de Evaluación)</span><span class="pill ok">C11 POSIX</span></h2>
           <div class="code-execution-box" data-src="../src-code/tema-02/creacion_hebras_segura.c" data-lang="c"></div>
         </section>
       </div>
@@ -164,6 +207,7 @@
   </div>
 
   <script src="../../../../../assets/js/storage.js"></script>
+  <script src="../../../../../assets/js/security-gate.js"></script>
   <script src="../../../../../assets/js/core-shell.js"></script>
   <script src="../../../../../assets/js/code-runner.js"></script>
 </body>

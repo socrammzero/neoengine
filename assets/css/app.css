@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ENGINEERING WORKBENCH — APP.CSS (Estándar html-maker + View Transitions PWA)
+   NeoEngine — APP.CSS (diseño técnico modular + View Transitions PWA)
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
@@ -14,7 +14,7 @@
   animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* 1. Variables de Tema (Estándar html-maker) */
+/* 1. Variables de Tema (diseño técnico modular) */
 :root {
   --bg: #eef1f4;
   --surface: #ffffff;
@@ -160,7 +160,7 @@ section[id] {
   scroll-margin-top: 4.5rem;
 }
 
-/* 3. Layout Principal con Sidebar Izquierdo Ocultable Hermético (html-maker) */
+/* 3. Layout Principal con Sidebar Izquierdo Ocultable Hermético (NeoEngine UI) */
 .layout {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
@@ -344,10 +344,29 @@ header.topbar {
 
 .sidebar-brand-title {
   font-family: var(--f-display);
-  font-size: 1.15rem;
+  font-size: 1.22rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.neo-brand-svg {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  transition: transform 0.15s ease;
+}
+
+.sidebar-brand-title:active .neo-brand-svg,
+.neo-logo-trigger:active {
+  transform: scale(0.92);
+}
   color: var(--ink);
   display: flex;
   align-items: center;
@@ -546,7 +565,7 @@ header.topbar {
   color: var(--sig);
 }
 
-/* 5. Bloques Pedagógicos (Estándar html-maker) */
+/* 5. Bloques Pedagógicos (diseño técnico modular) */
 .card, section.topic-section {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -678,7 +697,7 @@ ol.steps details[open] summary, details.sol[open] summary {
   border-bottom: 1px dashed var(--line);
 }
 
-/* 6. Tablas Técnicas y Contenedores SVG (Estándar html-maker) */
+/* 6. Tablas Técnicas y Contenedores SVG (diseño técnico modular) */
 .scroll, .svgbox {
   width: 100%;
   overflow-x: auto;
@@ -1230,22 +1249,56 @@ table.tech-table tr.cur {
   color: var(--bad);
 }
 
-/* 11. Utilidades de Grid y Tarjetas */
+/* 11. Utilidades de Grid y Tarjetas Auto-Adaptativas */
 .grid-2 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
   gap: 1.1rem;
 }
 
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr));
   gap: 1rem;
+}
+
+.table-scroll-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+}
+
+.cmd-search-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.cmd-item-snippet {
+  font-size: 0.77rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+  line-height: 1.38;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .btn-action {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
   padding: 0.5rem 0.95rem;
   border-radius: 8px;
@@ -1267,6 +1320,7 @@ table.tech-table tr.cur {
 .btn-secondary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
   padding: 0.5rem 0.95rem;
   border-radius: 8px;
@@ -1284,9 +1338,296 @@ table.tech-table tr.cur {
   text-decoration: none;
 }
 
-/* 12. Adaptabilidad Móvil (Drawer Flotante <= 900px según html-maker) */
+/* 12. Sistema de Seguridad Criptográfica FOUC-Free y Portal TOTP (RFC 6238) */
+html.neo-locked {
+  overflow: hidden;
+}
+
+html.neo-locked .layout,
+html.neo-locked .sidebar-backdrop,
+html.neo-locked #cmdPaletteBackdrop {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.neo-security-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(circle at 20% 20%, #112431 0%, #091017 65%, #05080c 100%);
+  color: #e6edf3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+
+.neo-gate-card {
+  width: 100%;
+  max-width: 560px;
+  background: rgba(18, 26, 36, 0.95);
+  border: 1px solid #284252;
+  border-top: 4px solid #3cc9b8;
+  border-radius: 16px;
+  padding: clamp(1.25rem, 4vw, 2.15rem);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(14px);
+}
+
+.neo-gate-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.15rem;
+}
+
+.neo-gate-logo svg,
+.neo-gate-logo img {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 12px;
+}
+
+.neo-gate-kicker {
+  font-family: var(--f-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #3cc9b8;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+
+.neo-gate-title {
+  font-family: var(--f-display);
+  font-size: clamp(1.4rem, 3.5vw, 1.85rem);
+  color: #ffffff;
+  margin: 0;
+}
+
+.neo-gate-message {
+  background: rgba(13, 112, 105, 0.14);
+  border-left: 4px solid #f2a33a;
+  border-radius: 8px;
+  padding: 0.95rem 1.1rem;
+  font-size: 0.94rem;
+  line-height: 1.58;
+  color: #dce6f0;
+  margin: 0 0 1.25rem;
+}
+
+.neo-gate-label {
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #93a8b8;
+  margin-bottom: 0.5rem;
+}
+
+.neo-gate-input-row {
+  display: flex;
+  gap: 0.65rem;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.neo-gate-input {
+  flex: 1 1 190px;
+  background: #0a1017;
+  border: 1.5px solid #2e4756;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  color: #4ef2df;
+  font-family: var(--f-mono);
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.neo-gate-input:focus {
+  border-color: #3cc9b8;
+  box-shadow: 0 0 0 3px rgba(60, 201, 184, 0.2);
+}
+
+.neo-gate-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.neo-gate-btn {
+  flex: 0 0 auto;
+  padding: 0.75rem 1.35rem;
+  border-radius: 10px;
+  border: 1px solid #3cc9b8;
+  background: linear-gradient(135deg, #129486 0%, #0d7069 100%);
+  color: #ffffff;
+  font-family: var(--f-body);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.neo-gate-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.neo-gate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.neo-gate-feedback {
+  margin-top: 0.75rem;
+  font-family: var(--f-mono);
+  font-size: 0.8rem;
+  min-height: 1.3rem;
+}
+
+.neo-gate-feedback.error {
+  color: #ff7b6e;
+}
+
+.neo-gate-feedback.ok {
+  color: #4cc387;
+}
+
+.neo-gate-footer {
+  margin-top: 1.35rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid #1f313e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  color: #7d92a3;
+}
+
+/* Portal Autónomo QR + Base32 */
+.neo-portal-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  background: var(--bg);
+}
+
+.neo-portal-card {
+  width: 100%;
+  max-width: 860px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--accent);
+  border-radius: 16px;
+  padding: clamp(1.2rem, 3.5vw, 2.2rem);
+  box-shadow: var(--shadow);
+}
+
+.neo-portal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.neo-qr-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.35rem;
+}
+
+.neo-qr-box {
+  background: #ffffff;
+  padding: 0.85rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  display: inline-flex;
+}
+
+.neo-qr-box svg {
+  width: min(230px, 65vw);
+  height: auto;
+  display: block;
+}
+
+.neo-copy-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.neo-base32-code {
+  flex: 1 1 200px;
+  padding: 0.65rem 0.85rem;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--accent);
+  word-break: break-all;
+}
+
+.neo-live-totp-box {
+  padding: 1rem 1.15rem;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.neo-live-digits {
+  font-family: var(--f-mono);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+
+.neo-progress-track {
+  width: 100%;
+  height: 6px;
+  background: var(--surface-3);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.neo-progress-fill {
+  height: 100%;
+  width: 100%;
+  background: var(--accent);
+  transition: width 0.35s linear;
+}
+
+/* 13. Adaptabilidad Multi-Dispositivo Integral (Auto-Resize Desktop, Tablet y Móvil) */
 .sidebar-backdrop {
   display: none;
+}
+
+@media (max-width: 1024px) {
+  .page-wrap {
+    padding: 1.5rem 1.25rem 3.5rem;
+  }
+
+  .hero-banner {
+    padding: 1.4rem 1.35rem;
+  }
 }
 
 @media (max-width: 900px) {
@@ -1301,6 +1642,7 @@ table.tech-table tr.cur {
     top: 0;
     bottom: 0;
     height: 100vh;
+    height: 100dvh;
     z-index: 60;
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
   }
@@ -1315,5 +1657,80 @@ table.tech-table tr.cur {
 
   .page-wrap {
     padding: 1.15rem 1rem 3rem;
+  }
+}
+
+@media (max-width: 680px) {
+  .hide-sm {
+    display: none !important;
+  }
+
+  header.topbar {
+    padding: 0.5rem 0.75rem;
+    gap: 0.45rem;
+  }
+
+  .breadcrumbs .sep,
+  .breadcrumbs > *:not(:first-child) {
+    display: none;
+  }
+
+  .cmd-trigger {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.78rem;
+  }
+
+  .cmd-trigger kbd {
+    display: none;
+  }
+
+  .hero-banner {
+    padding: 1.15rem 1rem;
+  }
+
+  .hero-banner h1 {
+    font-size: clamp(1.45rem, 6vw, 1.9rem);
+  }
+
+  .topic-section {
+    padding: 1.1rem 0.95rem;
+  }
+
+  .topic-section h2 {
+    font-size: 1.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ro-grid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
+
+  .ceb-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .ceb-actions {
+    justify-content: flex-end;
+  }
+
+  .neo-gate-input-row {
+    flex-direction: column;
+  }
+
+  .neo-gate-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .hide-xs {
+    display: none !important;
+  }
+
+  .page-wrap {
+    padding: 0.85rem 0.65rem 2.5rem;
   }
 }

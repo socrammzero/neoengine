@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Auditor de Privacidad, Neutralidad, Estándar html-maker y Reglas INFO.md
+ * NEOENGINE — Auditor Automático de Privacidad, Neutralidad y Normativa de Evaluación
  */
 
 const fs = require('fs');
@@ -12,14 +12,16 @@ const RESTRICTED_PATTERNS = [
   { regex: /C:\\Users\\[a-zA-Z0-9_-]+/i, reason: 'Ruta local de usuario detectada' },
   { regex: /\/home\/[a-zA-Z0-9_-]+\//i, reason: 'Ruta local de usuario Linux detectada' },
   { regex: /@[a-zA-Z0-9.-]+\.(edu|es|ac\.[a-z]{2})\b/i, reason: 'Correo electrónico institucional detectado' },
-  { regex: /<!--\s*Añadir el resto aqu[ií]\s*-->/i, reason: 'Placeholder prohibido por estándar html-maker (Zero-Toy UI)' },
+  { regex: /\bINFO\.md\b/i, reason: 'Referencia a archivo interno detectada' },
+  { regex: /\bhtml-maker\b/i, reason: 'Referencia interna de maquetación detectada' },
+  { regex: /\bEngineering Workbench\b|\bEngWorkbench\b/i, reason: 'Nombre antiguo detectado (debe ser NeoEngine)' },
   { regex: /TODO:\s*completar/i, reason: 'Código truncado o placeholder incompleto detectado' }
 ];
 
 const C_CODE_FORBIDDEN = [
-  { regex: /\bvolatile\b/, reason: 'PROHIBICIÓN INFO.md #1: Uso de volatile en archivo .c' },
-  { regex: /\bpthread_mutex_lock\b/, reason: 'PROHIBICIÓN INFO.md #3: Uso de pthread_mutex_lock en archivo .c (usar sem_t mutex)' },
-  { regex: /\(\s*void\s*\*\s*\)\s*\(\s*intptr_t\s*\)/, reason: 'PROHIBICIÓN INFO.md #4: Uso de (void*)(intptr_t) en archivo .c (usar &ids[i])' }
+  { regex: /\bvolatile\b/, reason: 'NORMATIVA #1: Uso prohibido de volatile en archivo .c' },
+  { regex: /\bpthread_mutex_lock\b/, reason: 'NORMATIVA #3: Uso prohibido de pthread_mutex_lock en archivo .c (usar sem_t mutex)' },
+  { regex: /\(\s*void\s*\*\s*\)\s*\(\s*intptr_t\s*\)/, reason: 'NORMATIVA #4: Uso prohibido de (void*)(intptr_t) en archivo .c (usar &ids[i])' }
 ];
 
 const IGNORED_DIRS = new Set(['.git', 'node_modules', '__pycache__', '.pytest_cache']);
@@ -83,13 +85,13 @@ function runAudit() {
   }
 
   if (violations.length > 0) {
-    console.error('❌ [PRIVACY & INFO.MD HOOK] Se encontraron infracciones:');
+    console.error('❌ [NEOENGINE AUDITOR] Se encontraron infracciones:');
     for (const v of violations) {
       console.error(`  - ${v.file}:${v.line} -> ${v.reason} ("${v.snippet}")`);
     }
     process.exit(1);
   } else {
-    console.log(`✅ [PRIVACY & INFO.MD HOOK] ${files.length} archivos verificados. 100% conforme con INFO.md, html-maker y neutralidad.`);
+    console.log(`✅ [NEOENGINE AUDITOR] ${files.length} archivos verificados. 100% conforme con NeoEngine, seguridad y normativa.`);
   }
 }
 

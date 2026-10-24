@@ -1,7 +1,7 @@
 /*
  * Especificación de Laboratorio — Tema 1: Búsqueda Lineal Concurrente
  * Compilación: gcc -Wall -Wextra -std=c11 -pthread busqueda_concurrente.c -o busqueda_concurrente -lrt
- * Cumplimiento estricto INFO.md: Variables globales simples y comprobación obligatoria de pthread_create y pthread_join.
+ * Cumplimiento estricto Normativa de Evaluación: Variables globales simples y comprobación obligatoria de pthread_create y pthread_join.
  */
 
 #include <stdio.h>

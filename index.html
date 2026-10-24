@@ -4,15 +4,58 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Plataforma Web Interactiva de Estudio, Laboratorio de Código C/POSIX y Simulación Técnica." />
-  <title>Engineering Workbench — Plataforma Interactiva de Estudio (Programación Concurrente)</title>
+  <title>NeoEngine — Plataforma Interactiva de Estudio (Programación Concurrente)</title>
   <link rel="manifest" href="./manifest.json" />
   <link rel="stylesheet" href="./assets/css/app.css" />
+  <meta name="theme-color" content="#0d7069" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="NeoEngine" />
+  <link rel="icon" type="image/svg+xml" href="./assets/img/logo-neoengine.svg" />
+  <link rel="apple-touch-icon" href="./assets/img/icon-192.png" />
+  <style id="neo-fouc-shield">
+    html.neo-locked .layout,
+    html.neo-locked .sidebar-backdrop,
+    html.neo-locked #cmdPaletteBackdrop {
+      display: none !important;
+      visibility: hidden !important;
+    }
+  </style>
+  <script id="neo-fouc-script">
+    (function(){
+      try {
+        var raw = localStorage.getItem("neoengine_auth_v1");
+        if (!raw) {
+          var m = document.cookie.match(/(?:^|; )neoengine_auth_v1=([^;]*)/);
+          if (m && m[1]) raw = decodeURIComponent(m[1]);
+        }
+        if (!raw) { document.documentElement.classList.add("neo-locked"); return; }
+        var s = JSON.parse(raw);
+        if (!s || !s.deviceId || !s.issuedAt || !s.syncSeal || !s.hmacSha256) {
+          document.documentElement.classList.add("neo-locked"); return;
+        }
+        var mk = [0x3a,0x91,0xc4,0x57,0x88,0x12,0xe9,0x4f,0x63,0xb8,0x2d,0xa1,0x07,0xf4,0x5e,0xd2,0x79,0x31,0x8c,0x66,0xbe,0x05,0x44,0x9a,0xe1,0x28,0x73,0xdf,0x19,0x6c,0xa8,0x50];
+        var dk = [0x74,0xd4,0x8b,0x12,0xc6,0x55,0xa0,0x01,0x26,0x95,0x69,0xe4,0x51,0xbd,0x1d,0x97,0x54,0x62,0xc5,0x21,0xf0,0x40,0x08,0xd3,0xa3,0x6d,0x27,0x9e,0x5c,0x23,0xe5,0x1e];
+        var str = s.deviceId + "|" + s.issuedAt + "|neoengine-sync-v1";
+        var h1 = 0x811c9dc5, h2 = 0x01000193;
+        for (var i = 0; i < str.length; i++) {
+          var k = (dk[i % 32] ^ mk[i % 32]) & 0xff;
+          var c = str.charCodeAt(i) ^ k;
+          h1 ^= c; h1 = Math.imul(h1, 0x01000193) >>> 0;
+          h2 ^= (c + i) & 0xff; h2 = Math.imul(h2, 0x85ebca6b) >>> 0;
+        }
+        var seal = h1.toString(16).padStart(8, "0") + h2.toString(16).padStart(8, "0");
+        if (seal !== s.syncSeal) document.documentElement.classList.add("neo-locked");
+      } catch(e) {
+        document.documentElement.classList.add("neo-locked");
+      }
+    })();
+  </script>
 </head>
 <body data-page-id="dashboard-root" data-subject-id="programacion-concurrente">
   <div class="layout">
     <aside class="sidebar" aria-label="Índice y navegación global">
       <div class="sidebar-brand">
-        <div class="sidebar-brand-title"><span>⚡ EngWorkbench</span></div>
+        <div class="sidebar-brand-title"><span>⚡ NeoEngine</span></div>
         <span class="sidebar-brand-badge">PWA v2.5</span>
       </div>
 
@@ -24,7 +67,7 @@
       <div class="sidebar-section-label">Índice del Panel</div>
       <nav aria-label="Secciones del dashboard">
         <a href="#sec-foco" class="active"><span>1. Programación Concurrente</span><span class="pill accent">7 Temas</span></a>
-        <a href="#sec-reglas-info"><span>2. Reglas de Oro (INFO.md)</span><span>⚠️</span></a>
+        <a href="#sec-reglas-info"><span>2. Normativa de Evaluación POSIX</span><span>⚠️</span></a>
         <a href="#sec-simulador"><span>3. Simulador Interleaving</span><span>📈</span></a>
         <a href="#sec-sandbox"><span>4. Sandbox C11 POSIX en Vivo</span><span>▶</span></a>
         <a href="#sec-mapa"><span>5. Mapa de Asignaturas</span><span>📚</span></a>
@@ -45,7 +88,7 @@
       </nav>
 
       <div class="sidebar-exam-notice">
-        <strong>Directiva Crítica INFO.md</strong>
+        <strong>Criterio Oficial de Evaluación</strong>
         Prohibido <code>volatile</code>, prohibido <code>pthread_mutex_lock</code> (usar <code>sem_t mutex</code>) y prohibido <code>(void*)(intptr_t)i</code> (usar <code>&amp;ids[i]</code>).
       </div>
     </aside>
@@ -55,7 +98,7 @@
         <div class="topbar-left">
           <button type="button" id="toggleSidebar" aria-label="Mostrar u ocultar barra lateral" aria-expanded="true">☰</button>
           <div class="breadcrumbs">
-            <span class="current">Engineering Workbench</span>
+            <span class="current">NeoEngine</span>
             <span class="sep">/</span>
             <span>3er Año · 1er Semestre · Programación Concurrente</span>
           </div>
@@ -72,18 +115,18 @@
       <div class="page-wrap">
         <header class="hero-banner">
           <div class="hero-kicker">
-            <span>PLATAFORMA INTERACTIVA DE ESTUDIO</span>
+            <span>INGENIERÍA ELECTRÓNICA DE TELECOMUNICACIONES</span>
             <span>·</span>
             <span>FOCO ACTIVO: PROGRAMACIÓN CONCURRENTE (TEMAS 1 A 7)</span>
           </div>
-          <h1>Engineering Workbench: Programación Concurrente y Sistemas de Tiempo Real</h1>
+          <h1>NeoEngine: Programación Concurrente y Sistemas de Tiempo Real</h1>
           <p class="lead">
-            Entorno técnico interactivo construido bajo el estándar <code>html-maker</code> y las reglas estrictas de <code>INFO.md</code>. Incluye los 7 temas completos de teoría interactiva, 7 hojas de ejercicios paso a paso, 11 programas C11 POSIX y Java ejecutables en el navegador con auditor automático de reglas de examen, y simulador tipo test con penalización.
+            Plataforma interactiva de estudio para el Grado en <strong>Ingeniería Electrónica de Telecomunicaciones</strong>. Incluye los 7 temas completos de teoría interactiva, 7 hojas de ejercicios resueltos paso a paso, 11 programas C11 POSIX y Java ejecutables en el navegador con verificador automático de normativa de evaluación, y simulador de examen tipo test con penalización.
           </p>
           <div class="meta-pills">
             <span class="pill accent">✓ 7 Temas Oficiales Completos</span>
-            <span class="pill ok">✓ Auditor INFO.md Integrado en Compilador</span>
-            <span class="pill sig">✓ 11 Archivos Reales en src-code/</span>
+            <span class="pill ok">✓ Verificador POSIX Integrado</span>
+            <span class="pill sig">✓ 11 Programas Ejecutables C11 POSIX</span>
             <span class="pill">Atajo Global: Ctrl + K</span>
           </div>
 
@@ -187,10 +230,10 @@
           </div>
         </section>
 
-        <!-- SECCIÓN 2: DIRECTIVAS CRÍTICAS DE CODIFICACIÓN (INFO.MD) -->
+        <!-- SECCIÓN 2: DIRECTIVAS CRÍTICAS DE CODIFICACIÓN (Normativa de Evaluación) -->
         <section class="topic-section" id="sec-reglas-info">
           <h2>
-            <span>2. Directivas Críticas de Codificación para Examen (Estándar INFO.md)</span>
+            <span>2. Directivas Críticas de Codificación para Examen (Criterios de Evaluación)</span>
             <span class="pill sig">Cumplimiento Estricto</span>
           </h2>
           <div class="warn">
@@ -247,11 +290,11 @@
         <!-- SECCIÓN 4: SANDBOX DE CÓDIGO REAL EN EL DASHBOARD -->
         <section class="topic-section" id="sec-sandbox">
           <h2>
-            <span>4. Motor de Ejecución C11 POSIX con Auditor INFO.md en Vivo</span>
-            <span class="pill ok">Conectado a src-code/</span>
+            <span>4. Motor de Ejecución C11 POSIX con Verificador POSIX en Vivo</span>
+            <span class="pill ok">Ejecución C11 POSIX en Vivo</span>
           </h2>
           <p>
-            Prueba en vivo el patrón canónico de <strong>Productor/Consumidor con Semáforos POSIX</strong> (<code>INFO.md</code> Sección 3.4). Si pruebas a escribir <code>volatile</code> o <code>pthread_mutex_lock</code> en el editor y pulsas <strong>▶ Compilar y Ejecutar</strong>, comprobarás cómo el auditor integrado detecta la infracción:
+            Prueba en vivo el patrón canónico de <strong>Productor/Consumidor con Semáforos POSIX</strong> (la Normativa de Evaluación). Si pruebas a escribir <code>volatile</code> o <code>pthread_mutex_lock</code> en el editor y pulsas <strong>▶ Compilar y Ejecutar</strong>, comprobarás cómo el auditor integrado detecta la infracción:
           </p>
           <div
             class="code-execution-box"
@@ -311,6 +354,7 @@
   </div>
 
   <script src="./assets/js/storage.js"></script>
+  <script src="./assets/js/security-gate.js"></script>
   <script src="./assets/js/core-shell.js"></script>
   <script src="./assets/js/code-runner.js"></script>
   <script>
@@ -432,7 +476,9 @@
           yr.semesters.forEach((sem) => {
             const matchedSubjects = sem.subjects.filter((s) => {
               if (!q) return true;
-              return `${s.name} ${s.area}`.toLowerCase().includes(q);
+              const normQ = q.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[¿?¡!.,;:]/g, "");
+              const normSub = `${s.name} ${s.area} ${(s.tags || []).join(" ")}`.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+              return normSub.includes(normQ);
             });
             if (matchedSubjects.length === 0) return;
 
