@@ -210,18 +210,47 @@ header.topbar {
   background: color-mix(in srgb, var(--surface) 92%, transparent);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
-  padding: 0.6rem 1.25rem;
+  padding: 0.55rem max(1.15rem, env(safe-area-inset-right, 0px));
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.65rem;
+}
+
+@media (display-mode: window-controls-overlay) {
+  header.topbar {
+    padding-right: calc(env(titlebar-area-width, 140px) + 0.8rem);
+    -webkit-app-region: drag;
+    app-region: drag;
+  }
+  header.topbar button,
+  header.topbar input,
+  header.topbar a {
+    -webkit-app-region: no-drag;
+    app-region: no-drag;
+  }
 }
 
 .topbar-left {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   min-width: 0;
+  flex: 0 1 auto;
+  overflow: hidden;
+}
+
+.topbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  flex-shrink: 0;
 }
 
 #toggleSidebar {
@@ -250,11 +279,11 @@ header.topbar {
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   color: var(--muted);
   white-space: nowrap;
+  min-width: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .breadcrumbs a {
@@ -276,30 +305,71 @@ header.topbar {
   font-weight: 600;
 }
 
+.breadcrumbs span:not(.current):not(.sep) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .cmd-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.38rem 0.75rem;
+  gap: 0.5rem;
+  padding: 0.35rem 0.65rem;
   border-radius: 8px;
   border: 1px solid var(--line);
   background: var(--surface-2);
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.15s ease;
+  max-width: 280px;
+  min-width: 130px;
 }
 
 .cmd-trigger:hover {
   border-color: var(--accent);
   color: var(--ink);
+}
+
+.cmd-trigger span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cmd-text-short {
+  display: none;
+}
+
+@media (max-width: 1200px) {
+  .breadcrumbs .sep,
+  .breadcrumbs span:not(.current) {
+    display: none;
+  }
+  .cmd-trigger {
+    max-width: 180px;
+  }
+  .cmd-trigger .cmd-text-full {
+    display: none;
+  }
+  .cmd-trigger .cmd-text-short {
+    display: inline;
+  }
+}
+
+@media (max-width: 960px) {
+  .cmd-trigger kbd {
+    display: none;
+  }
 }
 
 .cmd-trigger kbd {
@@ -309,6 +379,7 @@ header.topbar {
   padding: 0.08rem 0.38rem;
   font-size: 0.73rem;
   color: var(--ink);
+  flex-shrink: 0;
 }
 
 .btn-top {
@@ -323,6 +394,8 @@ header.topbar {
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
   transition: all 0.15s ease;
 }
 
@@ -367,11 +440,6 @@ header.topbar {
 .neo-logo-trigger:active {
   transform: scale(0.92);
 }
-  color: var(--ink);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
 
 .sidebar-brand-badge {
   font-family: var(--f-mono);
@@ -381,6 +449,8 @@ header.topbar {
   background: var(--accent-soft);
   color: var(--accent);
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .sidebar-selectors {
@@ -431,7 +501,7 @@ header.topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: 0.45rem;
   padding: 0.45rem 0.65rem;
   border-radius: 6px;
   color: var(--ink);
@@ -439,6 +509,26 @@ header.topbar {
   text-decoration: none;
   border-left: 3px solid transparent;
   transition: all 0.15s ease;
+}
+
+.sidebar nav a > span:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.sidebar nav a .pill,
+.sidebar nav a > span:last-child {
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.sidebar nav a .pill {
+  font-size: 0.66rem;
+  padding: 0.12rem 0.45rem;
+  line-height: 1.2;
+  border-radius: 999px;
 }
 
 .sidebar nav a:hover {
@@ -545,6 +635,8 @@ header.topbar {
   border: 1px solid var(--line);
   background: var(--surface-2);
   color: var(--ink);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .pill.accent {

@@ -1,6 +1,6 @@
 {
   "name": "neoengine",
-  "version": "2.6.0",
+  "version": "3.0.0",
   "description": "NeoEngine — Plataforma Interactiva de Estudio para Ingeniería Electrónica de Telecomunicaciones",
   "private": true,
   "scripts": {

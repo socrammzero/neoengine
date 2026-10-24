@@ -115,6 +115,15 @@
           : "NeoEngine";
       brandTitle.innerHTML = `${MINI_NEO_LOGO_SVG}<span>${label}</span>`;
     }
+
+    const breadcrumbCurrent = document.querySelector(".breadcrumbs .current");
+    if (breadcrumbCurrent && !breadcrumbCurrent.dataset.branded) {
+      breadcrumbCurrent.dataset.branded = "true";
+      breadcrumbCurrent.classList.add("neo-logo-trigger");
+      breadcrumbCurrent.title = "NeoEngine — Ingeniería Electrónica de Telecomunicaciones";
+      const root = getRootPrefix();
+      breadcrumbCurrent.innerHTML = `<a href="${root}index.html" class="topbar-brand-link" style="display:inline-flex;align-items:center;gap:0.4rem;text-decoration:none;color:inherit;">${MINI_NEO_LOGO_SVG}<span>NeoEngine</span></a>`;
+    }
   }
 
   function initSidebarAndScrollspy() {
@@ -353,7 +362,7 @@
             <div style="display:flex;align-items:center;gap:0.65rem;">
               ${MINI_NEO_LOGO_SVG}
               <div>
-                <div style="font-family:var(--f-mono);font-size:0.68rem;color:var(--accent);text-transform:uppercase;">APLICACIÓN WEB PROGRESIVA (PWA)</div>
+                <div style="font-family:var(--f-mono);font-size:0.68rem;color:var(--accent);text-transform:uppercase;">APLICACIÓN WEB PROGRESIVA (PWA v3)</div>
                 <h3 style="margin:0;font-size:1.25rem;">Descargar e Instalar NeoEngine</h3>
               </div>
             </div>
@@ -871,6 +880,11 @@
     }
 
     document.querySelectorAll(".cmd-trigger, [data-action='open-search']").forEach((btn) => {
+      if (btn.classList.contains("cmd-trigger") && !btn.querySelector(".cmd-text-full")) {
+        const kbd = btn.querySelector("kbd");
+        const kbdHtml = kbd ? kbd.outerHTML : "<kbd>Ctrl K</kbd>";
+        btn.innerHTML = `<span class="cmd-text-full">⌕ Buscar tema o algoritmo...</span><span class="cmd-text-short">⌕ Buscar...</span>${kbdHtml}`;
+      }
       if (!btn.dataset.bound) {
         btn.dataset.bound = "true";
         btn.addEventListener("click", () => openPalette(""));

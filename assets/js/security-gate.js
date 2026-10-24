@@ -678,11 +678,6 @@
             <div id="neoGateFeedback" class="neo-gate-feedback" aria-live="polite"></div>
           </form>
 
-          <div class="neo-gate-footer">
-            <span>🔒 Criptografía RFC 6238 (HMAC-SHA1 · ±1 paso)</span>
-            <span>·</span>
-            <span>Firma de terminal HMAC-SHA256</span>
-          </div>
         </div>
       `;
       document.body.appendChild(gate);

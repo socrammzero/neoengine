@@ -14,3 +14,7 @@ __pycache__/
 *.exe
 *.out
 *.class
+
+#
+iniciar_pagina.bat
+portal_totp.html

@@ -2,7 +2,7 @@
   "platform": {
     "title": "NeoEngine",
     "subtitle": "Plataforma Interactiva de Estudio, Laboratorio de Código y Simulación Técnica",
-    "version": "2.5.0",
+    "version": "3.0.0",
     "activeFocus": {
       "yearId": "anio-3",
       "semesterId": "semestre-1",
