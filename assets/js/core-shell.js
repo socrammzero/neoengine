@@ -44,7 +44,7 @@
     }
     const btn = document.getElementById("themeToggle");
     if (btn) {
-      btn.innerHTML = theme === "dark" ? "☀️ <span class='hide-xs'>Claro</span>" : "🌙 <span class='hide-xs'>Oscuro</span>";
+      btn.innerHTML = theme === "dark" ? "☀️ <span class='hide-sm'>Claro</span>" : "🌙 <span class='hide-sm'>Oscuro</span>";
       btn.setAttribute(
         "aria-label",
         `Cambiar a modo ${theme === "dark" ? "claro" : "oscuro"}`
@@ -249,8 +249,8 @@
       const updateBtnUI = () => {
         const done = global.WorkbenchStorage.isTopicRead(pageId);
         readBtn.innerHTML = done
-          ? "✓ <span class='hide-xs'>Completado</span>"
-          : "○ <span class='hide-xs'>Marcar Leído</span>";
+          ? "✓ <span class='hide-sm'>Completado</span>"
+          : "○ <span class='hide-sm'>Marcar Leído</span>";
         readBtn.className = done ? "btn-top pill ok" : "btn-top";
       };
       updateBtnUI();

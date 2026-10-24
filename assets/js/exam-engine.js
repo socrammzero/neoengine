@@ -19,6 +19,21 @@
     return copy;
   }
 
+  function cloneAndPrepareQuestions(sourceList, shuffleQuestions = false, shuffleOptions = false) {
+    const list = sourceList.map((item) => {
+      const q = { ...item, options: item.options.slice() };
+      if (!shuffleOptions) return q;
+      const originalCorrectText = item.options[item.answer];
+      for (let i = q.options.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [q.options[i], q.options[j]] = [q.options[j], q.options[i]];
+      }
+      q.answer = q.options.indexOf(originalCorrectText);
+      return q;
+    });
+    return shuffleQuestions ? shuffleArray(list) : list;
+  }
+
   function formatTime(sec) {
     const m = Math.floor(sec / 60);
     const s = sec % 60;
@@ -299,7 +314,7 @@
       mode = newMode;
       graded = false;
       answers = {};
-      questions = doShuffle ? shuffleArray(rawQuestions) : rawQuestions.slice();
+      questions = cloneAndPrepareQuestions(rawQuestions, doShuffle, doShuffle);
 
       if (modePracticaBtn && modeExamenBtn) {
         modePracticaBtn.classList.toggle("active", mode === "practica");
@@ -310,6 +325,22 @@
       renderMatrix();
       updateLiveScoreboard();
       startTimer();
+    }
+
+    const clearHistoryBtn = document.getElementById("clearExamHistoryBtn");
+    if (clearHistoryBtn) {
+      clearHistoryBtn.addEventListener("click", () => {
+        if (!global.WorkbenchStorage) return;
+        const currentList = global.WorkbenchStorage.getExamHistory(subjectId);
+        if (!currentList || currentList.length === 0) {
+          alert("No hay registros en el historial para borrar.");
+          return;
+        }
+        if (window.confirm("¿Desea eliminar todo el historial de evaluaciones de este módulo? Esta acción no se puede deshacer.")) {
+          global.WorkbenchStorage.clearExamHistory(subjectId);
+          renderHistory();
+        }
+      });
     }
 
     if (modePracticaBtn) {
@@ -332,9 +363,9 @@
         document.querySelectorAll("details.sol").forEach((d) => {
           d.open = openAll;
         });
-        allSolBtn.textContent = openAll
-          ? "▲ Ocultar Todas las Soluciones"
-          : "▼ Mostrar Todas las Soluciones";
+        allSolBtn.innerHTML = openAll
+          ? "<span class='all-sol-full'>▲ Ocultar Todas las Soluciones</span><span class='all-sol-short'>▲ Ocultar</span>"
+          : "<span class='all-sol-full'>▼ Mostrar Todas las Soluciones</span><span class='all-sol-short'>▼ Soluciones</span>";
       });
     }
 

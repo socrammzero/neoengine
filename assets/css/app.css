@@ -669,8 +669,9 @@ header.topbar {
   border: 1px solid var(--line);
   background: var(--surface-2);
   color: var(--ink);
-  white-space: nowrap;
-  flex-shrink: 0;
+  max-width: 100%;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .pill.accent {
@@ -906,9 +907,8 @@ table.tech-table tr.cur {
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--accent);
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
+  display: block;
+  line-height: 1.35;
 }
 
 .controls-grid {
@@ -1786,14 +1786,44 @@ html.neo-locked #cmdPaletteBackdrop {
   }
 }
 
+.all-sol-full {
+  display: inline;
+}
+
+.all-sol-short {
+  display: none;
+}
+
 @media (max-width: 680px) {
   .hide-sm {
     display: none !important;
   }
 
   header.topbar {
-    padding: 0.5rem 0.75rem;
-    gap: 0.45rem;
+    padding: 0.45rem 0.65rem;
+    gap: 0.35rem;
+  }
+
+  .topbar-left {
+    gap: 0.35rem;
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  .topbar-right {
+    gap: 0.35rem;
+    min-width: 0;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+  }
+
+  header.topbar #installAppBtn {
+    display: none !important;
+  }
+
+  .btn-top {
+    padding: 0.3rem 0.48rem;
+    font-size: 0.76rem;
   }
 
   .breadcrumbs .sep,
@@ -1802,30 +1832,58 @@ html.neo-locked #cmdPaletteBackdrop {
   }
 
   .cmd-trigger {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.78rem;
+    min-width: 0;
+    max-width: 95px;
+    padding: 0.3rem 0.45rem;
+    font-size: 0.76rem;
+  }
+
+  .cmd-trigger span {
+    font-size: 0.74rem;
   }
 
   .cmd-trigger kbd {
     display: none;
   }
 
+  .all-sol-full {
+    display: none !important;
+  }
+
+  .all-sol-short {
+    display: inline !important;
+  }
+
+  #examTimerDisplay {
+    font-size: 0.82rem !important;
+    padding: 0.18rem 0.42rem !important;
+  }
+
   .hero-banner {
-    padding: 1.15rem 1rem;
+    padding: 1.15rem 0.95rem;
   }
 
   .hero-banner h1 {
-    font-size: clamp(1.45rem, 6vw, 1.9rem);
+    font-size: clamp(1.35rem, 5.5vw, 1.8rem);
+  }
+
+  .hero-kicker {
+    gap: 0.3rem 0.45rem;
+  }
+
+  .hero-kicker span:not(:first-child):not(:last-child) {
+    display: none;
   }
 
   .topic-section {
-    padding: 1.1rem 0.95rem;
+    padding: 1rem 0.85rem;
   }
 
   .topic-section h2 {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.45rem;
   }
 
   .ro-grid {
@@ -1835,11 +1893,38 @@ html.neo-locked #cmdPaletteBackdrop {
   .ceb-toolbar {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.5rem;
+    gap: 0.45rem;
+    padding: 0.45rem 0.65rem;
+  }
+
+  .ceb-file-info {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    font-size: 0.74rem;
   }
 
   .ceb-actions {
-    justify-content: flex-end;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .ceb-btn {
+    flex: 1 1 calc(50% - 0.35rem);
+    min-width: 110px;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.72rem;
+    padding: 0.35rem 0.45rem;
+    white-space: nowrap;
+  }
+
+  .q-option {
+    padding: 0.55rem 0.75rem;
+    font-size: 0.86rem;
+    gap: 0.5rem;
   }
 
   .neo-gate-input-row {
@@ -1858,5 +1943,34 @@ html.neo-locked #cmdPaletteBackdrop {
 
   .page-wrap {
     padding: 0.85rem 0.65rem 2.5rem;
+  }
+
+  .cmd-trigger {
+    max-width: 32px;
+    padding: 0.3rem 0.35rem;
+    justify-content: center;
+  }
+
+  .cmd-trigger span {
+    display: none !important;
+  }
+
+  .cmd-trigger::before {
+    content: "⌕";
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .btn-top {
+    padding: 0.28rem 0.4rem;
+    font-size: 0.72rem;
+  }
+
+  .hero-banner h1 {
+    font-size: 1.3rem;
+  }
+
+  .ceb-btn {
+    flex: 1 1 100%;
   }
 }

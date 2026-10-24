@@ -156,6 +156,17 @@
       return state.examHistory.filter((item) => item.subjectId === subjectId);
     },
 
+    clearExamHistory(subjectId = null) {
+      const state = loadState();
+      if (!subjectId) {
+        state.examHistory = [];
+      } else {
+        state.examHistory = (state.examHistory || []).filter((item) => item.subjectId !== subjectId);
+      }
+      saveState(state);
+      return state.examHistory;
+    },
+
     getStats() {
       const state = loadState();
       const topicsCount = Object.keys(state.topicsRead).length;

@@ -254,9 +254,9 @@
         document.querySelectorAll("details.sol").forEach((d) => {
           d.open = allOpen;
         });
-        allSolBtn.textContent = allOpen
-          ? "▲ Ocultar Todas las Soluciones"
-          : "▼ Mostrar Todas las Soluciones";
+        allSolBtn.innerHTML = allOpen
+          ? "<span class='all-sol-full'>▲ Ocultar Todas las Soluciones</span><span class='all-sol-short'>▲ Ocultar</span>"
+          : "<span class='all-sol-full'>▼ Mostrar Todas las Soluciones</span><span class='all-sol-short'>▼ Soluciones</span>";
       });
     }
   }

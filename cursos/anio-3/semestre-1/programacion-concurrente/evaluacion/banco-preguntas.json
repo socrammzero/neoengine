@@ -5,12 +5,12 @@
     "difficulty": "Alta",
     "question": "Según la directiva oficial de codificación de la asignatura (Normativa de Evaluación), ¿cuál de las siguientes declaraciones de variables compartidas para un algoritmo de espera activa o semáforos es la forma recomendada en la asignatura?",
     "options": [
-      "unsigned f[2] = {0, 0}; int turno = 0; (sin necesidad de emplear la palabra clave volatile)",
       "volatile unsigned f[2] = {0, 0}; volatile int turno = 0;",
+      "unsigned f[2] = {0, 0}; int turno = 0; (sin necesidad de emplear la palabra clave volatile)",
       "atomic_int f[2] = {0, 0}; volatile int turno = 0;",
       "register int f[2] = {0, 0}; static volatile int turno = 0;"
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Recomendación de Escritura: En la asignatura se aconseja evitar el uso de la palabra clave `volatile` en cualquier variable, parámetro o puntero. Toda variable compartida se define como variable global estándar (`int`, `unsigned`, `long`)."
   },
   {
@@ -19,12 +19,12 @@
     "difficulty": "Alta",
     "question": "Al crear múltiples hebras en un bucle `for (i = 0; i < NUM_HEBRAS; i++)`, ¿cuál es la forma recomendada de pasar el identificador `i` a cada hebra según la normativa de evaluación?",
     "options": [
-      "Declarar un array `int ids[NUM_HEBRAS];`, asignar `ids[i] = i;` y llamar a `pthread_create(&hebras[i], NULL, HTarea, &ids[i])` comprobando que devuelve 0.",
-      "Hacer un cast directo del entero a puntero: `pthread_create(&hebras[i], NULL, HTarea, (void *)(intptr_t)i)`.",
       "Pasar la dirección de la variable de control del bucle: `pthread_create(&hebras[i], NULL, HTarea, &i)`.",
+      "Hacer un cast directo del entero a puntero: `pthread_create(&hebras[i], NULL, HTarea, (void *)(intptr_t)i)`.",
+      "Declarar un array `int ids[NUM_HEBRAS];`, asignar `ids[i] = i;` y llamar a `pthread_create(&hebras[i], NULL, HTarea, &ids[i])` comprobando que devuelve 0.",
       "Asignar el identificador mediante una variable global sin sincronización antes de `pthread_create`."
     ],
-    "answer": 0,
+    "answer": 2,
     "explanation": "Recomendación de Escritura: No se aconseja usar `(void*)(intptr_t)i` y pasar `&i` causa condición de carrera. Se aconseja utilizar un array `int ids[NUM_HEBRAS]` con `ids[i] = i` y pasar `&ids[i]`, verificando además el valor de retorno de `pthread_create` y `pthread_join`."
   },
   {
@@ -33,12 +33,12 @@
     "difficulty": "Media",
     "question": "Dados dos procesos concurrentes P = p1 → p2 → p3 (n = 3 instrucciones atómicas) y Q = q1 → q2 → q3 (m = 3 instrucciones atómicas), ¿cuántas trazas de ejecución posibles existen para P || Q en un monoprocesador sin solapamiento?",
     "options": [
-      "20 trazas",
+      "720 trazas",
       "6 trazas",
       "10 trazas",
-      "720 trazas"
+      "20 trazas"
     ],
-    "answer": 0,
+    "answer": 3,
     "explanation": "Según la fórmula del Tema 1 (pág. 16), el número de trazas posibles que conservan el orden parcial relativo de P y Q es (m + n)! / (m! · n!) = (3 + 3)! / (3! · 3!) = 6! / (6 × 6) = 720 / 36 = 20 trazas."
   },
   {
@@ -61,12 +61,12 @@
     "difficulty": "Baja",
     "question": "Según la clasificación de requisitos temporales del Tema 1 (pág. 41), ¿cómo se denomina un sistema de tiempo real acrítico en el que sobrepasar un plazo se tolera ocasionalmente pero el servicio retrasado carece de beneficio?",
     "options": [
-      "Tiempo Real Firme",
       "Tiempo Real Crítico",
+      "Tiempo Real Firme",
       "Tiempo Real Real",
       "Tiempo Compartido Puro"
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "En el Tema 1 (pág. 41) se definen cuatro categorías: Tiempo Real Crítico (una sola respuesta fuera de plazo invalida el sistema), Tiempo Real Acrítico (tolera retrasos ocasionales), Tiempo Real Real (crítico con plazos muy cortos) y Tiempo Real Firme (acrítico sin beneficio en el retraso)."
   },
   {
@@ -75,12 +75,12 @@
     "difficulty": "Baja",
     "question": "Según el Tema 2 (págs. 10–14), ¿qué recursos mantiene de forma PRIVADA cada hebra dentro de un proceso UNIX/POSIX?",
     "options": [
-      "Puntero a la pila (stack), registros de la CPU (incluido el contador de programa), propiedades de planificación y máscara de señales bloqueadas/pendientes.",
-      "El segmento de código ejecutable, el heap y los descriptores de ficheros abiertos.",
       "El Process ID (PID), el directorio de trabajo y las librerías compartidas.",
+      "El segmento de código ejecutable, el heap y los descriptores de ficheros abiertos.",
+      "Puntero a la pila (stack), registros de la CPU (incluido el contador de programa), propiedades de planificación y máscara de señales bloqueadas/pendientes.",
       "Las variables globales declaradas fuera de `main()` y las colas de mensajes."
     ],
-    "answer": 0,
+    "answer": 2,
     "explanation": "Como muestran las páginas 12 y 14 del Tema 2, todas las hebras de un proceso comparten código, datos globales, heap y ficheros/sockets, pero cada hebra mantiene su propia pila, registros, prioridad/política de planificación y máscara de señales."
   },
   {
@@ -89,12 +89,12 @@
     "difficulty": "Media",
     "question": "¿Qué ocurre en un programa Pthreads si la función `main()` finaliza ejecutando explícitamente `pthread_exit(NULL)` en lugar de `return 0` o `exit()` (Tema 2, págs. 31–33)?",
     "options": [
-      "La hebra principal termina pero el proceso permanece vivo permitiendo que las demás hebras creadas continúen su ejecución hasta concluir.",
+      "El planificador convierte automáticamente todas las hebras hijas en procesos independientes.",
       "Todas las hebras del proceso se destruyen instantáneamente igual que con `exit(0)`.",
       "Se produce un error de segmentación si alguna hebra está en estado `PTHREAD_CREATE_JOINABLE`.",
-      "El planificador convierte automáticamente todas las hebras hijas en procesos independientes."
+      "La hebra principal termina pero el proceso permanece vivo permitiendo que las demás hebras creadas continúen su ejecución hasta concluir."
     ],
-    "answer": 0,
+    "answer": 3,
     "explanation": "Cuando `main()` ejecuta `return` o `exit()`, termina el proceso completo y mueren todas sus hebras. Sin embargo, si `main()` invoca `pthread_exit(NULL)` como última operación (Tema 2, pág. 33), sólo termina la hebra inicial y las demás hebras siguen ejecutándose."
   },
   {
@@ -117,12 +117,12 @@
     "difficulty": "Media",
     "question": "En el Algoritmo de Peterson (`f[miId] = 1; turno = otra; while (f[otra] && turno == otra);`), si P0 y P1 quieren entrar simultáneamente y P0 ejecuta `turno = 1` antes de que P1 ejecute `turno = 0`, ¿quién entra primero en su Sección Crítica?",
     "options": [
-      "Entra primero P0, porque la última asignación a `turno` fue `turno = 0` realizada por P1.",
       "Entra primero P1, porque P1 ejecutó la asignación más reciente.",
+      "Entra primero P0, porque la última asignación a `turno` fue `turno = 0` realizada por P1.",
       "Se produce un livelock hasta que el planificador reinicie `turno`.",
       "Entran ambos porque `f[0]` y `f[1]` valen 1 simultáneamente."
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Como P1 sobrescribe `turno = 0` en último lugar, cuando P0 evalúa `f[1] && turno == 1` la condición resulta falsa (`turno` es 0) y P0 entra inmediatamente en SC0, mientras P1 espera en `while (f[0] && turno == 0)`."
   },
   {
@@ -131,12 +131,12 @@
     "difficulty": "Alta",
     "question": "En el Algoritmo de la Panadería de Lamport (Tema 3, págs. 45–51), ¿por qué es imprescindible el array `pidiendoTurno[MAXT]` además del criterio lexicográfico en `meToca(id, i)`?",
     "options": [
-      "Porque `siguiente()` no se ejecuta en exclusión mutua: sin `pidiendoTurno`, un proceso con menor identificador `c[0]` podría estar calculando el mismo turno que `c[2]` pero asignarlo tarde, entrando ambos en la Sección Crítica.",
-      "Para evitar que los números de ticket superen el valor 255.",
       "Porque en C no se permite comparar dos elementos del mismo array `turno` sin otro array auxiliar.",
+      "Para evitar que los números de ticket superen el valor 255.",
+      "Porque `siguiente()` no se ejecuta en exclusión mutua: sin `pidiendoTurno`, un proceso con menor identificador `c[0]` podría estar calculando el mismo turno que `c[2]` pero asignarlo tarde, entrando ambos en la Sección Crítica.",
       "Únicamente para reducir el consumo energético del procesador durante el bucle `for`."
     ],
-    "answer": 0,
+    "answer": 2,
     "explanation": "Como demuestra la traza de error de la página 49 del Tema 3, si `c[0]` y `c[2]` leen ambos `max = 0` en `siguiente()`, pero `c[0]` se suspende antes de escribir `turno[0] = 1`, `c[2]` ve `turno[0] == 0` y entra en SC2; luego `c[0]` escribe `turno[0] = 1`, gana el desempate `0 < 2` en `meToca(0,2)` y también entra en SC0. Esperar en `while (pidiendoTurno[j]);` impide evaluar `meToca` hasta que `j` haya fijado su turno."
   },
   {
@@ -145,12 +145,12 @@
     "difficulty": "Media",
     "question": "Según el Tema 3 (pág. 55), ¿qué diferencia a un planificador fuertemente justo de uno débilmente justo?",
     "options": [
-      "El débilmente justo garantiza atender una petición si se mantiene verdadera de forma continua; el fuertemente justo garantiza atenderla si se hace verdadera con infinita frecuencia aunque se desactive entre medias.",
+      "El fuertemente justo impide los cambios de contexto durante la espera activa.",
       "El fuertemente justo asigna rodajas de tiempo de 100 ms y el débilmente justo de 10 ms.",
       "El débilmente justo sólo funciona en sistemas multiprocesador y el fuertemente justo en monoprocesador.",
-      "El fuertemente justo impide los cambios de contexto durante la espera activa."
+      "El débilmente justo garantiza atender una petición si se mantiene verdadera de forma continua; el fuertemente justo garantiza atenderla si se hace verdadera con infinita frecuencia aunque se desactive entre medias."
     ],
-    "answer": 0,
+    "answer": 3,
     "explanation": "En la página 55 del Tema 3 se muestra el contraejemplo donde `hebra1` alterna `fin1 = 1; fin1 = 0;` dentro de un bucle: como la condición `fin1` no permanece continua sino que se activa infinitas veces, sólo un planificador fuertemente justo garantiza que `hebra2` observe `fin1 == 1` y termine."
   },
   {
@@ -173,12 +173,12 @@
     "difficulty": "Alta",
     "question": "En la versión justa para los escritores del problema de Lectores/Escritores con semáforos (Tema 3_1, pág. 108), ¿cuál es la misión específica del tercer semáforo de exclusión `mutex3` al inicio de `entraLector()`?",
     "options": [
-      "Retener en `mutex3` a los lectores adicionales para que en la cola del semáforo `leyendo` a lo sumo haya un único lector, garantizando así que `sem_post(&leyendo)` despierte al primer escritor incluso con semáforos no FIFO.",
       "Proteger la variable entera `nEscritores` frente a accesos concurrentes de los escritores.",
+      "Retener en `mutex3` a los lectores adicionales para que en la cola del semáforo `leyendo` a lo sumo haya un único lector, garantizando así que `sem_post(&leyendo)` despierte al primer escritor incluso con semáforos no FIFO.",
       "Permitir que dos escritores actualicen simultáneamente distintas tablas de la base de datos.",
       "Sustituir al semáforo `escribiendo` cuando no quedan lectores activos."
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Según las páginas 107 y 108 del Tema 3_1, si varios lectores y un escritor esperasen juntos en `leyendo`, al salir el lector en curso su `sem_post(&leyendo)` podría despertar a otro lector en vez de al escritor. Con `sem_wait(&mutex3)` antes de `sem_wait(&leyendo)`, el resto de lectores espera en `mutex3` y en `leyendo` sólo puede esperar el escritor."
   },
   {
@@ -187,12 +187,12 @@
     "difficulty": "Media",
     "question": "En el estándar de colas de mensajes POSIX `<mqueue.h>` (Tema 4, págs. 15–18), ¿qué diferencia existe entre `mq_close(mqdes)` y `mq_unlink(name)`?",
     "options": [
-      "`mq_close` cierra el descriptor de la cola para el proceso actual, mientras que `mq_unlink` elimina el nombre y el contenido de la cola del sistema.",
-      "`mq_close` borra todos los mensajes pendientes y `mq_unlink` sólo vacía el primer mensaje.",
       "`mq_unlink` debe llamarse antes de cada `mq_send` para desbloquear el canal.",
+      "`mq_close` borra todos los mensajes pendientes y `mq_unlink` sólo vacía el primer mensaje.",
+      "`mq_close` cierra el descriptor de la cola para el proceso actual, mientras que `mq_unlink` elimina el nombre y el contenido de la cola del sistema.",
       "Son funciones equivalentes; basta llamar a cualquiera de las dos para borrar la cola."
     ],
-    "answer": 0,
+    "answer": 2,
     "explanation": "En POSIX (`<mqueue.h>`), las colas tienen persistencia en el kernel: `mq_close(mqd_t)` cierra la asociación del descriptor con el proceso, mientras que `mq_unlink(const char *name)` elimina la cola del espacio de nombres del sistema."
   },
   {
@@ -201,12 +201,12 @@
     "difficulty": "Media",
     "question": "En una instrucción de espera selectiva (`select ... or ... end;`, Tema 4 págs. 31–33), ¿cuándo se dice que una rama `or` con guarda `[when expBool =>] c?v;` está ABIERTA y qué ocurre si existe una rama final `else`?",
     "options": [
-      "Está abierta si y sólo si `expBool` se evalúa a `true` Y además es posible completar la cita inmediatamente; si hay rama `else` y todas las ramas `or` están cerradas, el proceso nunca se bloquea y ejecuta el `else`.",
+      "Si varias ramas `or` están abiertas, se ejecutan todas en paralelo creando nuevas hebras.",
       "Está abierta basta con que `expBool` sea `true` aunque no haya emisor en el canal `c`; la rama `else` bloquea al proceso durante 5 segundos.",
       "La alternativa `else` puede combinarse libremente con la alternativa `terminate` en el mismo `select`.",
-      "Si varias ramas `or` están abiertas, se ejecutan todas en paralelo creando nuevas hebras."
+      "Está abierta si y sólo si `expBool` se evalúa a `true` Y además es posible completar la cita inmediatamente; si hay rama `else` y todas las ramas `or` están cerradas, el proceso nunca se bloquea y ejecuta el `else`."
     ],
-    "answer": 0,
+    "answer": 3,
     "explanation": "Según las páginas 31 y 33 del Tema 4, una rama con guarda está abierta sii `expBool == true` y hay un proceso listo al otro extremo del canal para completar la cita. Además, la alternativa `else` es incompatible con `terminate` y garantiza que el proceso nunca se bloquee en el `select`."
   },
   {
@@ -229,12 +229,12 @@
     "difficulty": "Media",
     "question": "En un monitor de Java (Tema 6, págs. 14–25), ¿qué ocurre si una hebra A está ejecutando un método `synchronized` de un objeto `obj` y al mismo tiempo otra hebra B intenta ejecutar otro método `synchronized` distinto del mismo `obj`, mientras una hebra C invoca un método NO `synchronized` de `obj`?",
     "options": [
-      "La hebra B queda bloqueada esperando el cerrojo de la instancia `obj`, pero la hebra C puede ejecutar el método no sincronizado sin bloquearse.",
       "Tanto la hebra B como la hebra C quedan bloqueadas hasta que A termine.",
+      "La hebra B queda bloqueada esperando el cerrojo de la instancia `obj`, pero la hebra C puede ejecutar el método no sincronizado sin bloquearse.",
       "La hebra B puede entrar porque es un método distinto aunque sea del mismo objeto.",
       "Se lanza automáticamente una excepción `InterruptedException` en la hebra B."
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "Según las páginas 14 y 15 del Tema 6, sólo una hebra puede estar ejecutando a la vez cualquier método o bloque `synchronized` de una misma instancia de objeto, pero los métodos no `synchronized` de esa misma instancia siguen siendo accesibles concurrentemente."
   },
   {
@@ -243,12 +243,12 @@
     "difficulty": "Media",
     "question": "En FreeRTOS (Tema 6, págs. 58–60 y 71), ¿qué diferencia existe entre `vTaskDelay` y `vTaskDelayUntil`, y cuál de los 5 esquemas de memoria dinámica fusiona (compacta) bloques libres contiguos?",
     "options": [
-      "`vTaskDelay` realiza una pausa relativa en ticks mientras que `vTaskDelayUntil` realiza esperas absolutas exactas para tareas periódicas; el esquema que compacta bloques contiguos es `heap_4.c` (y `heap_5.c` en regiones no contiguas).",
-      "`vTaskDelay` recibe nanosegundos y `vTaskDelayUntil` recibe segundos; el esquema que compacta bloques es `heap_1.c`.",
       "`vTaskDelayUntil` sólo puede llamarse desde una rutina de interrupción (ISR) y `heap_2.c` realiza compactación automática.",
+      "`vTaskDelay` recibe nanosegundos y `vTaskDelayUntil` recibe segundos; el esquema que compacta bloques es `heap_1.c`.",
+      "`vTaskDelay` realiza una pausa relativa en ticks mientras que `vTaskDelayUntil` realiza esperas absolutas exactas para tareas periódicas; el esquema que compacta bloques contiguos es `heap_4.c` (y `heap_5.c` en regiones no contiguas).",
       "Ambas funciones son relativas y `heap_3.c` prohíbe liberar memoria con `vPortFree`."
     ],
-    "answer": 0,
+    "answer": 2,
     "explanation": "En FreeRTOS (Tema 6, págs. 58–60), `vTaskDelay(ticks)` duerme un número relativo de ticks desde la llamada, mientras que `vTaskDelayUntil(&xLastWakeTime, PeriodoTicks)` mantiene una cadencia periódica exacta. En gestión de memoria (pág. 71), `heap_1` no libera, `heap_2` libera sin compactar, `heap_3` envuelve `malloc/free`, `heap_4` compacta bloques adyacentes y `heap_5` soporta múltiples regiones."
   },
   {
@@ -257,12 +257,12 @@
     "difficulty": "Media",
     "question": "Al configurar una hebra de tiempo real en Linux/POSIX con política `SCHED_FIFO` o `SCHED_RR` mediante un objeto `pthread_attr_t attr` (Tema 7, págs. 3–8), ¿qué llamada es recomendada para que `pthread_create` no ignore la política y prioridad configuradas en `attr`?",
     "options": [
-      "`pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);`",
+      "`sched_get_priority_max(SCHED_OTHER);`",
       "`pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);`",
       "`mlockall(MCL_CURRENT | MCL_FUTURE);`",
-      "`sched_get_priority_max(SCHED_OTHER);`"
+      "`pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);`"
     ],
-    "answer": 0,
+    "answer": 3,
     "explanation": "Como subraya la página 5 del Tema 7, por defecto las hebras heredan los atributos de planificación de la hebra creadora (`PTHREAD_INHERIT_SCHED`). En Linux es recomendado invocar `pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED)` antes de `pthread_create` para que se apliquen `SCHED_FIFO`/`SCHED_RR` y `sched_priority`."
   },
   {
@@ -285,12 +285,12 @@
     "difficulty": "Alta",
     "question": "¿Cuáles son los tres protocolos de atributo de mutex (`pthread_mutexattr_setprotocol`) definidos en POSIX Tiempo Real para gestionar la inversión de prioridades (Tema 7, págs. 21–22)?",
     "options": [
-      "`PTHREAD_PRIO_NONE`, `PTHREAD_PRIO_INHERIT` (herencia de prioridad) y `PTHREAD_PRIO_PROTECT` (techo de prioridad inmediato con `prioceiling`).",
       "`SCHED_FIFO`, `SCHED_RR` y `SCHED_DEADLINE`.",
+      "`PTHREAD_PRIO_NONE`, `PTHREAD_PRIO_INHERIT` (herencia de prioridad) y `PTHREAD_PRIO_PROTECT` (techo de prioridad inmediato con `prioceiling`).",
       "`MCL_CURRENT`, `MCL_FUTURE` y `SA_SIGINFO`.",
       "`PTHREAD_CREATE_JOINABLE`, `PTHREAD_CREATE_DETACHED` y `PTHREAD_EXPLICIT_SCHED`."
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "En las páginas 21 y 22 del Tema 7 se especifican los tres protocolos de mutex de tiempo real: `PTHREAD_PRIO_NONE` (sin protección contra inversión), `PTHREAD_PRIO_INHERIT` (la hebra de baja prioridad hereda temporalmente la prioridad de la hebra de alta prioridad bloqueada) y `PTHREAD_PRIO_PROTECT` (eleva la prioridad al techo `prioceiling` al tomar el mutex)."
   }
 ]

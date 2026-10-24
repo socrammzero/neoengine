@@ -92,7 +92,7 @@
         </div>
         <div class="topbar-right">
           <span class="pill sig mono" id="examTimerDisplay" style="font-size:0.88rem;font-weight:700;">25:00</span>
-          <button type="button" id="allSol" class="btn-top">▼ Mostrar Todas las Soluciones</button>
+          <button type="button" id="allSol" class="btn-top"><span class="all-sol-full">▼ Mostrar Todas las Soluciones</span><span class="all-sol-short">▼ Soluciones</span></button>
           <button type="button" class="cmd-trigger"><span>⌕ Buscar...</span><kbd>Ctrl K</kbd></button>
           <button type="button" id="themeToggle" class="btn-top">🌙 Oscuro</button>
         </div>
@@ -131,7 +131,13 @@
         </section>
 
         <section class="topic-section" id="sec-historial">
-          <h2><span>2. Historial Local de Evaluaciones en Programación Concurrente</span><span class="pill">Persistencia Local</span></h2>
+          <h2>
+            <span>2. Historial Local de Evaluaciones en Programación Concurrente</span>
+            <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+              <span class="pill">Persistencia Local</span>
+              <button type="button" id="clearExamHistoryBtn" class="btn-secondary" style="font-size:0.75rem;padding:0.25rem 0.6rem;cursor:pointer;">🗑 Borrar Historial</button>
+            </div>
+          </h2>
           <div class="scroll">
             <table class="tech-table">
               <thead>
