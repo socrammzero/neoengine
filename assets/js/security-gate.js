@@ -624,7 +624,7 @@
      6. Interfaz del Portal de Seguridad y Bloqueo FOUC-Free
      -------------------------------------------------------------------------- */
   const INLINE_NEO_LOGO_SVG = `<svg viewBox="0 0 512 512" width="58" height="58" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <rect width="512" height="512" rx="96" fill="#171a1e"/>
+    <rect width="512" height="512" fill="#171a1e"/>
     <g stroke="#1ee6ff" stroke-width="16" fill="none">
       <path d="M 118.5 334 L 201 169 A 30.1 30.1 0 0 1 255 169 L 293 245 L 323.5 184" stroke-linecap="round" stroke-linejoin="miter" stroke-miterlimit="6"/>
       <path d="M 166 306 L 228 182 L 293 312 L 352 194" stroke-linecap="round" stroke-linejoin="round"/>

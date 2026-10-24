@@ -405,25 +405,26 @@ header.topbar {
   color: var(--accent);
 }
 
-/* Contenido interior del Sidebar */
+/* Contenido interior del Sidebar (Compactado sin scroll vertical innecesario) */
 .sidebar-brand {
-  padding: 0.9rem 1rem;
+  padding: 0.55rem 0.85rem;
   border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .sidebar-brand-title {
   font-family: var(--f-display);
-  font-size: 1.06rem;
+  font-size: 1.02rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
@@ -431,10 +432,12 @@ header.topbar {
 }
 
 .neo-brand-svg {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   flex-shrink: 0;
-  border-radius: 6px;
+  border-radius: 5px;
+  display: block;
+  overflow: hidden;
   transition: transform 0.15s ease;
 }
 
@@ -445,8 +448,8 @@ header.topbar {
 
 .sidebar-brand-badge {
   font-family: var(--f-mono);
-  font-size: 0.68rem;
-  padding: 0.15rem 0.4rem;
+  font-size: 0.66rem;
+  padding: 0.12rem 0.38rem;
   border-radius: 4px;
   background: var(--accent-soft);
   color: var(--accent);
@@ -456,12 +459,28 @@ header.topbar {
 }
 
 .sidebar-selectors {
-  padding: 0.75rem 0.9rem;
+  padding: 0.42rem 0.8rem;
   border-bottom: 1px solid var(--line);
   background: var(--surface-2);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.22rem;
+  flex-shrink: 0;
+}
+
+.sidebar-install-mobile-only {
+  display: none !important;
+}
+
+@media (max-width: 680px) {
+  .sidebar-install-mobile-only {
+    display: inline-flex !important;
+    width: 100%;
+    margin-top: 0.35rem;
+    justify-content: center;
+    font-size: 0.78rem;
+    padding: 0.38rem 0.65rem;
+  }
 }
 
 .sidebar-select-row {
@@ -472,51 +491,61 @@ header.topbar {
 
 .sidebar-select {
   width: 100%;
-  padding: 0.35rem 0.5rem;
+  padding: 0.26rem 0.45rem;
   border-radius: 6px;
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--ink);
   font-family: var(--f-body);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
 }
 
 .sidebar-section-label {
-  padding: 0.65rem 1rem 0.3rem;
+  padding: 0.42rem 0.85rem 0.15rem;
   font-family: var(--f-mono);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--muted);
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
 }
 
 .sidebar nav {
-  padding: 0.25rem 0.6rem 0.75rem;
+  padding: 0.12rem 0.5rem 0.28rem;
   display: flex;
   flex-direction: column;
-  gap: 0.18rem;
+  gap: 0.06rem;
+  flex-shrink: 0;
 }
 
 .sidebar nav a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.45rem;
-  padding: 0.45rem 0.65rem;
+  gap: 0.35rem;
+  padding: 0.27rem 0.55rem;
   border-radius: 6px;
   color: var(--ink);
-  font-size: 0.84rem;
+  font-size: 0.78rem;
+  line-height: 1.22;
   text-decoration: none;
   border-left: 3px solid transparent;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .sidebar nav a > span:first-child {
   flex: 1 1 auto;
   min-width: 0;
-  line-height: 1.25;
+  line-height: 1.22;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sidebar nav a .pill,
@@ -527,9 +556,9 @@ header.topbar {
 }
 
 .sidebar nav a .pill {
-  font-size: 0.66rem;
-  padding: 0.12rem 0.45rem;
-  line-height: 1.2;
+  font-size: 0.62rem;
+  padding: 0.08rem 0.38rem;
+  line-height: 1.15;
   border-radius: 999px;
 }
 
@@ -546,22 +575,25 @@ header.topbar {
 }
 
 .sidebar-exam-notice {
-  margin: auto 0.75rem 0.85rem;
-  padding: 0.75rem;
-  border-radius: 8px;
+  margin: auto 0.6rem 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 7px;
   background: var(--sig-soft);
   border-left: 3px solid var(--sig);
-  font-size: 0.78rem;
+  font-size: 0.7rem;
+  line-height: 1.3;
   color: var(--ink);
+  flex-shrink: 0;
 }
 
 .sidebar-exam-notice > strong:first-child {
   display: block;
   color: var(--sig);
   font-family: var(--f-mono);
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.14rem;
+  line-height: 1.2;
 }
 
 /* 4. Contenedor de Página y Cabecera Hero */

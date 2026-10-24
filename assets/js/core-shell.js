@@ -90,7 +90,7 @@
      3. Identidad Visual NeoEngine, Barra Lateral (100% Hermética) y Scrollspy
      -------------------------------------------------------------------------- */
   const MINI_NEO_LOGO_SVG = `<svg class="neo-brand-svg neo-logo-trigger" viewBox="0 0 512 512" width="28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <rect width="512" height="512" rx="96" fill="#171a1e"/>
+    <rect width="512" height="512" fill="#171a1e"/>
     <g stroke="#1ee6ff" stroke-width="18" fill="none">
       <path d="M 118.5 334 L 201 169 A 30.1 30.1 0 0 1 255 169 L 293 245 L 323.5 184" stroke-linecap="round" stroke-linejoin="miter" stroke-miterlimit="6"/>
       <path d="M 166 306 L 228 182 L 293 312 L 352 194" stroke-linecap="round" stroke-linejoin="round"/>
@@ -299,14 +299,13 @@
       });
     }
 
-    // 2. Botón adicional en el menú lateral (.sidebar-selectors) para móviles y acceso rápido
+    // 2. Botón adicional en el menú lateral (.sidebar-selectors) solo para vista móvil
     const sidebarSel = document.querySelector(".sidebar-selectors");
     if (sidebarSel && !document.getElementById("sidebarInstallAppBtn")) {
       const sideBtn = document.createElement("button");
       sideBtn.type = "button";
       sideBtn.id = "sidebarInstallAppBtn";
-      sideBtn.className = "btn-action";
-      sideBtn.style.cssText = "width:100%;margin-top:0.55rem;justify-content:center;font-size:0.8rem;padding:0.42rem 0.7rem;";
+      sideBtn.className = "btn-action sidebar-install-mobile-only";
       sideBtn.innerHTML = "📲 Instalar NeoEngine como App";
       sidebarSel.appendChild(sideBtn);
       sideBtn.addEventListener("click", () => {

@@ -11,8 +11,8 @@
     </filter>
   </defs>
 
-  <!-- Fondo antracita oscuro del diseño original -->
-  <rect width="512" height="512" rx="96" fill="#171a1e" />
+  <!-- Fondo antracita oscuro del diseño original (cuadrado completo sin esquinas blancas) -->
+  <rect width="512" height="512" fill="#171a1e" />
 
   <g filter="url(#neoSoftGlow)" stroke="url(#neoCyanTrace)" stroke-width="14.5" fill="none">
     <!-- Pista 1 (Superior / Izquierda exterior -> Arco superior -> Vértice interno -> Nodo superior interno) -->
