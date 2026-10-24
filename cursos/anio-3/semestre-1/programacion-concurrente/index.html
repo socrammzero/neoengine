@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Panel Maestro de Programación Concurrente: Los 7 Temas Oficiales, Reglas de Oro Normativa de Evaluación, Hojas de Problemas y Simulador de Examen." />
   <title>Programación Concurrente — Panel Maestro de la Asignatura | NeoEngine</title>
+  <link rel="manifest" href="../../../../manifest.json" />
   <link rel="stylesheet" href="../../../../assets/css/app.css" />
   <meta name="theme-color" content="#0d7069" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="NeoEngine" />
-  <link rel="icon" type="image/svg+xml" href="../../../../assets/img/logo-neoengine.svg" />
+  <link rel="icon" type="image/svg+xml" href="../../../../favicon.svg" />
   <link rel="apple-touch-icon" href="../../../../assets/img/icon-192.png" />
   <style id="neo-fouc-shield">
     html.neo-locked .layout,
@@ -84,7 +85,7 @@
 
       <div class="sidebar-exam-notice">
         <strong>Recordatorio Crítico</strong>
-        Comprueba siempre los errores de <code>pthread_create</code> y <code>pthread_join</code>, pasa <code>&amp;ids[i]</code> y usa <code>sem_t mutex</code> (nunca <code>volatile</code> ni <code>pthread_mutex_lock</code>).
+        Se aconseja comprobar el retorno de <code>pthread_create</code> y <code>pthread_join</code>, pasar <code>&amp;ids[i]</code> y emplear <code>sem_t mutex</code> como forma recomendada de sincronización.
       </div>
     </aside>
 
@@ -127,14 +128,14 @@
 
         <!-- SECCIÓN 1: Normativa Oficial de Codificación POSIX -->
         <section class="topic-section" id="sec-info-md">
-          <h2><span>1. Directivas Críticas de Codificación y Argumentación (Normativa de Evaluación)</span><span class="pill sig">Lectura Obligatoria</span></h2>
+          <h2><span>1. Recomendaciones de Escritura, Ecuaciones y Argumentación</span><span class="pill sig">Guía Recomendada</span></h2>
           <div class="warn">
-            <strong class="tag">Las 5 Reglas Inquebrantables de Examen (Normativa de Evaluación)</strong>
+            <strong class="tag">Las 5 Recomendaciones Clave de Escritura y Argumentación</strong>
             <ul style="margin:0.4rem 0 0;padding-left:1.25rem;">
-              <li><strong>1. PROHIBICIÓN ABSOLUTA DE <code>volatile</code>:</strong> En la asignatura jamás se usa la palabra clave <code>volatile</code> (ni en espera activa, ni en semáforos, ni en manejadores). Toda variable compartida se declara como variable global normal (<code>int</code>, <code>unsigned</code>, <code>long</code>).</li>
-              <li><strong>2. OBLIGATORIO COMPROBAR ERRORES:</strong> Toda llamada a <code>pthread_create</code> y <code>pthread_join</code> debe validar su valor devuelto con <code>if (pthread_create(...) != 0) { perror(...); exit(-1); }</code>.</li>
-              <li><strong>3. PROHIBIDO EL USO DE <code>pthread_mutex_lock</code>:</strong> Debe usarse siempre un semáforo binario <code>sem_t mutex</code> inicializado con <code>sem_init(&amp;mutex, 0, 1)</code> y operado con <code>sem_wait(&amp;mutex)</code> y <code>sem_post(&amp;mutex)</code>.</li>
-              <li><strong>4. PROHIBIDO EL USO DE <code>(void*)(intptr_t)i</code> EN <code>pthread_create</code>:</strong> Debe declararse <code>int ids[MAX]</code> en un bucle <code>for</code> asignando <code>ids[i] = i;</code> y pasando <code>&amp;ids[i]</code> en <code>pthread_create(&amp;th[i], NULL, Tarea, &amp;ids[i])</code>.</li>
+              <li><strong>1. DECLARACIÓN RECOMENDADA DE VARIABLES COMPARTIDAS (SIN <code>volatile</code>):</strong> En la asignatura se aconseja no emplear la palabra clave <code>volatile</code> (ni en espera activa, ni en semáforos, ni en manejadores). Toda variable compartida se declara como variable global normal (<code>int</code>, <code>unsigned</code>, <code>long</code>).</li>
+              <li><strong>2. COMPROBACIÓN RECOMENDADA DE ERRORES EN PTHREADS:</strong> Toda llamada a <code>pthread_create</code> y <code>pthread_join</code> debe validar su valor devuelto con <code>if (pthread_create(...) != 0) { perror(...); exit(-1); }</code>.</li>
+              <li><strong>3. EXCLUSIÓN MUTUA RECOMENDADA CON <code>sem_t mutex</code>:</strong> Se aconseja emplear un semáforo binario <code>sem_t mutex</code> inicializado con <code>sem_init(&amp;mutex, 0, 1)</code> y operado con <code>sem_wait(&amp;mutex)</code> y <code>sem_post(&amp;mutex)</code>.</li>
+              <li><strong>4. PASO RECOMENDADO DE IDENTIFICADORES CON <code>&amp;ids[i]</code> EN <code>pthread_create</code>:</strong> Se aconseja declarar <code>int ids[MAX]</code> en un bucle <code>for</code> asignando <code>ids[i] = i;</code> y pasando <code>&amp;ids[i]</code> en <code>pthread_create(&amp;th[i], NULL, Tarea, &amp;ids[i])</code>.</li>
               <li><strong>5. DISTINCIÓN SECCIÓN CRÍTICA (SC) VS REGIÓN CRÍTICA (RC):</strong> La <em>Sección Crítica (SC)</em> es el bloque de código cuya exclusión mutua gestiona explícitamente el programador; la <em>Región Crítica (RC)</em> es una construcción sintáctica de alto nivel donde el compilador/runtime garantiza automáticamente la exclusión mutua.</li>
             </ul>
           </div>

@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Práctica Tema 1: Entrelazado, Trazas e Instrucciones Atómicas | Programación Concurrente</title>
+  <link rel="manifest" href="../../../../../manifest.json" />
   <link rel="stylesheet" href="../../../../../assets/css/app.css" />
   <meta name="theme-color" content="#0d7069" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="NeoEngine" />
-  <link rel="icon" type="image/svg+xml" href="../../../../../assets/img/logo-neoengine.svg" />
+  <link rel="icon" type="image/svg+xml" href="../../../../../favicon.svg" />
   <link rel="apple-touch-icon" href="../../../../../assets/img/icon-192.png" />
   <style id="neo-fouc-shield">
     html.neo-locked .layout,
@@ -202,7 +203,7 @@
             <span class="pill ex-status-badge">○ Pendiente</span>
           </div>
           <h3>Implementación y Ejecución de la Búsqueda Lineal Concurrente</h3>
-          <p>Verifica y ejecuta el código C de búsqueda lineal concurrente sobre dos particiones del array (<code>[0..4]</code> y <code>[5..9]</code>) cumpliendo el control obligatorio de errores en <code>pthread_create</code> y <code>pthread_join</code> dy la normativa de evaluación:</p>
+          <p>Verifica y ejecuta el código C de búsqueda lineal concurrente sobre dos particiones del array (<code>[0..4]</code> y <code>[5..9]</code>) cumpliendo el control recomendado de errores en <code>pthread_create</code> y <code>pthread_join</code> dy la normativa de evaluación:</p>
           <div class="code-execution-box" data-src="../src-code/tema-01/busqueda_concurrente.c" data-lang="c"></div>
           <button type="button" class="btn-action ex-verify-code-btn">✓ Compilar, Ejecutar y Marcar Ejercicio Resuelto</button>
           <div class="ex-feedback" style="margin-top:0.75rem;"></div>

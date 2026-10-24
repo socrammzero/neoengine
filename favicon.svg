@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="NeoEngine">
+  <rect width="512" height="512" rx="96" fill="#171a1e" />
+  <g stroke="#1ee6ff" stroke-width="16" fill="none">
+    <path d="M 118.5 334 L 201 169 A 30.1 30.1 0 0 1 255 169 L 293 245 L 323.5 184" stroke-linecap="round" stroke-linejoin="miter" stroke-miterlimit="6" />
+    <path d="M 166 306 L 228 182 L 293 312 L 352 194" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 192.5 320 L 228 249 L 266 325 A 30.1 30.1 0 0 0 320 325 L 395.5 174" stroke-linecap="round" stroke-linejoin="miter" stroke-miterlimit="6" />
+    <circle cx="113" cy="345" r="11" fill="#171a1e" stroke-width="11" />
+    <circle cx="187" cy="331" r="11" fill="#171a1e" stroke-width="11" />
+    <circle cx="329" cy="173" r="11" fill="#171a1e" stroke-width="11" />
+    <circle cx="401" cy="163" r="11" fill="#171a1e" stroke-width="11" />
+  </g>
+</svg>

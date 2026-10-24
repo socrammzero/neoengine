@@ -32,7 +32,7 @@
       "pthread_join",
       "ids"
     ],
-    "content": "Panel central de Programación Concurrente (3er Año, 1er Semestre): prohibición de volatile, exclusión mutua con sem_t mutex (sem_wait y sem_post), paso de identificadores con array int ids[MAX] (&ids[i]), comprobación de errores en pthread_create y pthread_join, y distinción entre Sección Crítica y Región Crítica."
+    "content": "Panel central de Programación Concurrente (3er Año, 1er Semestre): recomendación sobre volatile, exclusión mutua con sem_t mutex (sem_wait y sem_post), paso de identificadores con array int ids[MAX] (&ids[i]), comprobación de errores en pthread_create y pthread_join, y distinción entre Sección Crítica y Región Crítica."
   },
   {
     "title": "Tema 1: Introducción a la Programación Concurrente",
@@ -334,10 +334,10 @@
       "vida",
       "patron",
       "canonico",
-      "obligatorio",
+      "recomendado",
       "recoleccion"
     ],
-    "content": "Propiedades estructurales de los procesos (estática vs dinámica, jerarquía padre/hijo, creación y representación explícita/implícita), arquitectura de memoria compartida y privada de las hebras en UNIX, estándar IEEE POSIX 1003.1c (Pthreads), estados del ciclo de vida y patrón canónico obligatorio de creación y recolección."
+    "content": "Propiedades estructurales de los procesos (estática vs dinámica, jerarquía padre/hijo, creación y representación explícita/implícita), arquitectura de memoria compartida y privada de las hebras en UNIX, estándar IEEE POSIX 1003.1c (Pthreads), estados del ciclo de vida y patrón canónico recomendado de creación y recolección."
   },
   {
     "title": "Tema 2 · 1. Características, Jerarquías y Representación de Procesos (Págs. 2–9) Conceptos Base",
@@ -487,7 +487,7 @@
     "content": "3. Estándar IEEE POSIX 1003.1c y Ciclo de Vida de una Hebra (Págs. 17–30 y 40) Ciclo de Vida Dentro de la familia IEEE POSIX ( POSIX.4 extensiones de tiempo real, POSIX.4a / 1003.1c extensión de threads, POSIX.4b tiempo real adicional y POSIX.13 perfiles de tiempo real), una hebra atraviesa los estados: No-existe → Creada → Ejecutable (Lista ↔ En-ejecución) ↔ Bloqueada → Terminada → No-existe . Propiedades Críticas del Cambio de Contexto y Bloqueo (Págs. 29–30) El cambio de contexto entre dos hebras guarda todos los registros de la CPU y sólo puede realizarse entre la ejecución de dos instrucciones máquina, nunca durante la ejecución de una d"
   },
   {
-    "title": "Tema 2 · 4. Primitivas Pthreads, Paso de Parámetros y Prohibiciones de Examen (Págs. 25–39 + Normativa POSIX) Reglas de Examen",
+    "title": "Tema 2 · 4. Primitivas Pthreads, Paso de Parámetros y recomendaciones de Examen (Págs. 25–39 + Normativa POSIX) Reglas de Examen",
     "category": "Sección Teórica",
     "subject": "Programación Concurrente",
     "path": "cursos/anio-3/semestre-1/programacion-concurrente/teoria/tema-02.html#sec-api-pthreads",
@@ -496,7 +496,7 @@
       "pthreads",
       "paso",
       "parametros",
-      "prohibiciones",
+      "recomendaciones",
       "examen",
       "pags",
       "normativa",
@@ -533,7 +533,7 @@
       "esta",
       "terminantemente"
     ],
-    "content": "4. Primitivas Pthreads, Paso de Parámetros y Prohibiciones de Examen (Págs. 25–39 + Normativa POSIX) Reglas de Examen int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg); int pthread_join(pthread_t thread, void **value_ptr); | void pthread_exit(void *value_ptr); Aviso sobre las Transparencias 33 y 37 del Tema 2 (Regla de Oro #4 dy la normativa de evaluación) En las páginas 33 y 37 de las diapositivas aparece el ejemplo introductorio con pthread_create(&threads[t], NULL, Hebra, (void *)t); . ¡CUIDADO! En los exámenes de la asignatura está TERMINANTEMENTE PROHIBIDO hacer ese cast directo "
+    "content": "4. Primitivas Pthreads, Paso de Parámetros y recomendaciones de Examen (Págs. 25–39 + Normativa POSIX) Reglas de Examen int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg); int pthread_join(pthread_t thread, void **value_ptr); | void pthread_exit(void *value_ptr); Aviso sobre las Transparencias 33 y 37 del Tema 2 (Regla de Oro #4 dy la normativa de evaluación) En las páginas 33 y 37 de las diapositivas aparece el ejemplo introductorio con pthread_create(&threads[t], NULL, Hebra, (void *)t); . ¡CUIDADO! En los exámenes de la asignatura está desaconsejado hacer ese cast directo "
   },
   {
     "title": "Tema 2 · 5. Patrón Canónico Oficial de Creación y Recolección de Hebras (Normativa de Evaluación) C11 POSIX",
@@ -787,7 +787,7 @@
       "critica",
       "orden",
       "preprotocolo",
-      "obligatorio",
+      "recomendado",
       "esperar",
       "primero",
       "condicion",
@@ -796,7 +796,7 @@
       "despues",
       "tomar"
     ],
-    "content": "4. Semáforos POSIX ( semaphore.h ) y Productor/Consumidor Circular (Págs. 65–89) Tema 3_1 Un semáforo POSIX sem_t representa un número natural de permisos disponibles, manipulado atómicamente mediante sem_init(&s, 0, val) , sem_wait(&s) (decrementa o suspende la hebra si vale 0) y sem_post(&s) (incrementa o despierta a una hebra bloqueada). Regla Crítica de Orden en el Preprotocolo (Pág. 89) En el Productor/Consumidor es obligatorio esperar primero por el semáforo de condición ( sem_wait(&Hay_espacio) o sem_wait(&Hay_Datos) ) y después tomar la exclusión mutua ( sem_wait(&mutex) ). Si se invierte el orden (tomando primero mutex ), el consumid"
+    "content": "4. Semáforos POSIX ( semaphore.h ) y Productor/Consumidor Circular (Págs. 65–89) Tema 3_1 Un semáforo POSIX sem_t representa un número natural de permisos disponibles, manipulado atómicamente mediante sem_init(&s, 0, val) , sem_wait(&s) (decrementa o suspende la hebra si vale 0) y sem_post(&s) (incrementa o despierta a una hebra bloqueada). Regla Crítica de Orden en el Preprotocolo (Pág. 89) En el Productor/Consumidor es recomendado esperar primero por el semáforo de condición ( sem_wait(&Hay_espacio) o sem_wait(&Hay_Datos) ) y después tomar la exclusión mutua ( sem_wait(&mutex) ). Si se invierte el orden (tomando primero mutex ), el consumid"
   },
   {
     "title": "Tema 3 · 5. Problemas Clásicos con Semáforos: Lectores/Escritores y Cena de los Filósofos (Págs. 90–115) Problemas de Examen",
@@ -1643,7 +1643,7 @@
       "convencionales",
       "compartido",
       "secuencia",
-      "obligatoria",
+      "recomendada",
       "configuracion",
       "atributos",
       "hebra",
@@ -1651,11 +1651,11 @@
       "attr",
       "pthread_attr_setinheritsched",
       "pthread_explicit_sched",
-      "obligatorio",
+      "recomendado",
       "pthread_attr_setschedpolicy",
       "param"
     ],
-    "content": "1. Políticas de Planificación de Tiempo Real en POSIX (Págs. 3–7) sched.h Linux ofrece 99 niveles de prioridad de tiempo real (de 1 a 99 , donde 99 es la máxima prioridad) para las políticas expulsivas SCHED_FIFO (FIFO a igual prioridad) y SCHED_RR (Round-Robin con rodaja de tiempo a igual prioridad), mientras que SCHED_OTHER gestiona los procesos convencionales de tiempo compartido con prioridad 0. Secuencia obligatoria de configuración en atributos de hebra (Págs. 4–5): pthread_attr_init(&attr); pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED); /* Obligatorio en Linux */ pthread_attr_setschedpolicy(&attr, SCHED_FIFO); param.sched"
+    "content": "1. Políticas de Planificación de Tiempo Real en POSIX (Págs. 3–7) sched.h Linux ofrece 99 niveles de prioridad de tiempo real (de 1 a 99 , donde 99 es la máxima prioridad) para las políticas expulsivas SCHED_FIFO (FIFO a igual prioridad) y SCHED_RR (Round-Robin con rodaja de tiempo a igual prioridad), mientras que SCHED_OTHER gestiona los procesos convencionales de tiempo compartido con prioridad 0. Secuencia recomendada de configuración en atributos de hebra (Págs. 4–5): pthread_attr_init(&attr); pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED); /* recomendado en Linux */ pthread_attr_setschedpolicy(&attr, SCHED_FIFO); param.sched"
   },
   {
     "title": "Tema 7 · 2. Bloqueo de Memoria Virtual y Señales de Tiempo Real (Págs. 8–16) sys/mman.h",
@@ -1880,7 +1880,7 @@
       "evaluacion",
       "seccion"
     ],
-    "content": "Ejercicios sobre el modelo de procesos y hebras en UNIX, estándar IEEE POSIX 1003.1c, ciclo de vida y cumplimiento estricto de las directivas dy la normativa de evaluación (Sección 3.1)."
+    "content": "Ejercicios sobre el modelo de procesos y hebras en UNIX, estándar IEEE POSIX 1003.1c, ciclo de vida y Guía Recomendada de las directivas dy la normativa de evaluación (Sección 3.1)."
   },
   {
     "title": "Práctica Tema 3: Espera Activa (Peterson y Lamport), Semáforos y Problemas Clásicos",
@@ -2045,7 +2045,7 @@
     "content": "Simulador interactivo de examen con 21 cuestiones técnicas sobre Pthreads, espera activa, Peterson, Panadería de Lamport, Semáforos POSIX, Colas mqueue, Señales sigwait, Monitores Java/C#, FreeRTOS y Tiempo Real."
   },
   {
-    "title": "Pregunta de Examen #1 (Normativa Crítica de Evaluación): Según la directiva oficial de codificación de la asignatura (Normativa de Evaluación), ¿cuál de…",
+    "title": "Pregunta de Examen #1 (Buenas Prácticas de Escritura): Según la directiva oficial de codificación de la asignatura (Normativa de Evaluación), ¿cuál de…",
     "category": "Cuestión de Examen",
     "subject": "Programación Concurrente",
     "path": "cursos/anio-3/semestre-1/programacion-concurrente/evaluacion/examen-test.html",
@@ -2084,17 +2084,17 @@
       "criterio",
       "esta",
       "terminantemente",
-      "prohibido",
+      "desaconsejado",
       "cualquier",
       "variable",
       "parametro",
       "puntero",
       "toda"
     ],
-    "content": "Según la directiva oficial de codificación de la asignatura (Normativa de Evaluación), ¿cuál de las siguientes declaraciones de variables compartidas para un algoritmo de espera activa o semáforos es la ÚNICA permitida en un examen? Respuesta correcta: unsigned f[2] = {0, 0}; int turno = 0; (sin usar jamás la palabra clave volatile) Explicación: Criterio Oficial de Evaluación: En la asignatura está terminantemente prohibido el uso de la palabra clave `volatile` en cualquier variable, parámetro o puntero. Toda variable compartida se define como variable global estándar (`int`, `unsigned`, `long`)."
+    "content": "Según la directiva oficial de codificación de la asignatura (Normativa de Evaluación), ¿cuál de las siguientes declaraciones de variables compartidas para un algoritmo de espera activa o semáforos es la forma recomendada en la asignatura? Respuesta correcta: unsigned f[2] = {0, 0}; int turno = 0; (sin necesidad de emplear la palabra clave volatile) Explicación: Recomendación de Escritura: En la asignatura se aconseja evitar el uso de la palabra clave `volatile` en cualquier variable, parámetro o puntero. Toda variable compartida se define como variable global estándar (`int`, `unsigned`, `long`)."
   },
   {
-    "title": "Pregunta de Examen #2 (Normativa Crítica de Evaluación · Pthreads): Al crear múltiples hebras en un bucle `for (i = 0; i < NUM_HEBRAS; i++)`, ¿cuál es la forma obl…",
+    "title": "Pregunta de Examen #2 (Buenas Prácticas de Escritura · Pthreads): Al crear múltiples hebras en un bucle `for (i = 0; i < NUM_HEBRAS; i++)`, ¿cuál es la forma obl…",
     "category": "Cuestión de Examen",
     "subject": "Programación Concurrente",
     "path": "cursos/anio-3/semestre-1/programacion-concurrente/evaluacion/examen-test.html",
@@ -2110,7 +2110,7 @@
       "num_hebras",
       "cual",
       "forma",
-      "obligatoria",
+      "recomendada",
       "pasar",
       "identificador",
       "cada",
@@ -2131,16 +2131,16 @@
       "criterio",
       "oficial",
       "esta",
-      "prohibido",
+      "desaconsejado",
       "usar",
       "void",
       "intptr_t",
       "causa",
       "condicion",
       "carrera",
-      "obligatorio"
+      "recomendado"
     ],
-    "content": "Al crear múltiples hebras en un bucle `for (i = 0; i < NUM_HEBRAS; i++)`, ¿cuál es la forma obligatoria de pasar el identificador `i` a cada hebra según la normativa de evaluación? Respuesta correcta: Declarar un array `int ids[NUM_HEBRAS];`, asignar `ids[i] = i;` y llamar a `pthread_create(&hebras[i], NULL, HTarea, &ids[i])` comprobando que devuelve 0. Explicación: Criterio Oficial de Evaluación: Está prohibido usar `(void*)(intptr_t)i` y pasar `&i` causa condición de carrera. Es obligatorio usar un array `int ids[NUM_HEBRAS]` con `ids[i] = i` y pasar `&ids[i]`, verificando además el valor de retorno de `pthread_create` y `pthread_join`."
+    "content": "Al crear múltiples hebras en un bucle `for (i = 0; i < NUM_HEBRAS; i++)`, ¿cuál es la forma recomendada de pasar el identificador `i` a cada hebra según la normativa de evaluación? Respuesta correcta: Declarar un array `int ids[NUM_HEBRAS];`, asignar `ids[i] = i;` y llamar a `pthread_create(&hebras[i], NULL, HTarea, &ids[i])` comprobando que devuelve 0. Explicación: Recomendación de Escritura: No se aconseja usar `(void*)(intptr_t)i` y pasar `&i` causa condición de carrera. Se aconseja utilizar un array `int ids[NUM_HEBRAS]` con `ids[i] = i` y pasar `&ids[i]`, verificando además el valor de retorno de `pthread_create` y `pthread_join`."
   },
   {
     "title": "Pregunta de Examen #3 (Tema 1 · Entrelazado (Interleaving)): Dados dos procesos concurrentes P = p1 → p2 → p3 (n = 3 instrucciones atómicas) y Q = q1 → q2 →…",
@@ -2928,7 +2928,7 @@
       "attr",
       "pags",
       "llamada",
-      "obligatoria",
+      "recomendada",
       "para",
       "pthread_create",
       "ignore",
@@ -2948,10 +2948,10 @@
       "atributos",
       "creadora",
       "pthread_inherit_sched",
-      "obligatorio",
+      "recomendado",
       "invocar"
     ],
-    "content": "Al configurar una hebra de tiempo real en Linux/POSIX con política `SCHED_FIFO` o `SCHED_RR` mediante un objeto `pthread_attr_t attr` (Tema 7, págs. 3–8), ¿qué llamada es obligatoria para que `pthread_create` no ignore la política y prioridad configuradas en `attr`? Respuesta correcta: `pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);` Explicación: Como subraya la página 5 del Tema 7, por defecto las hebras heredan los atributos de planificación de la hebra creadora (`PTHREAD_INHERIT_SCHED`). En Linux es obligatorio invocar `pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED)` antes de `pthread_create` para que se apliquen `SCHED_FIFO`/`SCHED_RR` y `sched_priority`."
+    "content": "Al configurar una hebra de tiempo real en Linux/POSIX con política `SCHED_FIFO` o `SCHED_RR` mediante un objeto `pthread_attr_t attr` (Tema 7, págs. 3–8), ¿qué llamada es recomendada para que `pthread_create` no ignore la política y prioridad configuradas en `attr`? Respuesta correcta: `pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);` Explicación: Como subraya la página 5 del Tema 7, por defecto las hebras heredan los atributos de planificación de la hebra creadora (`PTHREAD_INHERIT_SCHED`). En Linux es recomendado invocar `pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED)` antes de `pthread_create` para que se apliquen `SCHED_FIFO`/`SCHED_RR` y `sched_priority`."
   },
   {
     "title": "Pregunta de Examen #20 (Tema 7 · Señales de Tiempo Real y Relojes): En el rango de señales de tiempo real POSIX (`SIGRTMIN` a `SIGRTMAX`, Tema 7 págs. 10 y 18–20),…",
@@ -3093,13 +3093,13 @@
       "paso",
       "creacion_hebras_segura",
       "patron",
-      "obligatorio",
+      "recomendado",
       "array",
       "num_hebras",
       "recoleccion",
       "pthread_join"
     ],
-    "content": "Patrón obligatorio de creación de N hebras con array int ids[NUM_HEBRAS], ids[i] = i, paso de &ids[i] y recolección con pthread_join."
+    "content": "Patrón recomendado de creación de N hebras con array int ids[NUM_HEBRAS], ids[i] = i, paso de &ids[i] y recolección con pthread_join."
   },
   {
     "title": "Código C11 POSIX: Algoritmo de Peterson para 2 Procesos (peterson.c)",

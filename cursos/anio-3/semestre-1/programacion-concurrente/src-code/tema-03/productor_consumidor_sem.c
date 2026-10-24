@@ -1,7 +1,7 @@
 /*
  * Patrón Canónico Oficial (Normativa de Evaluación) — Tema 3_1: Productor/Consumidor con Semáforos POSIX
  * Compilación: gcc -Wall -Wextra -std=c11 -pthread productor_consumidor_sem.c -o productor_consumidor_sem -lrt
- * Directiva Crítica: Uso obligatorio de sem_t mutex con sem_wait(&mutex) y sem_post(&mutex).
+ * Directiva Crítica: Uso recomendado de sem_t mutex con sem_wait(&mutex) y sem_post(&mutex).
  */
 
 #include <stdio.h>

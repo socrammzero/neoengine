@@ -89,13 +89,17 @@
   /* --------------------------------------------------------------------------
      3. Identidad Visual NeoEngine, Barra Lateral (100% Hermética) y Scrollspy
      -------------------------------------------------------------------------- */
-  const MINI_NEO_LOGO_SVG = `<svg class="neo-brand-svg neo-logo-trigger" viewBox="0 0 256 256" width="28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <rect x="8" y="8" width="240" height="240" rx="52" fill="#0d1822" stroke="#3cc9b8" stroke-width="8"/>
-    <path d="M 52 64 A 96 96 0 0 1 204 64" fill="none" stroke="#3cc9b8" stroke-width="6" stroke-linecap="round" opacity="0.65"/>
-    <path d="M 204 192 A 96 96 0 0 1 52 192" fill="none" stroke="#3cc9b8" stroke-width="6" stroke-linecap="round" opacity="0.65"/>
-    <rect x="60" y="60" width="136" height="136" rx="24" fill="#091118" stroke="#3cc9b8" stroke-width="6"/>
-    <path d="M 88 164 L 88 92 L 138 158 L 168 92 L 168 164" fill="none" stroke="#3cc9b8" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M 74 128 L 96 128 L 106 102 L 118 154 L 130 96 L 142 154 L 152 114 L 162 128 L 182 128" fill="none" stroke="#f2a33a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  const MINI_NEO_LOGO_SVG = `<svg class="neo-brand-svg neo-logo-trigger" viewBox="0 0 512 512" width="28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect width="512" height="512" rx="96" fill="#171a1e"/>
+    <g stroke="#1ee6ff" stroke-width="18" fill="none">
+      <path d="M 118.5 334 L 201 169 A 30.1 30.1 0 0 1 255 169 L 293 245 L 323.5 184" stroke-linecap="round" stroke-linejoin="miter" stroke-miterlimit="6"/>
+      <path d="M 166 306 L 228 182 L 293 312 L 352 194" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M 192.5 320 L 228 249 L 266 325 A 30.1 30.1 0 0 0 320 325 L 395.5 174" stroke-linecap="round" stroke-linejoin="miter" stroke-miterlimit="6"/>
+      <circle cx="113" cy="345" r="12" fill="#171a1e" stroke-width="12"/>
+      <circle cx="187" cy="331" r="12" fill="#171a1e" stroke-width="12"/>
+      <circle cx="329" cy="173" r="12" fill="#171a1e" stroke-width="12"/>
+      <circle cx="401" cy="163" r="12" fill="#171a1e" stroke-width="12"/>
+    </g>
   </svg>`;
 
   function injectNeoEngineBranding() {
@@ -258,18 +262,19 @@
     window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       deferredInstallPrompt = e;
-      document.querySelectorAll(".neo-install-btn").forEach((b) => {
-        b.style.display = "inline-flex";
-      });
+      const nativeBtn = document.getElementById("nativePwaPromptBtn");
+      if (nativeBtn) nativeBtn.style.display = "inline-flex";
     });
 
+    // 1. Botón en la barra superior (.topbar-right)
     const topbarRight = document.querySelector(".topbar-right");
     if (topbarRight && !document.getElementById("installAppBtn")) {
       const installBtn = document.createElement("button");
       installBtn.type = "button";
       installBtn.id = "installAppBtn";
       installBtn.className = "btn-top neo-install-btn";
-      installBtn.setAttribute("aria-label", "Instalar aplicación NeoEngine en el dispositivo");
+      installBtn.style.borderColor = "var(--accent)";
+      installBtn.setAttribute("aria-label", "Instalar o descargar aplicación NeoEngine");
       installBtn.innerHTML = `📲 <span class="hide-sm">Instalar App</span>`;
       const themeBtn = document.getElementById("themeToggle");
       if (themeBtn) {
@@ -277,67 +282,167 @@
       } else {
         topbarRight.appendChild(installBtn);
       }
+      installBtn.addEventListener("click", () => {
+        showInstallGuideModal();
+      });
+    }
 
-      installBtn.addEventListener("click", async () => {
-        if (deferredInstallPrompt) {
-          deferredInstallPrompt.prompt();
-          await deferredInstallPrompt.userChoice.catch(() => {});
-          deferredInstallPrompt = null;
-        } else {
-          showInstallGuideModal();
-        }
+    // 2. Botón adicional en el menú lateral (.sidebar-selectors) para móviles y acceso rápido
+    const sidebarSel = document.querySelector(".sidebar-selectors");
+    if (sidebarSel && !document.getElementById("sidebarInstallAppBtn")) {
+      const sideBtn = document.createElement("button");
+      sideBtn.type = "button";
+      sideBtn.id = "sidebarInstallAppBtn";
+      sideBtn.className = "btn-action";
+      sideBtn.style.cssText = "width:100%;margin-top:0.55rem;justify-content:center;font-size:0.8rem;padding:0.42rem 0.7rem;";
+      sideBtn.innerHTML = "📲 Instalar NeoEngine como App";
+      sidebarSel.appendChild(sideBtn);
+      sideBtn.addEventListener("click", () => {
+        showInstallGuideModal();
       });
     }
   }
 
+  function downloadDesktopShortcut() {
+    const targetUrl = "https://socrammzero.github.io/neoengine/";
+    const isMac = /Mac|iPhone|iPad/i.test(navigator.platform || navigator.userAgent);
+    let content, filename, mime;
+
+    if (isMac) {
+      content = `<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n\t<key>URL</key>\n\t<string>${targetUrl}</string>\n</dict>\n</plist>`;
+      filename = "NeoEngine.webloc";
+      mime = "application/octet-stream";
+    } else {
+      content = `[InternetShortcut]\r\nURL=${targetUrl}\r\nIconIndex=0\r\n`;
+      filename = "NeoEngine.url";
+      mime = "application/internet-shortcut";
+    }
+
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 300);
+  }
+
   function showInstallGuideModal() {
     let modal = document.getElementById("neoInstallModal");
+    const webUrl = "https://socrammzero.github.io/neoengine/";
+    const qrSvg =
+      global.NeoEngineSecurity && typeof global.NeoEngineSecurity.generateQrSvg === "function"
+        ? global.NeoEngineSecurity.generateQrSvg(webUrl, 145)
+        : "";
+
     if (!modal) {
       modal = document.createElement("div");
       modal.id = "neoInstallModal";
       modal.className = "cmd-backdrop open";
+      modal.style.zIndex = "9500";
       modal.setAttribute("role", "dialog");
       modal.setAttribute("aria-modal", "true");
-      modal.setAttribute("aria-label", "Instalar NeoEngine como Aplicación");
+      modal.setAttribute("aria-label", "Centro de Instalación de NeoEngine");
       modal.innerHTML = `
-        <div class="cmd-modal" style="max-width:540px;padding:1.4rem;">
+        <div class="cmd-modal" style="max-width:650px;padding:1.4rem;max-height:90vh;overflow-y:auto;">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;margin-bottom:0.85rem;">
             <div style="display:flex;align-items:center;gap:0.65rem;">
               ${MINI_NEO_LOGO_SVG}
-              <h3 style="margin:0;font-size:1.2rem;">Instalar NeoEngine en tu Dispositivo</h3>
+              <div>
+                <div style="font-family:var(--f-mono);font-size:0.68rem;color:var(--accent);text-transform:uppercase;">APLICACIÓN WEB PROGRESIVA (PWA)</div>
+                <h3 style="margin:0;font-size:1.25rem;">Descargar e Instalar NeoEngine</h3>
+              </div>
             </div>
             <button type="button" id="closeInstallModalBtn" class="btn-top">✕</button>
           </div>
-          <p style="font-size:0.9rem;color:var(--muted);margin-top:0;">
-            <strong>NeoEngine</strong> es una Aplicación Web Progresiva (PWA) con soporte offline completo y auto-redimensionado para móvil, tablet y escritorio:
-          </p>
-          <div style="display:grid;gap:0.65rem;font-size:0.86rem;">
-            <div style="padding:0.75rem;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;">
-              <strong>💻 Windows / macOS / Linux (Edge, Chrome, Brave):</strong><br/>
-              Haz clic en el icono <strong>Instalar NeoEngine (⊕ / 🖥️)</strong> situado a la derecha de la barra de direcciones o abre el menú del navegador (<code>⋮</code>) → <em>Aplicaciones → Instalar este sitio como una aplicación</em>.
+
+          <div style="display:flex;flex-wrap:wrap;gap:0.65rem;margin-bottom:1.1rem;padding:0.9rem;background:var(--surface-2);border:1px solid var(--accent);border-radius:10px;align-items:center;justify-content:space-between;">
+            <div style="flex:1 1 240px;">
+              <strong style="color:var(--ink);font-size:0.92rem;">Opción 1: Descarga e Instalación Rápida</strong>
+              <div style="font-size:0.8rem;color:var(--muted);margin-top:0.2rem;">
+                Instala la aplicación nativa del navegador o descarga el lanzador directo para tu escritorio.
+              </div>
             </div>
-            <div style="padding:0.75rem;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;">
-              <strong>📱 iPhone / iPad (Safari / iOS):</strong><br/>
-              Pulsa el botón <strong>Compartir (↑)</strong> en la barra de Safari y selecciona <strong>«Añadir a pantalla de inicio»</strong>.
-            </div>
-            <div style="padding:0.75rem;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;">
-              <strong>🤖 Android (Chrome / Edge):</strong><br/>
-              Abre el menú (<code>⋮</code>) y selecciona <strong>«Instalar aplicación»</strong> o <strong>«Añadir a pantalla de inicio»</strong>.
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <button type="button" id="nativePwaPromptBtn" class="btn-action" style="${deferredInstallPrompt ? "display:inline-flex;" : "display:none;"}">
+                ⚡ Instalar App Nativa Ahora
+              </button>
+              <button type="button" id="downloadShortcutBtn" class="btn-action">
+                📥 Descargar Acceso Directo (PC/Mac)
+              </button>
             </div>
           </div>
-          <div style="margin-top:1.1rem;text-align:right;">
-            <button type="button" id="okInstallModalBtn" class="btn-action">Entendido</button>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 240px), 1fr));gap:0.9rem;align-items:center;margin-bottom:1rem;">
+            <div style="display:grid;gap:0.6rem;font-size:0.83rem;">
+              <div style="padding:0.7rem;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;">
+                <strong>💻 En Windows / Mac (Edge, Chrome, Brave):</strong><br/>
+                Pulsa el icono de aplicación <strong>(⊕ / 🖥️ Instalar NeoEngine)</strong> en el lado derecho de la barra de direcciones superior o ve al menú <code>⋮</code> → <em>Aplicaciones → Instalar este sitio como una aplicación</em>.
+              </div>
+              <div style="padding:0.7rem;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;">
+                <strong>📱 En iPhone / iPad (Safari):</strong><br/>
+                Pulsa el icono <strong>Compartir (↑)</strong> en la barra inferior y selecciona <strong>«Añadir a pantalla de inicio»</strong>.
+              </div>
+              <div style="padding:0.7rem;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;">
+                <strong>🤖 En Android (Chrome / Edge):</strong><br/>
+                Abre el menú <code>⋮</code> de la esquina superior derecha y toca <strong>«Instalar aplicación»</strong>.
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0.9rem;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;text-align:center;">
+              <span class="pill accent" style="margin-bottom:0.5rem;font-size:0.68rem;">ABRIR E INSTALAR EN MÓVIL</span>
+              <div style="background:#fff;padding:0.5rem;border-radius:8px;display:inline-flex;">${qrSvg}</div>
+              <a href="${webUrl}" target="_blank" rel="noopener" style="font-family:var(--f-mono);font-size:0.72rem;margin-top:0.5rem;word-break:break-all;">
+                socrammzero.github.io/neoengine
+              </a>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;gap:0.6rem;">
+            <button type="button" id="okInstallModalBtn" class="btn-secondary">Cerrar</button>
           </div>
         </div>
       `;
       document.body.appendChild(modal);
+
       const close = () => modal.classList.remove("open");
       modal.querySelector("#closeInstallModalBtn").addEventListener("click", close);
       modal.querySelector("#okInstallModalBtn").addEventListener("click", close);
       modal.addEventListener("click", (e) => {
         if (e.target === modal) close();
       });
+
+      const nativeBtn = modal.querySelector("#nativePwaPromptBtn");
+      if (nativeBtn) {
+        nativeBtn.addEventListener("click", async () => {
+          if (deferredInstallPrompt) {
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice.catch(() => {});
+            deferredInstallPrompt = null;
+            nativeBtn.style.display = "none";
+          }
+        });
+      }
+
+      const shortcutBtn = modal.querySelector("#downloadShortcutBtn");
+      if (shortcutBtn) {
+        shortcutBtn.addEventListener("click", () => {
+          downloadDesktopShortcut();
+          shortcutBtn.textContent = "✓ Acceso Directo Descargado";
+          setTimeout(() => {
+            shortcutBtn.textContent = "📥 Descargar Acceso Directo (PC/Mac)";
+          }, 2500);
+        });
+      }
     } else {
+      const nativeBtn = modal.querySelector("#nativePwaPromptBtn");
+      if (nativeBtn) {
+        nativeBtn.style.display = deferredInstallPrompt ? "inline-flex" : "none";
+      }
       modal.classList.add("open");
     }
   }
@@ -575,7 +680,7 @@
       subject: "Programación Concurrente",
       path: "cursos/anio-3/semestre-1/programacion-concurrente/index.html",
       keywords: ["volatile", "sem_t", "pthreads", "criterios", "evaluacion"],
-      content: "Normativa de codificación C11 POSIX: prohibido volatile, uso de sem_t mutex, paso de &ids[i] y control de errores en pthread_create y pthread_join."
+      content: "Recomendaciones de codificación C11 POSIX: se aconseja evitar volatile para sincronización, usar sem_t mutex, paso de &ids[i] y control de retorno en pthread_create y pthread_join."
     },
     {
       title: "Tema 01: Introducción a la Programación Concurrente y STR",

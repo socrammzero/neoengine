@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tema 5: Programación Dirigida por Eventos y Señales POSIX | Programación Concurrente</title>
+  <link rel="manifest" href="../../../../../manifest.json" />
   <link rel="stylesheet" href="../../../../../assets/css/app.css" />
   <meta name="theme-color" content="#0d7069" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="NeoEngine" />
-  <link rel="icon" type="image/svg+xml" href="../../../../../assets/img/logo-neoengine.svg" />
+  <link rel="icon" type="image/svg+xml" href="../../../../../favicon.svg" />
   <link rel="apple-touch-icon" href="../../../../../assets/img/icon-192.png" />
   <style id="neo-fouc-shield">
     html.neo-locked .layout,
@@ -75,7 +76,7 @@
       </nav>
       <div class="sidebar-exam-notice">
         <strong>Aviso de Examen (Págs. 32–34)</strong>
-        Para usar <code>sigwait</code> o <code>sigwaitinfo</code> en una hebra dedicada, es obligatorio bloquear antes la señal en <code>main()</code> con <code>pthread_sigmask(SIG_BLOCK, &amp;sigset, NULL)</code> para que todas las hebras hereden la máscara.
+        Para usar <code>sigwait</code> o <code>sigwaitinfo</code> en una hebra dedicada, es recomendado bloquear antes la señal en <code>main()</code> con <code>pthread_sigmask(SIG_BLOCK, &amp;sigset, NULL)</code> para que todas las hebras hereden la máscara.
       </div>
     </aside>
 

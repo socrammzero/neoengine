@@ -1,10 +1,10 @@
 /*
  * Patrón Canónico Oficial (Normativa de Evaluación) — Tema 2: Gestión Segura de Hebras Pthreads
  * Compilación: gcc -Wall -Wextra -std=c11 -pthread creacion_hebras_segura.c -o creacion_hebras_segura -lrt
- * Reglas cumplidas:
- *  - Uso obligatorio de int ids[NUM_HEBRAS] con ids[i] = i y paso de &ids[i].
- *  - Comprobación obligatoria de retorno de pthread_create y pthread_join.
- *  - Variables estándar sin calificadores prohibidos.
+ * Buenas prácticas recomendadas:
+ *  - Se aconseja el uso de int ids[NUM_HEBRAS] con ids[i] = i y paso de &ids[i].
+ *  - Se recomienda comprobar el retorno de pthread_create y pthread_join.
+ *  - Variables estándar evitando calificadores no recomendados.
  */
 
 #include <stdio.h>

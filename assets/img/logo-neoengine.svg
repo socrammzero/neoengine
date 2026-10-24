@@ -1,97 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="NeoEngine — Ingeniería Electrónica de Telecomunicaciones">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="NeoEngine">
   <defs>
-    <linearGradient id="neoBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0a1118" />
-      <stop offset="55%" stop-color="#101c26" />
-      <stop offset="100%" stop-color="#0b2427" />
+    <linearGradient id="neoCyanTrace" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#15d4f5" />
+      <stop offset="50%" stop-color="#1ee6ff" />
+      <stop offset="100%" stop-color="#27ecff" />
     </linearGradient>
-    <linearGradient id="neoCyan" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4ef2df" />
-      <stop offset="100%" stop-color="#0d9488" />
-    </linearGradient>
-    <linearGradient id="neoAmber" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fbbf24" />
-      <stop offset="100%" stop-color="#d97706" />
-    </linearGradient>
-    <filter id="neoGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3.5" result="blur" />
+    <filter id="neoSoftGlow" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="3.2" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
   </defs>
 
-  <!-- Base chasis electrónico -->
-  <rect x="8" y="8" width="240" height="240" rx="52" fill="url(#neoBg)" stroke="#1e3a44" stroke-width="4" />
+  <!-- Fondo antracita oscuro del diseño original -->
+  <rect width="512" height="512" rx="96" fill="#171a1e" />
 
-  <!-- Retícula de osciloscopio / espectro sutil -->
-  <g stroke="#17303a" stroke-width="1.2" opacity="0.65">
-    <line x1="36" y1="128" x2="220" y2="128" stroke-dasharray="4 4" />
-    <line x1="128" y1="36" x2="128" y2="220" stroke-dasharray="4 4" />
-    <circle cx="128" cy="128" r="86" fill="none" stroke-dasharray="3 6" />
+  <g filter="url(#neoSoftGlow)" stroke="url(#neoCyanTrace)" stroke-width="14.5" fill="none">
+    <!-- Pista 1 (Superior / Izquierda exterior -> Arco superior -> Vértice interno -> Nodo superior interno) -->
+    <path d="M 118.5 334 L 201 169 A 30.1 30.1 0 0 1 255 169 L 293 245 L 323.5 184"
+          stroke-linecap="round"
+          stroke-linejoin="miter"
+          stroke-miterlimit="6" />
+
+    <!-- Pista 2 (Central con extremos redondeados y vértices en punta) -->
+    <path d="M 166 306 L 228 182 L 293 312 L 352 194"
+          stroke-linecap="round"
+          stroke-linejoin="round" />
+
+    <!-- Pista 3 (Inferior / Izquierda interior -> Vértice interno -> Arco inferior -> Nodo superior derecho exterior) -->
+    <path d="M 192.5 320 L 228 249 L 266 325 A 30.1 30.1 0 0 0 320 325 L 395.5 174"
+          stroke-linecap="round"
+          stroke-linejoin="miter"
+          stroke-miterlimit="6" />
+
+    <!-- 4 Nodos / Pads de vía PCB (Anillos circulares) -->
+    <circle cx="113" cy="345" r="10.5" fill="#171a1e" stroke-width="10.5" />
+    <circle cx="187" cy="331" r="10.5" fill="#171a1e" stroke-width="10.5" />
+    <circle cx="329" cy="173" r="10.5" fill="#171a1e" stroke-width="10.5" />
+    <circle cx="401" cy="163" r="10.5" fill="#171a1e" stroke-width="10.5" />
   </g>
-
-  <!-- Ondas de Telecomunicaciones (RF / Radiación Electromagnética Superior e Inferior) -->
-  <path d="M 52 64 A 96 96 0 0 1 204 64" fill="none" stroke="url(#neoCyan)" stroke-width="4" stroke-linecap="round" opacity="0.55" />
-  <path d="M 68 48 A 112 112 0 0 1 188 48" fill="none" stroke="url(#neoCyan)" stroke-width="3" stroke-linecap="round" opacity="0.32" />
-  <path d="M 204 192 A 96 96 0 0 1 52 192" fill="none" stroke="url(#neoCyan)" stroke-width="4" stroke-linecap="round" opacity="0.55" />
-  <path d="M 188 208 A 112 112 0 0 1 68 208" fill="none" stroke="url(#neoCyan)" stroke-width="3" stroke-linecap="round" opacity="0.32" />
-
-  <!-- Pines de circuito integrado (Microelectrónica QFP) -->
-  <g stroke="url(#neoAmber)" stroke-width="4.5" stroke-linecap="round">
-    <!-- Izquierda -->
-    <line x1="40" y1="92" x2="64" y2="92" />
-    <line x1="34" y1="116" x2="64" y2="116" />
-    <line x1="34" y1="140" x2="64" y2="140" />
-    <line x1="40" y1="164" x2="64" y2="164" />
-    <!-- Derecha -->
-    <line x1="192" y1="92" x2="216" y2="92" />
-    <line x1="192" y1="116" x2="222" y2="116" />
-    <line x1="192" y1="140" x2="222" y2="140" />
-    <line x1="192" y1="164" x2="216" y2="164" />
-    <!-- Arriba -->
-    <line x1="92" y1="44" x2="92" y2="64" />
-    <line x1="128" y1="36" x2="128" y2="64" />
-    <line x1="164" y1="44" x2="164" y2="64" />
-    <!-- Abajo -->
-    <line x1="92" y1="192" x2="92" y2="212" />
-    <line x1="128" y1="192" x2="128" y2="220" />
-    <line x1="164" y1="192" x2="164" y2="212" />
-  </g>
-
-  <!-- Nodos de pista PCB -->
-  <g fill="#fbbf24">
-    <circle cx="38" cy="92" r="4" />
-    <circle cx="32" cy="116" r="4" />
-    <circle cx="32" cy="140" r="4" />
-    <circle cx="38" cy="164" r="4" />
-    <circle cx="218" cy="92" r="4" />
-    <circle cx="224" cy="116" r="4" />
-    <circle cx="224" cy="140" r="4" />
-    <circle cx="218" cy="164" r="4" />
-  </g>
-
-  <!-- Encapsulado del Die de Silicio Central -->
-  <rect x="64" y="64" width="128" height="128" rx="22" fill="#0c161e" stroke="url(#neoCyan)" stroke-width="4.5" />
-  <rect x="74" y="74" width="108" height="108" rx="14" fill="none" stroke="#1e3a44" stroke-width="1.5" />
-
-  <!-- Monograma 'N' + Pulso de Modulación de Señal -->
-  <path d="M 90 162 L 90 94 L 138 158 L 166 94 L 166 162"
-        fill="none"
-        stroke="url(#neoCyan)"
-        stroke-width="12"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        filter="url(#neoGlow)" />
-
-  <!-- Portadora de Alta Frecuencia Superpuesta (Ámbar Telecom) -->
-  <path d="M 76 128 L 96 128 L 106 104 L 118 152 L 130 96 L 142 154 L 152 116 L 160 128 L 180 128"
-        fill="none"
-        stroke="url(#neoAmber)"
-        stroke-width="4"
-        stroke-linecap="round"
-        stroke-linejoin="round" />
-
-  <!-- Puntos de telemetría -->
-  <circle cx="90" cy="94" r="5" fill="#4ef2df" />
-  <circle cx="166" cy="94" r="5" fill="#fbbf24" />
-  <circle cx="166" cy="162" r="5" fill="#4ef2df" />
 </svg>

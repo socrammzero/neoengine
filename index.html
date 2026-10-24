@@ -10,7 +10,7 @@
   <meta name="theme-color" content="#0d7069" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="NeoEngine" />
-  <link rel="icon" type="image/svg+xml" href="./assets/img/logo-neoengine.svg" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <link rel="apple-touch-icon" href="./assets/img/icon-192.png" />
   <style id="neo-fouc-shield">
     html.neo-locked .layout,
@@ -88,8 +88,8 @@
       </nav>
 
       <div class="sidebar-exam-notice">
-        <strong>Criterio Oficial de Evaluación</strong>
-        Prohibido <code>volatile</code>, prohibido <code>pthread_mutex_lock</code> (usar <code>sem_t mutex</code>) y prohibido <code>(void*)(intptr_t)i</code> (usar <code>&amp;ids[i]</code>).
+        <strong>Recomendación de Escritura</strong>
+        Se aconseja declarar variables compartidas sin <code>volatile</code>, emplear <code>sem_t mutex</code> para exclusión mutua y pasar <code>&amp;ids[i]</code> mediante un array de identificadores.
       </div>
     </aside>
 
@@ -233,16 +233,16 @@
         <!-- SECCIÓN 2: DIRECTIVAS CRÍTICAS DE CODIFICACIÓN (Normativa de Evaluación) -->
         <section class="topic-section" id="sec-reglas-info">
           <h2>
-            <span>2. Directivas Críticas de Codificación para Examen (Criterios de Evaluación)</span>
-            <span class="pill sig">Cumplimiento Estricto</span>
+            <span>2. Recomendaciones de Escritura y Buenas Prácticas POSIX</span>
+            <span class="pill sig">Guía Recomendada</span>
           </h2>
           <div class="warn">
-            <strong class="tag">Prohibiciones Estrictas que Invalidan un Ejercicio de Examen</strong>
+            <strong class="tag">Recomendaciones de Escritura, Ecuaciones y Buenas Prácticas de la Asignatura</strong>
             <ol style="margin:0.4rem 0 0;padding-left:1.2rem;">
-              <li><strong>PROHIBICIÓN ABSOLUTA DE <code>volatile</code>:</strong> Jamás se utiliza la palabra clave <code>volatile</code> en ninguna variable, parámetro o puntero (ni en espera activa, ni en semáforos, ni en ninguna parte). Toda variable compartida se define como global estándar (<code>int</code>, <code>unsigned</code>, <code>long</code>).</li>
-              <li><strong>PROHIBIDO EL USO DE <code>pthread_mutex_lock</code>:</strong> Para exclusión mutua debe usarse obligatoriamente un semáforo <code>sem_t mutex</code> inicializado con <code>sem_init(&amp;mutex, 0, 1)</code> y operado con <code>sem_wait(&amp;mutex)</code> y <code>sem_post(&amp;mutex)</code>.</li>
-              <li><strong>PROHIBIDO EL USO DE <code>(void*)(intptr_t)i</code> EN <code>pthread_create</code>:</strong> Debe declararse <code>int ids[MAX]</code>, asignar en bucle <code>ids[i] = i;</code> y pasar <code>&amp;ids[i]</code> en <code>pthread_create(&amp;th[i], NULL, Tarea, &amp;ids[i])</code>.</li>
-              <li><strong>OBLIGATORIO COMPROBAR ERRORES:</strong> Toda llamada a <code>pthread_create</code> y <code>pthread_join</code> debe validar su valor devuelto (<code>if (pthread_create(...) != 0) { perror(...); exit(-1); }</code>).</li>
+              <li><strong>DECLARACIÓN RECOMENDADA DE VARIABLES COMPARTIDAS (SIN <code>volatile</code>):</strong> Se aconseja no emplear la palabra clave <code>volatile</code> en ninguna variable, parámetro o puntero (ni en espera activa, ni en semáforos, ni en ninguna parte). Toda variable compartida se define como global estándar (<code>int</code>, <code>unsigned</code>, <code>long</code>).</li>
+              <li><strong>EXCLUSIÓN MUTUA RECOMENDADA CON <code>sem_t mutex</code>:</strong> Para exclusión mutua Se aconseja utilizar un semáforo <code>sem_t mutex</code> inicializado con <code>sem_init(&amp;mutex, 0, 1)</code> y operado con <code>sem_wait(&amp;mutex)</code> y <code>sem_post(&amp;mutex)</code>.</li>
+              <li><strong>PASO RECOMENDADO DE IDENTIFICADORES CON <code>&amp;ids[i]</code> EN <code>pthread_create</code>:</strong> Se aconseja declarar <code>int ids[MAX]</code>, asignar en bucle <code>ids[i] = i;</code> y pasar <code>&amp;ids[i]</code> en <code>pthread_create(&amp;th[i], NULL, Tarea, &amp;ids[i])</code>.</li>
+              <li><strong>COMPROBACIÓN RECOMENDADA DE ERRORES EN PTHREADS:</strong> Toda llamada a <code>pthread_create</code> y <code>pthread_join</code> debe validar su valor devuelto (<code>if (pthread_create(...) != 0) { perror(...); exit(-1); }</code>).</li>
             </ol>
           </div>
           <div class="formula">

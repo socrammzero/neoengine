@@ -1,23 +1,23 @@
 [
   {
     "id": "pc-q01",
-    "topic": "Normativa Crítica de Evaluación",
+    "topic": "Buenas Prácticas de Escritura",
     "difficulty": "Alta",
-    "question": "Según la directiva oficial de codificación de la asignatura (Normativa de Evaluación), ¿cuál de las siguientes declaraciones de variables compartidas para un algoritmo de espera activa o semáforos es la ÚNICA permitida en un examen?",
+    "question": "Según la directiva oficial de codificación de la asignatura (Normativa de Evaluación), ¿cuál de las siguientes declaraciones de variables compartidas para un algoritmo de espera activa o semáforos es la forma recomendada en la asignatura?",
     "options": [
-      "unsigned f[2] = {0, 0}; int turno = 0; (sin usar jamás la palabra clave volatile)",
+      "unsigned f[2] = {0, 0}; int turno = 0; (sin necesidad de emplear la palabra clave volatile)",
       "volatile unsigned f[2] = {0, 0}; volatile int turno = 0;",
       "atomic_int f[2] = {0, 0}; volatile int turno = 0;",
       "register int f[2] = {0, 0}; static volatile int turno = 0;"
     ],
     "answer": 0,
-    "explanation": "Criterio Oficial de Evaluación: En la asignatura está terminantemente prohibido el uso de la palabra clave `volatile` en cualquier variable, parámetro o puntero. Toda variable compartida se define como variable global estándar (`int`, `unsigned`, `long`)."
+    "explanation": "Recomendación de Escritura: En la asignatura se aconseja evitar el uso de la palabra clave `volatile` en cualquier variable, parámetro o puntero. Toda variable compartida se define como variable global estándar (`int`, `unsigned`, `long`)."
   },
   {
     "id": "pc-q02",
-    "topic": "Normativa Crítica de Evaluación · Pthreads",
+    "topic": "Buenas Prácticas de Escritura · Pthreads",
     "difficulty": "Alta",
-    "question": "Al crear múltiples hebras en un bucle `for (i = 0; i < NUM_HEBRAS; i++)`, ¿cuál es la forma obligatoria de pasar el identificador `i` a cada hebra según la normativa de evaluación?",
+    "question": "Al crear múltiples hebras en un bucle `for (i = 0; i < NUM_HEBRAS; i++)`, ¿cuál es la forma recomendada de pasar el identificador `i` a cada hebra según la normativa de evaluación?",
     "options": [
       "Declarar un array `int ids[NUM_HEBRAS];`, asignar `ids[i] = i;` y llamar a `pthread_create(&hebras[i], NULL, HTarea, &ids[i])` comprobando que devuelve 0.",
       "Hacer un cast directo del entero a puntero: `pthread_create(&hebras[i], NULL, HTarea, (void *)(intptr_t)i)`.",
@@ -25,7 +25,7 @@
       "Asignar el identificador mediante una variable global sin sincronización antes de `pthread_create`."
     ],
     "answer": 0,
-    "explanation": "Criterio Oficial de Evaluación: Está prohibido usar `(void*)(intptr_t)i` y pasar `&i` causa condición de carrera. Es obligatorio usar un array `int ids[NUM_HEBRAS]` con `ids[i] = i` y pasar `&ids[i]`, verificando además el valor de retorno de `pthread_create` y `pthread_join`."
+    "explanation": "Recomendación de Escritura: No se aconseja usar `(void*)(intptr_t)i` y pasar `&i` causa condición de carrera. Se aconseja utilizar un array `int ids[NUM_HEBRAS]` con `ids[i] = i` y pasar `&ids[i]`, verificando además el valor de retorno de `pthread_create` y `pthread_join`."
   },
   {
     "id": "pc-q03",
@@ -255,7 +255,7 @@
     "id": "pc-q19",
     "topic": "Tema 7 · Planificación y Memoria en Tiempo Real POSIX",
     "difficulty": "Media",
-    "question": "Al configurar una hebra de tiempo real en Linux/POSIX con política `SCHED_FIFO` o `SCHED_RR` mediante un objeto `pthread_attr_t attr` (Tema 7, págs. 3–8), ¿qué llamada es obligatoria para que `pthread_create` no ignore la política y prioridad configuradas en `attr`?",
+    "question": "Al configurar una hebra de tiempo real en Linux/POSIX con política `SCHED_FIFO` o `SCHED_RR` mediante un objeto `pthread_attr_t attr` (Tema 7, págs. 3–8), ¿qué llamada es recomendada para que `pthread_create` no ignore la política y prioridad configuradas en `attr`?",
     "options": [
       "`pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);`",
       "`pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);`",
@@ -263,7 +263,7 @@
       "`sched_get_priority_max(SCHED_OTHER);`"
     ],
     "answer": 0,
-    "explanation": "Como subraya la página 5 del Tema 7, por defecto las hebras heredan los atributos de planificación de la hebra creadora (`PTHREAD_INHERIT_SCHED`). En Linux es obligatorio invocar `pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED)` antes de `pthread_create` para que se apliquen `SCHED_FIFO`/`SCHED_RR` y `sched_priority`."
+    "explanation": "Como subraya la página 5 del Tema 7, por defecto las hebras heredan los atributos de planificación de la hebra creadora (`PTHREAD_INHERIT_SCHED`). En Linux es recomendado invocar `pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED)` antes de `pthread_create` para que se apliquen `SCHED_FIFO`/`SCHED_RR` y `sched_priority`."
   },
   {
     "id": "pc-q20",
