@@ -194,7 +194,7 @@
             int pthread_join(pthread_t thread, void **value_ptr); &nbsp;&nbsp;|&nbsp;&nbsp; void pthread_exit(void *value_ptr);
           </div>
           <div class="warn">
-            <strong class="tag">Aviso sobre las Transparencias 33 y 37 del Tema 2 (Regla de Oro #4 dy la normativa de evaluación)</strong>
+            <strong class="tag">Aviso sobre las Transparencias 33 y 37 del Tema 2 (Regla de Oro #4 y la normativa de evaluación)</strong>
             En las páginas 33 y 37 de las diapositivas aparece el ejemplo introductorio con <code>pthread_create(&amp;threads[t], NULL, Hebra, (void *)t);</code>. <strong>¡CUIDADO! En los exámenes de la asignatura está desaconsejado hacer ese cast directo</strong> (ni <code>(void *)t</code> ni <code>(void *)(intptr_t)i</code>). Siempre debes declarar <code>int ids[NUM_HEBRAS];</code>, asignar <code>ids[i] = i;</code> dentro del bucle <code>for</code> y pasar <code>&amp;ids[i]</code>, comprobando además los errores de <code>pthread_create</code> y <code>pthread_join</code>.
           </div>
         </section>

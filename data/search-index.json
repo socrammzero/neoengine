@@ -295,7 +295,7 @@
       "normativa",
       "evaluacion"
     ],
-    "content": "5. Ejemplo Oficial Ejecutable: Búsqueda Lineal Aplicando Concurrencia (Págs. 18–21) C11 POSIX División del array v[0..9] en dos sub-rangos [0..4] y [5..9] procesados en paralelo por dos hebras Pthreads, adaptada estrictamente a las directivas de control de errores dy la normativa de evaluación:"
+    "content": "5. Ejemplo Oficial Ejecutable: Búsqueda Lineal Aplicando Concurrencia (Págs. 18–21) C11 POSIX División del array v[0..9] en dos sub-rangos [0..4] y [5..9] procesados en paralelo por dos hebras Pthreads, adaptada estrictamente a las directivas de control de errores y la normativa de evaluación:"
   },
   {
     "title": "Tema 2: Representación de Procesos y Soporte de la Concurrencia",
@@ -533,7 +533,7 @@
       "esta",
       "terminantemente"
     ],
-    "content": "4. Primitivas Pthreads, Paso de Parámetros y recomendaciones de Examen (Págs. 25–39 + Normativa POSIX) Reglas de Examen int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg); int pthread_join(pthread_t thread, void **value_ptr); | void pthread_exit(void *value_ptr); Aviso sobre las Transparencias 33 y 37 del Tema 2 (Regla de Oro #4 dy la normativa de evaluación) En las páginas 33 y 37 de las diapositivas aparece el ejemplo introductorio con pthread_create(&threads[t], NULL, Hebra, (void *)t); . ¡CUIDADO! En los exámenes de la asignatura está desaconsejado hacer ese cast directo "
+    "content": "4. Primitivas Pthreads, Paso de Parámetros y recomendaciones de Examen (Págs. 25–39 + Normativa POSIX) Reglas de Examen int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg); int pthread_join(pthread_t thread, void **value_ptr); | void pthread_exit(void *value_ptr); Aviso sobre las Transparencias 33 y 37 del Tema 2 (Regla de Oro #4 y la normativa de evaluación) En las páginas 33 y 37 de las diapositivas aparece el ejemplo introductorio con pthread_create(&threads[t], NULL, Hebra, (void *)t); . ¡CUIDADO! En los exámenes de la asignatura está desaconsejado hacer ese cast directo "
   },
   {
     "title": "Tema 2 · 5. Patrón Canónico Oficial de Creación y Recolección de Hebras (Normativa de Evaluación) C11 POSIX",
@@ -1848,7 +1848,7 @@
       "normativa",
       "evaluacion"
     ],
-    "content": "Ejercicios resueltos de principio a fin sin omitir pasos algebraicos, referenciando exactamente las diapositivas oficiales del Tema 1 y las reglas dy la normativa de evaluación."
+    "content": "Ejercicios resueltos de principio a fin sin omitir pasos algebraicos, referenciando exactamente las diapositivas oficiales del Tema 1 y las reglas y la normativa de evaluación."
   },
   {
     "title": "Práctica Tema 2: Creación y Gestión Segura de Hebras en POSIX",
@@ -1880,7 +1880,7 @@
       "evaluacion",
       "seccion"
     ],
-    "content": "Ejercicios sobre el modelo de procesos y hebras en UNIX, estándar IEEE POSIX 1003.1c, ciclo de vida y Guía Recomendada de las directivas dy la normativa de evaluación (Sección 3.1)."
+    "content": "Ejercicios sobre el modelo de procesos y hebras en UNIX, estándar IEEE POSIX 1003.1c, ciclo de vida y Guía Recomendada de las directivas y la normativa de evaluación (Sección 3.1)."
   },
   {
     "title": "Práctica Tema 3: Espera Activa (Peterson y Lamport), Semáforos y Problemas Clásicos",

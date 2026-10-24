@@ -417,15 +417,17 @@ header.topbar {
 
 .sidebar-brand-title {
   font-family: var(--f-display);
-  font-size: 1.22rem;
+  font-size: 1.06rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.5rem;
   cursor: pointer;
   user-select: none;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .neo-brand-svg {
@@ -553,13 +555,13 @@ header.topbar {
   color: var(--ink);
 }
 
-.sidebar-exam-notice strong {
+.sidebar-exam-notice > strong:first-child {
   display: block;
   color: var(--sig);
   font-family: var(--f-mono);
   font-size: 0.72rem;
   text-transform: uppercase;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.25rem;
 }
 
 /* 4. Contenedor de Página y Cabecera Hero */

@@ -142,22 +142,34 @@
       const codeVerifyBtn = card.querySelector(".ex-verify-code-btn");
       if (codeVerifyBtn) {
         codeVerifyBtn.addEventListener("click", () => {
-          const cebRunBtn = card.querySelector(".code-execution-box .ceb-btn.test") ||
-                            card.querySelector(".code-execution-box .ceb-btn.run");
+          const cebRunBtn =
+            card.querySelector(".code-execution-box .ceb-btn.test") ||
+            card.querySelector(".code-execution-box .ceb-btn.run");
           if (cebRunBtn) cebRunBtn.click();
-          if (global.WorkbenchStorage) {
-            global.WorkbenchStorage.markExerciseSolved(exId, {
-              subjectId,
-              difficulty: diff,
-              type: "code"
-            });
-          }
-          refreshSolvedUI();
-          updateProgressCounter();
-          if (feedbackEl) {
-            feedbackEl.className = "short ex-feedback";
-            feedbackEl.innerHTML = `<strong>Suite de pruebas superada.</strong> Código validado contra los casos de prueba del módulo.`;
-          }
+          setTimeout(() => {
+            const stdoutEl = card.querySelector(".code-execution-box .ceb-stdout");
+            const hasErr = stdoutEl && stdoutEl.classList.contains("error");
+            if (hasErr) {
+              if (feedbackEl) {
+                feedbackEl.className = "warn ex-feedback";
+                feedbackEl.innerHTML = `<strong class="tag">Revisión Necesaria</strong>El verificador ha detectado errores o huecos pendientes en el código superior. Corrígelos y vuelve a validar.`;
+              }
+              return;
+            }
+            if (global.WorkbenchStorage) {
+              global.WorkbenchStorage.markExerciseSolved(exId, {
+                subjectId,
+                difficulty: diff,
+                type: "code"
+              });
+            }
+            refreshSolvedUI();
+            updateProgressCounter();
+            if (feedbackEl) {
+              feedbackEl.className = "short ex-feedback";
+              feedbackEl.innerHTML = `<strong>Suite de pruebas superada.</strong> Código validado contra los casos de prueba del módulo.`;
+            }
+          }, 320);
         });
       }
     });

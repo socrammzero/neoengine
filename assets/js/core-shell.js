@@ -116,13 +116,16 @@
       brandTitle.innerHTML = `${MINI_NEO_LOGO_SVG}<span>${label}</span>`;
     }
 
-    const breadcrumbCurrent = document.querySelector(".breadcrumbs .current");
-    if (breadcrumbCurrent && !breadcrumbCurrent.dataset.branded) {
-      breadcrumbCurrent.dataset.branded = "true";
-      breadcrumbCurrent.classList.add("neo-logo-trigger");
-      breadcrumbCurrent.title = "NeoEngine — Ingeniería Electrónica de Telecomunicaciones";
-      const root = getRootPrefix();
-      breadcrumbCurrent.innerHTML = `<a href="${root}index.html" class="topbar-brand-link" style="display:inline-flex;align-items:center;gap:0.4rem;text-decoration:none;color:inherit;">${MINI_NEO_LOGO_SVG}<span>NeoEngine</span></a>`;
+    const breadcrumbFirst = document.querySelector(".breadcrumbs > :first-child");
+    if (breadcrumbFirst && !breadcrumbFirst.dataset.branded) {
+      breadcrumbFirst.dataset.branded = "true";
+      breadcrumbFirst.classList.add("neo-logo-trigger");
+      breadcrumbFirst.title = "NeoEngine — Ingeniería Electrónica de Telecomunicaciones";
+      breadcrumbFirst.style.display = "inline-flex";
+      breadcrumbFirst.style.alignItems = "center";
+      breadcrumbFirst.style.gap = "0.4rem";
+      const text = breadcrumbFirst.textContent.replace(/⚡/g, "").trim() || "NeoEngine";
+      breadcrumbFirst.innerHTML = `${MINI_NEO_LOGO_SVG}<span>${text}</span>`;
     }
   }
 

@@ -73,22 +73,26 @@
     if (fileName.includes("busqueda_concurrente")) {
       challengeCode = challengeCode
         .replace(
-          /if\s*\(\s*\(err\s*=\s*pthread_create\(&th\[0\][^\n]+\n/,
-          "    /* [RETO 1]: Crea la hebra th[0] pasando la función busquedaLineal y &arg1 */\n    // ___ ESCRIBE AQUÍ TU CÓDIGO ___\n"
+          /if\s*\(\s*(?:\(\s*err\s*=\s*)?pthread_create\(\s*&th(?:1|\[0\])[^\n]+\n/,
+          "    /* [RETO 1]: Crea la hebra th1 pasando la función busquedaLineal y &arg1 comprobando si devuelve != 0 */\n    if (/* ___ COMPLETAR AQUÍ: pthread_create(&th1, NULL, busquedaLineal, &arg1) ___ */ != 0) {\n"
         )
         .replace(
-          /if\s*\(\s*\(err\s*=\s*pthread_join\(th\[0\][^\n]+\n/,
-          "    /* [RETO 2]: Espera a la finalización de th[0] mediante pthread_join */\n    // ___ ESCRIBE AQUÍ TU CÓDIGO ___\n"
+          /if\s*\(\s*(?:\(\s*err\s*=\s*)?pthread_join\(\s*th(?:1|\[0\])[^\n]+\n/,
+          "    /* [RETO 2]: Espera a la finalización de th1 mediante pthread_join comprobando si devuelve != 0 */\n    if (/* ___ COMPLETAR AQUÍ: pthread_join(th1, NULL) ___ */ != 0) {\n"
         );
-      hints.push("Reto 1: Invoca pthread_create(&th[0], NULL, busquedaLineal, &arg1) comprobando si devuelve != 0.");
-      hints.push("Reto 2: Invoca pthread_join(th[0], NULL) para sincronizar la hebra principal antes de leer el resultado.");
+      hints.push("Reto 1: Invoca pthread_create(&th1, NULL, busquedaLineal, &arg1) dentro de la condición if (... != 0).");
+      hints.push("Reto 2: Invoca pthread_join(th1, NULL) dentro de la condición if (... != 0) para sincronizar la hebra principal.");
       checks.push({
         label: "Creación de ambas hebras con pthread_create y paso de &arg1 / &arg2",
-        test: (c) => /pthread_create\s*\(\s*&th\[0\][\s\S]*?&arg1\s*\)/.test(c) && /pthread_create\s*\(\s*&th\[1\][\s\S]*?&arg2\s*\)/.test(c)
+        test: (c) =>
+          /pthread_create\s*\(\s*&th(?:1|\[0\])[\s\S]*?&arg1\s*\)/.test(c) &&
+          /pthread_create\s*\(\s*&th(?:2|\[1\])[\s\S]*?&arg2\s*\)/.test(c)
       });
       checks.push({
-        label: "Sincronización mediante pthread_join para th[0] y th[1]",
-        test: (c) => /pthread_join\s*\(\s*th\[0\]/.test(c) && /pthread_join\s*\(\s*th\[1\]/.test(c)
+        label: "Sincronización mediante pthread_join para ambas hebras (th1 y th2)",
+        test: (c) =>
+          /pthread_join\s*\(\s*th(?:1|\[0\])/.test(c) &&
+          /pthread_join\s*\(\s*th(?:2|\[1\])/.test(c)
       });
     }
     // 2. Creación segura de hebras (Tema 2)
@@ -143,22 +147,25 @@
     else if (fileName.includes("panaderia")) {
       challengeCode = challengeCode
         .replace(
-          /pidiendoTurno\[id\]\s*=\s*1\s*;\s*\n\s*turno\[id\]\s*=\s*siguiente\(\)\s*;\s*\n\s*pidiendoTurno\[id\]\s*=\s*0\s*;/,
-          "        /* [RETO 1]: Toma de ticket en la Panadería de Lamport (activar pidiendoTurno[id], calcular turno[id] = siguiente() y desactivar pidiendoTurno[id]) */\n        // ___ COMPLETAR TOMA DE TURNO ___"
+          /pidiendoTurno\[(?:miId|id)\]\s*=\s*1\s*;\s*\n\s*turno\[(?:miId|id)\]\s*=\s*siguiente\(\)\s*;\s*\n\s*pidiendoTurno\[(?:miId|id)\]\s*=\s*0\s*;/,
+          "        /* [RETO 1]: Toma de ticket en la Panadería de Lamport (activar pidiendoTurno[miId], calcular turno[miId] = siguiente() y desactivar pidiendoTurno[miId]) */\n        // ___ COMPLETAR AQUÍ TOMA DE TURNO ___"
         )
         .replace(
-          /turno\[id\]\s*=\s*0\s*;/,
-          "        /* [RETO 2]: Postprotocolo: liberar el ticket poniendo turno[id] a 0 */\n        // ___ COMPLETAR POSTPROTOCOLO ___"
+          /turno\[(?:miId|id)\]\s*=\s*0\s*;/,
+          "        /* [RETO 2]: Postprotocolo: liberar el ticket poniendo turno[miId] a 0 */\n        // ___ COMPLETAR AQUÍ POSTPROTOCOLO ___"
         );
-      hints.push("Reto 1: pidiendoTurno[id] = 1; turno[id] = siguiente(); pidiendoTurno[id] = 0;");
-      hints.push("Reto 2: turno[id] = 0;");
+      hints.push("Reto 1: pidiendoTurno[miId] = 1; turno[miId] = siguiente(); pidiendoTurno[miId] = 0;");
+      hints.push("Reto 2: turno[miId] = 0;");
       checks.push({
-        label: "Protocolo de toma de número con pidiendoTurno[id] y turno[id] = siguiente()",
-        test: (c) => /pidiendoTurno\s*\[\s*id\s*\]\s*=\s*1/.test(c) && /turno\s*\[\s*id\s*\]\s*=\s*siguiente\s*\(\s*\)/.test(c) && /pidiendoTurno\s*\[\s*id\s*\]\s*=\s*0/.test(c)
+        label: "Protocolo de toma de número con pidiendoTurno[miId] y turno[miId] = siguiente()",
+        test: (c) =>
+          /pidiendoTurno\s*\[\s*(?:miId|id)\s*\]\s*=\s*1/.test(c) &&
+          /turno\s*\[\s*(?:miId|id)\s*\]\s*=\s*siguiente\s*\(\s*\)/.test(c) &&
+          /pidiendoTurno\s*\[\s*(?:miId|id)\s*\]\s*=\s*0/.test(c)
       });
       checks.push({
-        label: "Liberación del ticket turno[id] = 0 en el postprotocolo",
-        test: (c) => /turno\s*\[\s*id\s*\]\s*=\s*0\s*;/.test(c)
+        label: "Liberación del ticket turno[miId] = 0 en el postprotocolo",
+        test: (c) => /turno\s*\[\s*(?:miId|id)\s*\]\s*=\s*0\s*;/.test(c)
       });
     }
     // 5. Productor-Consumidor con Semáforos (Tema 3_1)
@@ -166,11 +173,11 @@
       challengeCode = challengeCode
         .replace(
           /sem_wait\(&Hay_espacio\)\s*;\s*\n\s*sem_wait\(&mutex\)\s*;/,
-          "        /* [RETO 1 - Preprotocolo Productor]: Espera primero a que haya espacio y después adquiere la exclusión mutua (¡cuidado con el orden para evitar deadlock!) */\n        // ___ COMPLETAR PREPROTOCOLO PRODUCTOR ___"
+          "        /* [RETO 1 - Preprotocolo Productor]: Espera primero a que haya espacio y después adquiere la exclusión mutua (¡cuidado con el orden para evitar deadlock!) */\n        // ___ COMPLETAR AQUÍ PREPROTOCOLO PRODUCTOR ___"
         )
         .replace(
           /sem_post\(&mutex\)\s*;\s*\n\s*sem_post\(&Hay_Datos\)\s*;/,
-          "        /* [RETO 2 - Postprotocolo Productor]: Libera la exclusión mutua y señaliza que hay un nuevo dato disponible */\n        // ___ COMPLETAR POSTPROTOCOLO PRODUCTOR ___"
+          "        /* [RETO 2 - Postprotocolo Productor]: Libera la exclusión mutua y señaliza que hay un nuevo dato disponible */\n        // ___ COMPLETAR AQUÍ POSTPROTOCOLO PRODUCTOR ___"
         );
       hints.push("Reto 1: sem_wait(&Hay_espacio); seguido de sem_wait(&mutex); (nunca al revés).");
       hints.push("Reto 2: sem_post(&mutex); seguido de sem_post(&Hay_Datos);");
@@ -188,11 +195,11 @@
       challengeCode = challengeCode
         .replace(
           /nLectores\+\+\s*;\s*\n\s*if\s*\(\s*nLectores\s*==\s*1\s*\)\s*\{\s*\n\s*sem_wait\(&escribiendo\)\s*;\s*\n\s*\}/,
-          "    /* [RETO 1]: Incrementa nLectores y, si es el primer lector (nLectores == 1), bloquea a los escritores con sem_wait(&escribiendo) */\n    // ___ COMPLETAR ENTRADA PRIMER LECTOR ___"
+          "    /* [RETO 1]: Incrementa nLectores y, si es el primer lector (nLectores == 1), bloquea a los escritores con sem_wait(&escribiendo) */\n    // ___ COMPLETAR AQUÍ ENTRADA PRIMER LECTOR ___"
         )
         .replace(
           /nLectores--\s*;\s*\n\s*if\s*\(\s*nLectores\s*==\s*0\s*\)\s*\{\s*\n\s*sem_post\(&escribiendo\)\s*;\s*\n\s*\}/,
-          "    /* [RETO 2]: Decrementa nLectores y, si era el último lector (nLectores == 0), libera sem_post(&escribiendo) */\n    // ___ COMPLETAR SALIDA ÚLTIMO LECTOR ___"
+          "    /* [RETO 2]: Decrementa nLectores y, si era el último lector (nLectores == 0), libera sem_post(&escribiendo) */\n    // ___ COMPLETAR AQUÍ SALIDA ÚLTIMO LECTOR ___"
         );
       hints.push("Reto 1: nLectores++; if (nLectores == 1) { sem_wait(&escribiendo); }");
       hints.push("Reto 2: nLectores--; if (nLectores == 0) { sem_post(&escribiendo); }");
@@ -210,36 +217,38 @@
       challengeCode = challengeCode
         .replace(
           /sem_init\(&sillas,\s*0,\s*MAXF\s*-\s*1\)\s*;/,
-          "    /* [RETO 1]: Inicializa el semáforo 'sillas' a MAXF - 1 para romper la espera circular */\n    // ___ COMPLETAR INICIALIZACIÓN DE SILLAS ___"
+          "    /* [RETO 1]: Inicializa el semáforo 'sillas' a MAXF - 1 para romper la espera circular */\n    // ___ COMPLETAR AQUÍ INICIALIZACIÓN DE SILLAS ___"
         )
         .replace(
-          /sem_wait\(&sillas\)\s*;\s*\n\s*sem_wait\(&ten\[miId\]\)\s*;\s*\n\s*sem_wait\(&ten\[\(miId\s*\+\s*1\)\s*%\s*MAXF\]\)\s*;/,
-          "        /* [RETO 2]: Toma asiento (sem_wait(&sillas)) y adquiere los dos tenedores adyacentes */\n        // ___ COMPLETAR PREPROTOCOLO DEL FILÓSOFO ___"
+          /sem_wait\(&sillas\)\s*;\s*\n\s*sem_wait\(&ten\[(?:id|miId)\]\)\s*;\s*\n\s*sem_wait\(&ten\[\((?:id|miId)\s*\+\s*1\)\s*%\s*MAXF\]\)\s*;/,
+          "    /* [RETO 2]: Toma asiento (sem_wait(&sillas)) y adquiere los dos tenedores adyacentes (id y (id + 1) % MAXF) */\n    // ___ COMPLETAR AQUÍ PREPROTOCOLO DEL FILÓSOFO ___"
         );
       hints.push("Reto 1: sem_init(&sillas, 0, MAXF - 1);");
-      hints.push("Reto 2: sem_wait(&sillas); sem_wait(&ten[miId]); sem_wait(&ten[(miId + 1) % MAXF]);");
+      hints.push("Reto 2: sem_wait(&sillas); sem_wait(&ten[id]); sem_wait(&ten[(id + 1) % MAXF]);");
       checks.push({
         label: "Inicialización del semáforo de sillas a MAXF - 1",
         test: (c) => /sem_init\s*\(\s*&sillas\s*,\s*0\s*,\s*(?:MAXF\s*-\s*1|4)\s*\)/.test(c)
       });
       checks.push({
-        label: "Adquisición de silla y ambos tenedores (miId y (miId + 1) % MAXF)",
-        test: (c) => /sem_wait\s*\(\s*&sillas\s*\)/.test(c) && /sem_wait\s*\(\s*&ten\s*\[\s*miId\s*\]\s*\)/.test(c)
+        label: "Adquisición de silla y ambos tenedores (ten[id] y ten[(id + 1) % MAXF])",
+        test: (c) =>
+          /sem_wait\s*\(\s*&sillas\s*\)/.test(c) &&
+          /sem_wait\s*\(\s*&ten\s*\[\s*(?:id|miId)\s*\]\s*\)/.test(c)
       });
     }
     // 8. Colas de mensajes POSIX (Tema 4)
     else if (fileName.includes("colas_mensajes")) {
       challengeCode = challengeCode
         .replace(
-          /mq_send\(cola\[id\],\s*\(const char \*\)&msg,\s*sizeof\(int\),\s*1\)/,
-          "/* [RETO 1]: Envía el mensaje 'msg' por la cola 'cola[id]' usando mq_send(...) */"
+          /mq_send\(cola\[(?:idCola|id)\],\s*\(const char \*\)&(?:val|msg),\s*sizeof\(int\),\s*(?:prio|1)\)/,
+          "/* [RETO 1]: ___ COMPLETAR AQUÍ: mq_send(cola[idCola], (const char *)&val, sizeof(int), prio) ___ */"
         )
         .replace(
-          /mq_receive\(cola\[i\],\s*\(char \*\)&dato,\s*sizeof\(int\),\s*&prio\)/,
-          "/* [RETO 2]: Extrae el mensaje de 'cola[i]' en 'dato' usando mq_receive(...) */"
+          /mq_receive\(cola\[(?:0|i)\],\s*\(char \*\)&(?:num|dato),\s*sizeof\(int\),\s*&(?:prior|prio)\)/,
+          "/* [RETO 2]: ___ COMPLETAR AQUÍ: mq_receive(cola[0], (char *)&num, sizeof(int), &prior) ___ */"
         );
-      hints.push("Reto 1: mq_send(cola[id], (const char *)&msg, sizeof(int), 1)");
-      hints.push("Reto 2: mq_receive(cola[i], (char *)&dato, sizeof(int), &prio)");
+      hints.push("Reto 1: mq_send(cola[idCola], (const char *)&val, sizeof(int), prio)");
+      hints.push("Reto 2: mq_receive(cola[0], (char *)&num, sizeof(int), &prior)");
       checks.push({
         label: "Envío por cola de mensajes POSIX mediante mq_send",
         test: (c) => /mq_send\s*\(\s*cola\[/.test(c)
@@ -253,40 +262,40 @@
     else if (fileName.includes("senales_sigwait")) {
       challengeCode = challengeCode
         .replace(
-          /pthread_sigmask\(SIG_BLOCK,\s*&sigset,\s*NULL\)\s*;/,
-          "    /* [RETO 1]: Bloquea el conjunto de señales 'sigset' en la máscara de la hebra con pthread_sigmask */\n    // ___ COMPLETAR BLOQUEO DE MÁSCARA ___"
+          /pthread_sigmask\(SIG_BLOCK,\s*&sigset,\s*NULL\)/,
+          "/* [RETO 1]: ___ COMPLETAR AQUÍ: pthread_sigmask(SIG_BLOCK, &sigset, NULL) ___ */"
         )
         .replace(
-          /sigwaitinfo\(&sigset,\s*&info\)\s*;/,
-          "/* [RETO 2]: Espera síncronamente la señal del conjunto 'sigset' recogiendo los datos en 'info' con sigwaitinfo */"
+          /sigwaitinfo\((?:set|&sigset),\s*&info\)\s*;/,
+          "/* [RETO 2]: ___ COMPLETAR AQUÍ: sigwaitinfo(set, &info); ___ */"
         );
-      hints.push("Reto 1: pthread_sigmask(SIG_BLOCK, &sigset, NULL);");
-      hints.push("Reto 2: sigwaitinfo(&sigset, &info);");
+      hints.push("Reto 1: pthread_sigmask(SIG_BLOCK, &sigset, NULL)");
+      hints.push("Reto 2: sigwaitinfo(set, &info);");
       checks.push({
         label: "Bloqueo de la máscara de señales con pthread_sigmask(SIG_BLOCK, &sigset, NULL)",
         test: (c) => /pthread_sigmask\s*\(\s*SIG_BLOCK\s*,\s*&sigset/.test(c)
       });
       checks.push({
-        label: "Espera síncrona con sigwaitinfo(&sigset, &info) o sigwait",
-        test: (c) => /sigwait(?:info)?\s*\(\s*&sigset/.test(c)
+        label: "Espera síncrona con sigwaitinfo(set, &info) o sigwait",
+        test: (c) => /sigwait(?:info)?\s*\(\s*(?:set|&sigset)/.test(c)
       });
     }
     // 10. Monitor Java BufferAcotado (Tema 6)
     else if (fileName.includes("BufferAcotado")) {
       challengeCode = challengeCode
         .replace(
-          /while\s*\(\s*cima\s*==\s*capacidad\s*\)\s*\{\s*\n\s*wait\(\)\s*;\s*\n\s*\}/,
-          "        /* [RETO 1]: Mientras el buffer esté lleno (cima == capacidad), suspende la hebra en la cola del monitor con wait() */\n        // ___ COMPLETAR GUARDA DE ESPERA EN PONER() ___"
+          /while\s*\(\s*cima\s*==\s*capacidad(?:\s*-\s*1)?\s*\)\s*\{\s*\n\s*try\s*\{\s*\n\s*wait\(\)\s*;\s*\n\s*\}\s*catch\s*\([^)]+\)\s*\{\s*\n\s*[^}]+\n\s*\}\s*\n\s*\}/,
+          "        /* [RETO 1]: Mientras el buffer esté lleno (cima == capacidad - 1), suspende la hebra con wait() */\n        while (cima == capacidad - 1) {\n            try { /* ___ COMPLETAR AQUÍ: wait(); ___ */ } catch (InterruptedException e) { Thread.currentThread().interrupt(); }\n        }"
         )
         .replace(
           /notifyAll\(\)\s*;/g,
-          "/* [RETO 2]: Despierta a todas las hebras en espera sobre el monitor con notifyAll(); */"
+          "/* [RETO 2]: ___ COMPLETAR AQUÍ: notifyAll(); ___ */"
         );
-      hints.push("Reto 1: while (cima == capacidad) { wait(); }");
-      hints.push("Reto 2: notifyAll();");
+      hints.push("Reto 1: Invoca wait(); dentro del bloque try cuando cima == capacidad - 1.");
+      hints.push("Reto 2: Invoca notifyAll(); para despertar a las hebras bloqueadas en el monitor.");
       checks.push({
-        label: "Comprobación de condición en bucle while (cima == capacidad) { wait(); }",
-        test: (c) => /while\s*\(\s*cima\s*==\s*capacidad\s*\)\s*\{?\s*wait\s*\(\s*\)/.test(c)
+        label: "Comprobación de condición en bucle while y llamada a wait()",
+        test: (c) => /while\s*\(\s*cima\s*==\s*capacidad(?:\s*-\s*1)?\s*\)\s*\{[\s\S]*?wait\s*\(\s*\)/.test(c)
       });
       checks.push({
         label: "Notificación a las hebras esperando mediante notifyAll()",
@@ -298,21 +307,21 @@
       challengeCode = challengeCode
         .replace(
           /mlockall\(MCL_CURRENT\s*\|\s*MCL_FUTURE\)/,
-          "/* [RETO 1]: Ancla las páginas de memoria actuales y futuras en RAM con mlockall(...) */"
+          "/* [RETO 1]: ___ COMPLETAR AQUÍ: mlockall(MCL_CURRENT | MCL_FUTURE) ___ */"
         )
         .replace(
-          /clock_nanosleep\(CLOCK_MONOTONIC,\s*TIMER_ABSTIME,\s*&next,\s*NULL\)\s*;/,
-          "        /* [RETO 2]: Suspende la hebra hasta el instante absoluto '&next' en el reloj CLOCK_MONOTONIC usando clock_nanosleep */\n        // ___ COMPLETAR ESPERA ABSOLUTA SIN DERIVA ___"
+          /clock_nanosleep\(CLOCK_MONOTONIC,\s*TIMER_ABSTIME,\s*&next(?:_activation)?,\s*NULL\)/,
+          "/* [RETO 2]: ___ COMPLETAR AQUÍ: clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next_activation, NULL) ___ */"
         );
       hints.push("Reto 1: mlockall(MCL_CURRENT | MCL_FUTURE)");
-      hints.push("Reto 2: clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next, NULL);");
+      hints.push("Reto 2: clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next_activation, NULL)");
       checks.push({
         label: "Bloqueo de paginación en RAM física con mlockall(MCL_CURRENT | MCL_FUTURE)",
         test: (c) => /mlockall\s*\(\s*MCL_CURRENT\s*\|\s*MCL_FUTURE\s*\)/.test(c)
       });
       checks.push({
-        label: "Espera periódica absoluta con clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next, NULL)",
-        test: (c) => /clock_nanosleep\s*\(\s*CLOCK_MONOTONIC\s*,\s*TIMER_ABSTIME\s*,\s*&next/.test(c)
+        label: "Espera periódica absoluta con clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next_activation, NULL)",
+        test: (c) => /clock_nanosleep\s*\(\s*CLOCK_MONOTONIC\s*,\s*TIMER_ABSTIME\s*,\s*&next(?:_activation)?/.test(c)
       });
     }
 
@@ -508,23 +517,23 @@
       out.push(`--------------------------------------------------------------------------------`);
 
       // 1. Tema 1: Búsqueda Lineal Concurrente
-      if (code.includes("busquedaLineal") || code.includes("struct argm")) {
+      if (fileName.includes("busqueda_concurrente") || code.includes("busquedaLineal") || code.includes("struct argm")) {
         const target = defines.OBJETIVO ?? defines.x ?? 7;
         out.push(`=== EJECUCIÓN EN VIVO: BÚSQUEDA LINEAL CONCURRENTE (x = ${target}) ===`);
-        out.push(`[main] Lanzando Hebra 0 sobre subvector [0..4] y Hebra 1 sobre subvector [5..9]`);
+        out.push(`[main] Lanzando Hebra 1 (th1) sobre subvector [0..4] y Hebra 2 (th2) sobre subvector [5..9]`);
         if (target >= 0 && target <= 4) {
-          out.push(`[Hebra 0] ¡Valor x=${target} encontrado en el índice pos = ${target}!`);
-          out.push(`[Hebra 1] Subvector [5..9] recorrido (enc = 0)`);
+          out.push(`[th1] ¡Valor x=${target} encontrado en pos = ${target}!`);
+          out.push(`[th2] Subvector [5..9] recorrido sin coincidencias (enc = 0)`);
         } else if (target >= 5 && target <= 9) {
-          out.push(`[Hebra 0] Subvector [0..4] recorrido (enc = 0)`);
-          out.push(`[Hebra 1] ¡Valor x=${target} encontrado en el índice pos = ${target}!`);
+          out.push(`[th1] Subvector [0..4] recorrido sin coincidencias (enc = 0)`);
+          out.push(`[th2] ¡Encontrado en pos = ${target}!`);
         } else {
           out.push(`[Resultado] El elemento x=${target} no se encuentra en el vector v[0..9].`);
         }
-        out.push(`[main] pthread_join completado con éxito para ambas hebras.`);
+        out.push(`[main] pthread_join(th1) y pthread_join(th2) completados con éxito. Fin.`);
       }
       // 2. Tema 2: Creación y Gestión Segura de Hebras
-      else if (code.includes("HTarea") || code.includes("NUM_HEBRAS")) {
+      else if (fileName.includes("creacion_hebras") || code.includes("HTarea")) {
         const nH = Math.min(20, defines.NUM_HEBRAS || 4);
         out.push(`=== EJECUCIÓN EN VIVO: CREACIÓN DE ${nH} HEBRAS POSIX (&ids[i]) ===`);
         for (let i = 0; i < nH; i++) {
@@ -536,7 +545,7 @@
         }
       }
       // 3. Tema 3: Algoritmo de Peterson
-      else if (code.includes("otra = (miId + 1) % 2") || code.includes("otra=(miId+1)%2") || (code.includes("f[2]") && code.includes("turno"))) {
+      else if (fileName.includes("peterson") || code.includes("otra = (miId + 1) % 2") || code.includes("otra=(miId+1)%2") || (code.includes("f[2]") && code.includes("turno"))) {
         const iter = Math.min(12, defines.ITERACIONES || 3);
         let cont = 0;
         out.push(`=== EJECUCIÓN EN VIVO: ALGORITMO DE PETERSON (${iter} iteraciones por hebra) ===`);
@@ -652,6 +661,20 @@
     lineBox.innerHTML = html;
   }
 
+  const CANONICAL_SOURCES = {
+  "busqueda_concurrente.c": "/*\n * Especificación de Laboratorio — Tema 1: Búsqueda Lineal Concurrente\n * Compilación: gcc -Wall -Wextra -std=c11 -pthread busqueda_concurrente.c -o busqueda_concurrente -lrt\n * Guía Recomendada Normativa de Evaluación: Variables globales simples y comprobación recomendada de pthread_create y pthread_join.\n */\n\n#include <stdio.h>\n#include <stdlib.h>\n#include <pthread.h>\n\n#define TAM_ARRAY 10\n#define OBJETIVO  7\n\nint v[TAM_ARRAY];\n\nstruct argm {\n    int x;\n    int li;\n    int lf;\n};\n\nvoid Rellenar(void) {\n    int i;\n    for (i = 0; i < TAM_ARRAY; i++) {\n        v[i] = i;\n    }\n}\n\nvoid *busquedaLineal(void *argg) {\n    int i = 0, enc = 0;\n    struct argm *arg = (struct argm *)argg;\n    i = arg->li;\n\n    while (i <= arg->lf && !enc) {\n        if (v[i] == arg->x) {\n            enc = 1;\n        } else {\n            i++;\n        }\n    }\n\n    if (enc) {\n        printf(\"Encontrado en pos = %d\\n\", i);\n    }\n    pthread_exit(NULL);\n}\n\nint main(void) {\n    struct argm arg1, arg2;\n    pthread_t th1, th2;\n\n    Rellenar();\n\n    arg1.li = 0;\n    arg1.lf = 4;\n    arg1.x = OBJETIVO;\n\n    arg2.li = 5;\n    arg2.lf = 9;\n    arg2.x = OBJETIVO;\n\n    if (pthread_create(&th1, NULL, busquedaLineal, &arg1) != 0) {\n        perror(\"Error en pthread_create th1: \");\n        exit(-1);\n    }\n\n    if (pthread_create(&th2, NULL, busquedaLineal, &arg2) != 0) {\n        perror(\"Error en pthread_create th2: \");\n        exit(-1);\n    }\n\n    if (pthread_join(th1, NULL) != 0) {\n        perror(\"Error en pthread_join th1: \");\n        exit(-1);\n    }\n\n    if (pthread_join(th2, NULL) != 0) {\n        perror(\"Error en pthread_join th2: \");\n        exit(-1);\n    }\n\n    printf(\"Fin\\n\");\n    return 0;\n}\n",
+  "creacion_hebras_segura.c": "/*\n * Patrón Canónico Oficial (Normativa de Evaluación) — Tema 2: Gestión Segura de Hebras Pthreads\n * Compilación: gcc -Wall -Wextra -std=c11 -pthread creacion_hebras_segura.c -o creacion_hebras_segura -lrt\n * Buenas prácticas recomendadas:\n *  - Se aconseja el uso de int ids[NUM_HEBRAS] con ids[i] = i y paso de &ids[i].\n *  - Se recomienda comprobar el retorno de pthread_create y pthread_join.\n *  - Variables estándar evitando calificadores no recomendados.\n */\n\n#include <stdio.h>\n#include <stdlib.h>\n#include <pthread.h>\n\n#define NUM_HEBRAS 4\n\nvoid *HTarea(void *param) {\n    int miId = *(int *)param;\n    printf(\"Hebra %d en ejecucion\\n\", miId);\n    pthread_exit(NULL);\n}\n\nint main(void) {\n    pthread_t hebras[NUM_HEBRAS];\n    int ids[NUM_HEBRAS];\n    int i;\n\n    for (i = 0; i < NUM_HEBRAS; i++) {\n        ids[i] = i;\n        if (pthread_create(&hebras[i], NULL, HTarea, &ids[i]) != 0) {\n            perror(\"Error en pthread_create: \");\n            exit(-1);\n        }\n    }\n\n    for (i = 0; i < NUM_HEBRAS; i++) {\n        if (pthread_join(hebras[i], NULL) != 0) {\n            perror(\"Error en pthread_join: \");\n            exit(-1);\n        }\n    }\n\n    printf(\"Todas las hebras han concluido.\\n\");\n    return 0;\n}\n",
+  "filosofos_sillas.c": "/*\n * Especificación de Laboratorio — Tema 3_1 (Págs. 109-115): Cena de los Filósofos sin Deadlock\n * Compilación: gcc -Wall -Wextra -std=c11 -pthread filosofos_sillas.c -o filosofos_sillas -lrt\n * Solución con semáforo general 'sillas' inicializado a MAXF - 1 (= 4) para impedir la espera circular.\n */\n\n#include <stdio.h>\n#include <stdlib.h>\n#include <pthread.h>\n#include <semaphore.h>\n\n#define MAXF 5\n\nsem_t ten[MAXF];\nsem_t sillas;\n\nvoid *HebraF(void *argg) {\n    int id = *(int *)argg;\n\n    sem_wait(&sillas);\n    sem_wait(&ten[id]);\n    sem_wait(&ten[(id + 1) % MAXF]);\n\n    printf(\"[Filosofo %d] Comiendo con tenedores %d y %d\\n\", id, id, (id + 1) % MAXF);\n\n    sem_post(&ten[(id + 1) % MAXF]);\n    sem_post(&ten[id]);\n    sem_post(&sillas);\n\n    printf(\"[Filosofo %d] Termina de comer y vuelve a pensar\\n\", id);\n    pthread_exit(NULL);\n}\n\nint main(void) {\n    pthread_t th[MAXF];\n    int id[MAXF];\n    int i;\n\n    sem_init(&sillas, 0, MAXF - 1);\n    for (i = 0; i < MAXF; i++) {\n        sem_init(&ten[i], 0, 1);\n    }\n\n    for (i = 0; i < MAXF; i++) {\n        id[i] = i;\n        if (pthread_create(&th[i], NULL, HebraF, &id[i]) != 0) {\n            perror(\"Error en pthread_create Filosofo: \");\n            exit(-1);\n        }\n    }\n\n    for (i = 0; i < MAXF; i++) {\n        if (pthread_join(th[i], NULL) != 0) {\n            perror(\"Error en pthread_join Filosofo: \");\n            exit(-1);\n        }\n    }\n\n    return 0;\n}\n",
+  "lectores_escritores_sem.c": "/*\n * Especificación de Laboratorio — Tema 3_1 (Págs. 101-108): Lectores/Escritores Justo para Escritores\n * Compilación: gcc -Wall -Wextra -std=c11 -pthread lectores_escritores_sem.c -o lectores_escritores_sem -lrt\n * Usa 5 semáforos binarios (escribiendo, leyendo, mutex1, mutex2, mutex3) para garantizar\n * que ningún lector adelante a un escritor que ya está esperando en leyendo.\n */\n\n#include <stdio.h>\n#include <stdlib.h>\n#include <pthread.h>\n#include <semaphore.h>\n\n#define MAXL 3\n#define MAXE 2\n\nint nLectores = 0;\nint nEscritores = 0;\n\nsem_t escribiendo;\nsem_t leyendo;\nsem_t mutex1;\nsem_t mutex2;\nsem_t mutex3;\n\nvoid entraLector(void) {\n    sem_wait(&mutex3);\n    sem_wait(&leyendo);\n    sem_wait(&mutex1);\n    nLectores++;\n    if (nLectores == 1) {\n        sem_wait(&escribiendo);\n    }\n    sem_post(&mutex1);\n    sem_post(&leyendo);\n    sem_post(&mutex3);\n}\n\nvoid saleLector(void) {\n    sem_wait(&mutex1);\n    nLectores--;\n    if (nLectores == 0) {\n        sem_post(&escribiendo);\n    }\n    sem_post(&mutex1);\n}\n\nvoid entraEscritor(void) {\n    sem_wait(&mutex2);\n    nEscritores++;\n    if (nEscritores == 1) {\n        sem_wait(&leyendo);\n    }\n    sem_post(&mutex2);\n    sem_wait(&escribiendo);\n}\n\nvoid saleEscritor(void) {\n    sem_wait(&mutex2);\n    nEscritores--;\n    if (nEscritores == 0) {\n        sem_post(&leyendo);\n    }\n    sem_post(&mutex2);\n    sem_post(&escribiendo);\n}\n\nvoid *Lector(void *param) {\n    int id = *(int *)param;\n    entraLector();\n    printf(\"[Lector %d] Leyendo Base de Datos...\\n\", id);\n    saleLector();\n    pthread_exit(NULL);\n}\n\nvoid *Escritor(void *param) {\n    int id = *(int *)param;\n    entraEscritor();\n    printf(\"[Escritor %d] Actualizando Base de Datos en exclusion mutua...\\n\", id);\n    saleEscritor();\n    pthread_exit(NULL);\n}\n\nint main(void) {\n    pthread_t thL[MAXL], thE[MAXE];\n    int idL[MAXL], idE[MAXE];\n    int i;\n\n    sem_init(&escribiendo, 0, 1);\n    sem_init(&leyendo, 0, 1);\n    sem_init(&mutex1, 0, 1);\n    sem_init(&mutex2, 0, 1);\n    sem_init(&mutex3, 0, 1);\n\n    for (i = 0; i < MAXL; i++) {\n        idL[i] = i;\n        if (pthread_create(&thL[i], NULL, Lector, &idL[i]) != 0) {\n            perror(\"Error en pthread_create Lector: \");\n            exit(-1);\n        }\n    }\n\n    for (i = 0; i < MAXE; i++) {\n        idE[i] = i;\n        if (pthread_create(&thE[i], NULL, Escritor, &idE[i]) != 0) {\n            perror(\"Error en pthread_create Escritor: \");\n            exit(-1);\n        }\n    }\n\n    for (i = 0; i < MAXL; i++) {\n        if (pthread_join(thL[i], NULL) != 0) {\n            perror(\"Error en pthread_join Lector: \");\n            exit(-1);\n        }\n    }\n\n    for (i = 0; i < MAXE; i++) {\n        if (pthread_join(thE[i], NULL) != 0) {\n            perror(\"Error en pthread_join Escritor: \");\n            exit(-1);\n        }\n    }\n\n    return 0;\n}\n",
+  "panaderia_lamport.c": "/*\n * Patrón Canónico Oficial (Normativa de Evaluación) — Tema 3: Algoritmo de la Panadería de Lamport (N Procesos)\n * Compilación: gcc -Wall -Wextra -std=c11 -pthread panaderia_lamport.c -o panaderia_lamport -lrt\n * Orden lexicográfico: (turno[i], i) < (turno[id], id)\n */\n\n#include <stdio.h>\n#include <stdlib.h>\n#include <pthread.h>\n\n#define MAXT        5\n#define ITERACIONES 1000\n\nint cont = 0;\nint pidiendoTurno[MAXT] = {0};\nint turno[MAXT] = {0};\n\nint siguiente(void) {\n    int i, max = 0;\n    for (i = 0; i < MAXT; i++) {\n        if (turno[i] > max) {\n            max = turno[i];\n        }\n    }\n    return max + 1;\n}\n\nint meToca(int id, int i) {\n    if (turno[i] > 0 && turno[i] < turno[id]) return 0;\n    if (turno[i] == turno[id] && i < id) return 0;\n    return 1;\n}\n\nvoid *Hebra(void *param) {\n    int miId = *(int *)param;\n    int i, j;\n\n    for (i = 0; i < ITERACIONES; i++) {\n        pidiendoTurno[miId] = 1;\n        turno[miId] = siguiente();\n        pidiendoTurno[miId] = 0;\n\n        for (j = 0; j < MAXT; j++) {\n            while (pidiendoTurno[j])\n                ;\n            while (!meToca(miId, j))\n                ;\n        }\n\n        /* Sección Crítica */\n        cont++;\n\n        /* Postprotocolo */\n        turno[miId] = 0;\n    }\n\n    pthread_exit(NULL);\n}\n\nint main(void) {\n    pthread_t hebras[MAXT];\n    int ids[MAXT];\n    int i;\n\n    for (i = 0; i < MAXT; i++) {\n        ids[i] = i;\n        if (pthread_create(&hebras[i], NULL, Hebra, &ids[i]) != 0) {\n            perror(\"Error en pthread_create: \");\n            exit(-1);\n        }\n    }\n\n    for (i = 0; i < MAXT; i++) {\n        if (pthread_join(hebras[i], NULL) != 0) {\n            perror(\"Error en pthread_join: \");\n            exit(-1);\n        }\n    }\n\n    printf(\"Fin Panaderia. Visitantes cont = %d\\n\", cont);\n    return 0;\n}\n",
+  "peterson.c": "/*\n * Patrón Canónico Oficial (Normativa de Evaluación) — Tema 3: Algoritmo de Peterson (2 Procesos)\n * Compilación: gcc -Wall -Wextra -std=c11 -pthread peterson.c -o peterson -lrt\n * Propiedades verificadas:\n *  - R1: Exclusión mutua estricta\n *  - R2: Ausencia de livelock / deadlock\n *  - R3: Progreso cuando sólo un proceso compite\n *  - R4: Justicia (espera acotada a 1 turno como máximo)\n */\n\n#include <stdio.h>\n#include <stdlib.h>\n#include <pthread.h>\n\n#define NUM_HEBRAS  2\n#define ITERACIONES 3\n\nunsigned f[2] = {0, 0};\nint turno = 0;\nint cont = 0;\n\nvoid *Hebra(void *param) {\n    int miId = *(int *)param;\n    int otra = (miId + 1) % 2;\n    int k;\n\n    for (k = 0; k < ITERACIONES; k++) {\n        /* Preprotocolo de Peterson */\n        f[miId] = 1;\n        turno = otra;\n        while (f[otra] && turno == otra)\n            ;\n\n        /* Sección Crítica */\n        cont = cont + 1;\n        printf(\"SECCION CRITICA id=%d (cont=%d)\\n\", miId, cont);\n\n        /* Postprotocolo de Peterson */\n        f[miId] = 0;\n        printf(\"SECCION NO CRITICA id=%d\\n\", miId);\n    }\n\n    pthread_exit(NULL);\n}\n\nint main(void) {\n    pthread_t hebras[NUM_HEBRAS];\n    int ids[NUM_HEBRAS];\n    int i;\n\n    for (i = 0; i < NUM_HEBRAS; i++) {\n        ids[i] = i;\n        if (pthread_create(&hebras[i], NULL, Hebra, &ids[i]) != 0) {\n            perror(\"Error en pthread_create: \");\n            exit(-1);\n        }\n    }\n\n    for (i = 0; i < NUM_HEBRAS; i++) {\n        if (pthread_join(hebras[i], NULL) != 0) {\n            perror(\"Error en pthread_join: \");\n            exit(-1);\n        }\n    }\n\n    printf(\"Fin. Valor final de cont = %d\\n\", cont);\n    return 0;\n}\n",
+  "productor_consumidor_sem.c": "/*\n * Patrón Canónico Oficial (Normativa de Evaluación) — Tema 3_1: Productor/Consumidor con Semáforos POSIX\n * Compilación: gcc -Wall -Wextra -std=c11 -pthread productor_consumidor_sem.c -o productor_consumidor_sem -lrt\n * Directiva Crítica: Uso recomendado de sem_t mutex con sem_wait(&mutex) y sem_post(&mutex).\n */\n\n#include <stdio.h>\n#include <stdlib.h>\n#include <pthread.h>\n#include <semaphore.h>\n\n#define MAXT        5\n#define TOTAL_DATOS 6\n\nlong Buffer[MAXT];\n\nsem_t Hay_espacio;\nsem_t Hay_Datos;\nsem_t mutex;\n\nvoid *Productor(void *param) {\n    int i = 0;\n    int dato = 0;\n    int k;\n    (void)param;\n\n    for (k = 0; k < TOTAL_DATOS; k++) {\n        sem_wait(&Hay_espacio);\n        sem_wait(&mutex);\n        Buffer[i] = dato;\n        dato = (dato + 1) % 10000;\n        i = (i + 1) % MAXT;\n        sem_post(&mutex);\n        sem_post(&Hay_Datos);\n    }\n    pthread_exit(NULL);\n}\n\nvoid *Consumidor(void *param) {\n    int i = 0;\n    int dato = 0;\n    int k;\n    (void)param;\n\n    for (k = 0; k < TOTAL_DATOS; k++) {\n        sem_wait(&Hay_Datos);\n        sem_wait(&mutex);\n        dato = (int)Buffer[i];\n        i = (i + 1) % MAXT;\n        sem_post(&mutex);\n        sem_post(&Hay_espacio);\n        printf(\"Dato Consumido = %d\\n\", dato);\n    }\n    pthread_exit(NULL);\n}\n\nint main(void) {\n    pthread_t th1, th2;\n\n    sem_init(&Hay_espacio, 0, MAXT);\n    sem_init(&Hay_Datos, 0, 0);\n    sem_init(&mutex, 0, 1);\n\n    if (pthread_create(&th1, NULL, Productor, NULL) != 0) {\n        perror(\"Error en pthread_create Productor: \");\n        exit(-1);\n    }\n    if (pthread_create(&th2, NULL, Consumidor, NULL) != 0) {\n        perror(\"Error en pthread_create Consumidor: \");\n        exit(-1);\n    }\n\n    if (pthread_join(th1, NULL) != 0) {\n        perror(\"Error en pthread_join th1: \");\n        exit(-1);\n    }\n    if (pthread_join(th2, NULL) != 0) {\n        perror(\"Error en pthread_join th2: \");\n        exit(-1);\n    }\n\n    sem_destroy(&Hay_espacio);\n    sem_destroy(&Hay_Datos);\n    sem_destroy(&mutex);\n\n    printf(\"Fin\\n\");\n    return 0;\n}\n",
+  "colas_mensajes_mq.c": "/*\n * Especificación de Laboratorio — Tema 4 (Págs. 14-34): Colas de Mensajes POSIX y Espera Selectiva\n * Compilación: gcc -Wall -Wextra -std=c11 -pthread colas_mensajes_mq.c -o colas_mensajes_mq -lrt\n * Implementa el Problema de los Jardines con 2 colas POSIX (<mqueue.h>) y multiplexación select().\n */\n\n#include <stdio.h>\n#include <stdlib.h>\n#include <pthread.h>\n#include <mqueue.h>\n#include <sys/stat.h>\n#include <sys/select.h>\n\n#define MAX_MSG    10\n#define VISITAS_P  1000\n\nmqd_t cola[2];\nlong Visitantes = 0;\n\nvoid *HebraVisitas(void *argg) {\n    int idCola = *(int *)argg;\n    int i, val = 1;\n    unsigned int prio = 1;\n\n    for (i = 0; i < VISITAS_P; i++) {\n        if (mq_send(cola[idCola], (const char *)&val, sizeof(int), prio) == -1) {\n            perror(\"Error en mq_send: \");\n            exit(-1);\n        }\n    }\n    pthread_exit(NULL);\n}\n\nvoid *IncVisitantesSelect(void *arg) {\n    fd_set rfds;\n    int recibidos = 0;\n    int num = 0;\n    unsigned int prior = 0;\n    int maxfd;\n    (void)arg;\n\n    maxfd = (cola[0] > cola[1] ? cola[0] : cola[1]) + 1;\n\n    while (recibidos < 2 * VISITAS_P) {\n        FD_ZERO(&rfds);\n        FD_SET(cola[0], &rfds);\n        FD_SET(cola[1], &rfds);\n\n        if (select(maxfd, &rfds, NULL, NULL, NULL) > 0) {\n            if (FD_ISSET(cola[0], &rfds)) {\n                if (mq_receive(cola[0], (char *)&num, sizeof(int), &prior) != -1) {\n                    Visitantes += num;\n                    recibidos++;\n                }\n            }\n            if (FD_ISSET(cola[1], &rfds)) {\n                if (mq_receive(cola[1], (char *)&num, sizeof(int), &prior) != -1) {\n                    Visitantes += num;\n                    recibidos++;\n                }\n            }\n        }\n    }\n    pthread_exit(NULL);\n}\n\nint main(void) {\n    pthread_t th1, th2, thSrv;\n    int ids[2] = {0, 1};\n    struct mq_attr attrq;\n\n    attrq.mq_maxmsg = MAX_MSG;\n    attrq.mq_msgsize = sizeof(int);\n    attrq.mq_flags = 0;\n\n    mq_unlink(\"/PC1\");\n    mq_unlink(\"/PC2\");\n\n    cola[0] = mq_open(\"/PC1\", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH, &attrq);\n    cola[1] = mq_open(\"/PC2\", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH, &attrq);\n\n    if (pthread_create(&th1, NULL, HebraVisitas, &ids[0]) != 0) {\n        perror(\"Error en pthread_create th1: \");\n        exit(-1);\n    }\n    if (pthread_create(&th2, NULL, HebraVisitas, &ids[1]) != 0) {\n        perror(\"Error en pthread_create th2: \");\n        exit(-1);\n    }\n    if (pthread_create(&thSrv, NULL, IncVisitantesSelect, NULL) != 0) {\n        perror(\"Error en pthread_create thSrv: \");\n        exit(-1);\n    }\n\n    if (pthread_join(th1, NULL) != 0 || pthread_join(th2, NULL) != 0 || pthread_join(thSrv, NULL) != 0) {\n        perror(\"Error en pthread_join: \");\n        exit(-1);\n    }\n\n    printf(\"El numero de visitas totales = %ld\\n\", Visitantes);\n\n    mq_close(cola[0]);\n    mq_close(cola[1]);\n    mq_unlink(\"/PC1\");\n    mq_unlink(\"/PC2\");\n    return 0;\n}\n",
+  "senales_sigwait.c": "/*\n * Especificación de Laboratorio — Tema 5 (Págs. 32-35): Señales POSIX con Espera Síncrona\n * Compilación: gcc -Wall -Wextra -std=c11 -pthread senales_sigwait.c -o senales_sigwait -lrt\n * Bloquea SIGRTMIN en main mediante pthread_sigmask (las hebras hijas heredan la máscara)\n * y dedica una hebra manejadora de eventos usando sigwaitinfo() + envío con sigqueue().\n */\n\n#include <stdio.h>\n#include <stdlib.h>\n#include <unistd.h>\n#include <signal.h>\n#include <pthread.h>\n\n#define NUM_EVENTOS 2\n\nvoid *HebraManejadora(void *arg) {\n    sigset_t *set = (sigset_t *)arg;\n    siginfo_t info;\n    int i, s;\n\n    for (i = 0; i < NUM_EVENTOS; i++) {\n        s = sigwaitinfo(set, &info);\n        if (s == -1) {\n            perror(\"Error en sigwaitinfo: \");\n            exit(-1);\n        }\n        printf(\"Hebra de eventos recibio senal #%d con valor sival_int = %d\\n\",\n               s, info.si_value.sival_int);\n    }\n    pthread_exit(NULL);\n}\n\nint main(void) {\n    sigset_t sigset;\n    pthread_t thEventos;\n    union sigval v;\n\n    /* 1. Bloquear la señal en main antes de crear hebras (herencia de máscara) */\n    sigemptyset(&sigset);\n    sigaddset(&sigset, SIGRTMIN);\n    if (pthread_sigmask(SIG_BLOCK, &sigset, NULL) != 0) {\n        perror(\"Error en pthread_sigmask: \");\n        exit(-1);\n    }\n\n    /* 2. Crear la hebra dedicada como manejador síncrono de eventos */\n    if (pthread_create(&thEventos, NULL, HebraManejadora, &sigset) != 0) {\n        perror(\"Error en pthread_create: \");\n        exit(-1);\n    }\n\n    /* 3. Enviar señales de tiempo real encoladas con carga útil (sigqueue) */\n    v.sival_int = 10;\n    sigqueue(getpid(), SIGRTMIN, v);\n\n    v.sival_int = 30;\n    sigqueue(getpid(), SIGRTMIN, v);\n\n    if (pthread_join(thEventos, NULL) != 0) {\n        perror(\"Error en pthread_join: \");\n        exit(-1);\n    }\n\n    printf(\"Fin del procesamiento de eventos.\\n\");\n    return 0;\n}\n",
+  "BufferAcotado.java": "/**\n * Especificación de Laboratorio — Tema 6 (Págs. 23-28): Monitor de Buffer Acotado en Java\n * Demuestra el uso de métodos synchronized, comprobación de condición en bucle while,\n * wait() y notifyAll() para múltiples productores y múltiples consumidores.\n */\npublic class BufferAcotado {\n    private int cima;\n    private int capacidad;\n    private int[] vector;\n\n    public BufferAcotado(int i) {\n        cima = 0;\n        capacidad = i;\n        vector = new int[i];\n    }\n\n    public synchronized int coger() {\n        while (cima == 0) {\n            try {\n                wait();\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n            }\n        }\n        notifyAll(); // Ya hay sitio libre en el buffer\n        return vector[--cima];\n    }\n\n    public synchronized void poner(int elem) {\n        while (cima == capacidad - 1) {\n            try {\n                wait();\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n            }\n        }\n        vector[cima] = elem;\n        cima++;\n        notifyAll(); // Ya hay elementos producidos disponibles\n    }\n\n    public static void main(String[] args) {\n        int CAPACIDAD = 3;\n        BufferAcotado buf = new BufferAcotado(CAPACIDAD);\n        buf.poner(1);\n        buf.poner(2);\n        System.out.println(\"Elemento extraido: \" + buf.coger());\n        System.out.println(\"Elemento extraido: \" + buf.coger());\n    }\n}\n",
+  "tarea_periodica_tr.c": "/*\n * Especificación de Laboratorio — Tema 7 (Págs. 3-20): Tarea Periódica de Tiempo Real en POSIX\n * Compilación: gcc -Wall -Wextra -std=c11 -pthread tarea_periodica_tr.c -o tarea_periodica_tr -lrt\n * Integra:\n *  1. Bloqueo de páginas en RAM física (mlockall MCL_CURRENT | MCL_FUTURE).\n *  2. Atributos de planificación expulsiva por prioridad fija (PTHREAD_EXPLICIT_SCHED + SCHED_FIFO).\n *  3. Normalización canónica de struct timespec (pág. 20 del Tema 7).\n *  4. Espera absoluta libre de deriva acumulativa con clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME).\n */\n\n#include <stdio.h>\n#include <stdlib.h>\n#include <pthread.h>\n#include <sched.h>\n#include <time.h>\n#include <sys/mman.h>\n#include <assert.h>\n\n#define PERIODO_MS  250\n#define ACTIVACIONES 4\n\nstatic void normalizar(struct timespec *tm) {\n    if (tm->tv_nsec >= 1000000000L) {\n        tm->tv_sec += (tm->tv_nsec / 1000000000L);\n        tm->tv_nsec = (tm->tv_nsec % 1000000000L);\n    } else if (tm->tv_nsec <= -1000000000L) {\n        tm->tv_sec += -(-tm->tv_nsec / 1000000000L);\n        tm->tv_nsec = -(-tm->tv_nsec % 1000000000L);\n    }\n    if ((tm->tv_sec > 0) && (tm->tv_nsec < 0)) {\n        tm->tv_nsec += 1000000000L;\n        tm->tv_sec -= 1;\n    } else if ((tm->tv_sec < 0) && (tm->tv_nsec > 0)) {\n        tm->tv_nsec -= 1000000000L;\n        tm->tv_sec += 1;\n    }\n    assert((tm->tv_sec >= 0 && tm->tv_nsec >= 0 && tm->tv_nsec < 1000000000L) ||\n           (tm->tv_sec < 0 && tm->tv_nsec > -1000000000L && tm->tv_nsec <= 0));\n}\n\nvoid *TareaPeriodica(void *param) {\n    int id = *(int *)param;\n    struct timespec next_activation;\n    int ciclo;\n\n    if (clock_gettime(CLOCK_MONOTONIC, &next_activation) != 0) {\n        perror(\"Error en clock_gettime: \");\n        exit(-1);\n    }\n\n    for (ciclo = 1; ciclo <= ACTIVACIONES; ciclo++) {\n        next_activation.tv_nsec += PERIODO_MS * 1000000L;\n        normalizar(&next_activation);\n\n        if (clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next_activation, NULL) != 0) {\n            perror(\"Error en clock_nanosleep: \");\n            exit(-1);\n        }\n\n        printf(\"[Tarea TR %d] Ciclo %d ejecutado en instante %ld.%09ld s\\n\",\n               id, ciclo, (long)next_activation.tv_sec, next_activation.tv_nsec);\n    }\n    pthread_exit(NULL);\n}\n\nint main(void) {\n    pthread_t th;\n    pthread_attr_t attr;\n    struct sched_param param;\n    int ids[1] = {0};\n\n    /* Bloquear páginas presentes y futuras en RAM física */\n    if (mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {\n        perror(\"Aviso mlockall (requiere privilegios RT): \");\n    }\n\n    pthread_attr_init(&attr);\n    pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);\n    pthread_attr_setschedpolicy(&attr, SCHED_FIFO);\n    param.sched_priority = 50;\n    pthread_attr_setschedparam(&attr, &param);\n\n    if (pthread_create(&th, &attr, TareaPeriodica, &ids[0]) != 0) {\n        /* Fallback con atributos por defecto si no se ejecuta como superusuario */\n        if (pthread_create(&th, NULL, TareaPeriodica, &ids[0]) != 0) {\n            perror(\"Error en pthread_create: \");\n            exit(-1);\n        }\n    }\n\n    if (pthread_join(th, NULL) != 0) {\n        perror(\"Error en pthread_join: \");\n        exit(-1);\n    }\n\n    munlockall();\n    return 0;\n}\n"
+};
+
   async function fetchSourceCode(srcUrl, box) {
     try {
       const res = await fetch(srcUrl);
@@ -662,6 +685,8 @@
       const tpl = document.getElementById(fallbackId);
       if (tpl) return tpl.textContent.trim();
     }
+    const fname = (srcUrl || "").split("/").pop();
+    if (fname && CANONICAL_SOURCES[fname]) return CANONICAL_SOURCES[fname];
     if (box.dataset.defaultCode) return box.dataset.defaultCode;
     return `/* Programa C11 POSIX */\n#include <stdio.h>\nint main(void) {\n    printf("Hola desde NeoEngine POSIX\\n");\n    return 0;\n}`;
   }
@@ -680,7 +705,8 @@
     const savedCode = global.WorkbenchStorage
       ? global.WorkbenchStorage.getUserCode(storageKey)
       : null;
-    const initialCode = savedCode || originalCode;
+    const isStaleFallback = savedCode && (savedCode.includes("Hola desde NeoEngine POSIX") || savedCode.includes("___ COMPLETAR AQUÍ") || savedCode.includes("___ ESCRIBE AQUÍ"));
+    const initialCode = (!isStaleFallback && savedCode) ? savedCode : originalCode;
     let isChallengeMode = false;
 
     box.innerHTML = `
