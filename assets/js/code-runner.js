@@ -74,25 +74,25 @@
       challengeCode = challengeCode
         .replace(
           /if\s*\(\s*(?:\(\s*err\s*=\s*)?pthread_create\(\s*&th(?:1|\[0\])[^\n]+\n/,
-          "    /* [RETO 1]: Crea la hebra th1 pasando la función busquedaLineal y &arg1 comprobando si devuelve != 0 */\n    if (/* ___ COMPLETAR AQUÍ: pthread_create(&th1, NULL, busquedaLineal, &arg1) ___ */ != 0) {\n"
+          "    // Reto 1: Invocación de creación de la hebra th1 con función busquedaLineal y &arg1\n    if (/* ___ COMPLETAR AQUÍ ___ */ != 0) {\n"
         )
         .replace(
           /if\s*\(\s*(?:\(\s*err\s*=\s*)?pthread_join\(\s*th(?:1|\[0\])[^\n]+\n/,
-          "    /* [RETO 2]: Espera a la finalización de th1 mediante pthread_join comprobando si devuelve != 0 */\n    if (/* ___ COMPLETAR AQUÍ: pthread_join(th1, NULL) ___ */ != 0) {\n"
+          "    // Reto 2: Invocación de espera/sincronización de la hebra th1 con pthread_join\n    if (/* ___ COMPLETAR AQUÍ ___ */ != 0) {\n"
         );
       hints.push("Reto 1: Invoca pthread_create(&th1, NULL, busquedaLineal, &arg1) dentro de la condición if (... != 0).");
       hints.push("Reto 2: Invoca pthread_join(th1, NULL) dentro de la condición if (... != 0) para sincronizar la hebra principal.");
       checks.push({
         label: "Creación de ambas hebras con pthread_create y paso de &arg1 / &arg2",
-        test: (c) =>
-          /pthread_create\s*\(\s*&th(?:1|\[0\])[\s\S]*?&arg1\s*\)/.test(c) &&
-          /pthread_create\s*\(\s*&th(?:2|\[1\])[\s\S]*?&arg2\s*\)/.test(c)
+        test: (clean) =>
+          /pthread_create\s*\(\s*&th(?:1|\[0\])[\s\S]*?&arg1\s*\)/.test(clean) &&
+          /pthread_create\s*\(\s*&th(?:2|\[1\])[\s\S]*?&arg2\s*\)/.test(clean)
       });
       checks.push({
         label: "Sincronización mediante pthread_join para ambas hebras (th1 y th2)",
-        test: (c) =>
-          /pthread_join\s*\(\s*th(?:1|\[0\])/.test(c) &&
-          /pthread_join\s*\(\s*th(?:2|\[1\])/.test(c)
+        test: (clean) =>
+          /pthread_join\s*\(\s*th(?:1|\[0\])/.test(clean) &&
+          /pthread_join\s*\(\s*th(?:2|\[1\])/.test(clean)
       });
     }
     // 2. Creación segura de hebras (Tema 2)
@@ -100,21 +100,21 @@
       challengeCode = challengeCode
         .replace(
           /int\s+miId\s*=\s*\*\(\s*int\s*\*\s*\)\s*param\s*;/,
-          "    /* [RETO 1]: Recupera el identificador entero desreferenciando el puntero 'param' */\n    int miId = /* ___ COMPLETAR AQUÍ ___ */;"
+          "    // Reto 1: Recuperar el identificador entero desreferenciando el puntero 'param'\n    int miId = /* ___ COMPLETAR AQUÍ ___ */;"
         )
         .replace(
           /ids\[i\]\s*=\s*i\s*;/,
-          "        /* [RETO 2]: Guarda el índice 'i' en el array 'ids' antes de crear la hebra */\n        /* ___ COMPLETAR AQUÍ ___ */"
+          "        // Reto 2: Guardar el índice 'i' en el array 'ids' antes de crear la hebra\n        /* ___ COMPLETAR AQUÍ ___ */"
         );
       hints.push("Reto 1: Convierte 'param' a puntero a entero y desreferéncialo: *(int *)param");
       hints.push("Reto 2: Asigna ids[i] = i; antes de pasar &ids[i] a pthread_create.");
       checks.push({
         label: "Desreferenciación segura del parámetro: *(int *)param",
-        test: (c) => /\*\s*\(\s*int\s*\*\s*\)\s*param/.test(c)
+        test: (clean) => /\*\s*\(\s*int\s*\*\s*\)\s*param/.test(clean)
       });
       checks.push({
         label: "Asignación previa ids[i] = i y paso de &ids[i] en pthread_create",
-        test: (c) => /ids\s*\[\s*i\s*\]\s*=\s*i\s*;/.test(c) && /pthread_create\s*\([^;]*&ids\s*\[\s*i\s*\]/.test(c)
+        test: (clean) => /ids\s*\[\s*i\s*\]\s*=\s*i\s*;/.test(clean) && /pthread_create\s*\([^;]*&ids\s*\[\s*i\s*\]/.test(clean)
       });
     }
     // 3. Algoritmo de Peterson (Tema 3)
@@ -122,25 +122,25 @@
       challengeCode = challengeCode
         .replace(
           /f\[miId\]\s*=\s*1\s*;\s*\n\s*turno\s*=\s*otra\s*;\s*\n\s*while\s*\(\s*f\[otra\]\s*&&\s*turno\s*==\s*otra\s*\)\s*;/,
-          "        /* [RETO 1]: Escribe las 3 líneas del Preprotocolo de Peterson (levantar flag f[miId], ceder turno a 'otra' y bucle while de espera activa) */\n        // ___ ESCRIBE AQUÍ EL PREPROTOCOLO DE PETERSON ___"
+          "        // Reto 1: Preprotocolo de Peterson (levantar flag f[miId], ceder turno a 'otra' y espera activa while)\n        // ___ COMPLETAR AQUÍ: PREPROTOCOLO DE PETERSON ___"
         )
         .replace(
           /f\[miId\]\s*=\s*0\s*;/,
-          "        /* [RETO 2]: Postprotocolo de Peterson (bajar el flag de interés de la hebra actual) */\n        // ___ ESCRIBE AQUÍ EL POSTPROTOCOLO ___"
+          "        // Reto 2: Postprotocolo de Peterson (bajar el flag de interés de la hebra actual)\n        // ___ COMPLETAR AQUÍ: POSTPROTOCOLO ___"
         );
       hints.push("Reto 1 (Preprotocolo): f[miId] = 1; turno = otra; while (f[otra] && turno == otra);");
       hints.push("Reto 2 (Postprotocolo): f[miId] = 0;");
       checks.push({
         label: "Activación de interés f[miId] = 1 y cesión turno = otra",
-        test: (c) => /f\s*\[\s*miId\s*\]\s*=\s*1\s*;/.test(c) && /turno\s*=\s*otra\s*;/.test(c)
+        test: (clean) => /f\s*\[\s*miId\s*\]\s*=\s*1\s*;/.test(clean) && /turno\s*=\s*otra\s*;/.test(clean)
       });
       checks.push({
         label: "Condición de espera activa while (f[otra] && turno == otra);",
-        test: (c) => /while\s*\(\s*f\s*\[\s*otra\s*\]\s*&&\s*turno\s*==\s*otra\s*\)\s*;/.test(c)
+        test: (clean) => /while\s*\(\s*f\s*\[\s*otra\s*\]\s*&&\s*turno\s*==\s*otra\s*\)\s*;/.test(clean)
       });
       checks.push({
         label: "Postprotocolo f[miId] = 0 al salir de la Sección Crítica",
-        test: (c) => /f\s*\[\s*miId\s*\]\s*=\s*0\s*;/.test(c)
+        test: (clean) => /f\s*\[\s*miId\s*\]\s*=\s*0\s*;/.test(clean)
       });
     }
     // 4. Panadería de Lamport (Tema 3)
@@ -148,24 +148,24 @@
       challengeCode = challengeCode
         .replace(
           /pidiendoTurno\[(?:miId|id)\]\s*=\s*1\s*;\s*\n\s*turno\[(?:miId|id)\]\s*=\s*siguiente\(\)\s*;\s*\n\s*pidiendoTurno\[(?:miId|id)\]\s*=\s*0\s*;/,
-          "        /* [RETO 1]: Toma de ticket en la Panadería de Lamport (activar pidiendoTurno[miId], calcular turno[miId] = siguiente() y desactivar pidiendoTurno[miId]) */\n        // ___ COMPLETAR AQUÍ TOMA DE TURNO ___"
+          "        // Reto 1: Toma de ticket (activar pidiendoTurno, turno = siguiente() y desactivar pidiendoTurno)\n        // ___ COMPLETAR AQUÍ: TOMA DE TURNO ___"
         )
         .replace(
           /turno\[(?:miId|id)\]\s*=\s*0\s*;/,
-          "        /* [RETO 2]: Postprotocolo: liberar el ticket poniendo turno[miId] a 0 */\n        // ___ COMPLETAR AQUÍ POSTPROTOCOLO ___"
+          "        // Reto 2: Postprotocolo (liberar el ticket poniendo el turno a 0)\n        // ___ COMPLETAR AQUÍ: POSTPROTOCOLO ___"
         );
       hints.push("Reto 1: pidiendoTurno[miId] = 1; turno[miId] = siguiente(); pidiendoTurno[miId] = 0;");
       hints.push("Reto 2: turno[miId] = 0;");
       checks.push({
         label: "Protocolo de toma de número con pidiendoTurno[miId] y turno[miId] = siguiente()",
-        test: (c) =>
-          /pidiendoTurno\s*\[\s*(?:miId|id)\s*\]\s*=\s*1/.test(c) &&
-          /turno\s*\[\s*(?:miId|id)\s*\]\s*=\s*siguiente\s*\(\s*\)/.test(c) &&
-          /pidiendoTurno\s*\[\s*(?:miId|id)\s*\]\s*=\s*0/.test(c)
+        test: (clean) =>
+          /pidiendoTurno\s*\[\s*(?:miId|id)\s*\]\s*=\s*1/.test(clean) &&
+          /turno\s*\[\s*(?:miId|id)\s*\]\s*=\s*siguiente\s*\(\s*\)/.test(clean) &&
+          /pidiendoTurno\s*\[\s*(?:miId|id)\s*\]\s*=\s*0/.test(clean)
       });
       checks.push({
         label: "Liberación del ticket turno[miId] = 0 en el postprotocolo",
-        test: (c) => /turno\s*\[\s*(?:miId|id)\s*\]\s*=\s*0\s*;/.test(c)
+        test: (clean) => /turno\s*\[\s*(?:miId|id)\s*\]\s*=\s*0\s*;/.test(clean)
       });
     }
     // 5. Productor-Consumidor con Semáforos (Tema 3_1)
@@ -173,21 +173,21 @@
       challengeCode = challengeCode
         .replace(
           /sem_wait\(&Hay_espacio\)\s*;\s*\n\s*sem_wait\(&mutex\)\s*;/,
-          "        /* [RETO 1 - Preprotocolo Productor]: Espera primero a que haya espacio y después adquiere la exclusión mutua (¡cuidado con el orden para evitar deadlock!) */\n        // ___ COMPLETAR AQUÍ PREPROTOCOLO PRODUCTOR ___"
+          "        // Reto 1: Preprotocolo Productor (esperar espacio y después exclusión mutua para evitar interbloqueo)\n        // ___ COMPLETAR AQUÍ: PREPROTOCOLO PRODUCTOR ___"
         )
         .replace(
           /sem_post\(&mutex\)\s*;\s*\n\s*sem_post\(&Hay_Datos\)\s*;/,
-          "        /* [RETO 2 - Postprotocolo Productor]: Libera la exclusión mutua y señaliza que hay un nuevo dato disponible */\n        // ___ COMPLETAR AQUÍ POSTPROTOCOLO PRODUCTOR ___"
+          "        // Reto 2: Postprotocolo Productor (liberar exclusión mutua y señalizar nuevo dato)\n        // ___ COMPLETAR AQUÍ: POSTPROTOCOLO PRODUCTOR ___"
         );
       hints.push("Reto 1: sem_wait(&Hay_espacio); seguido de sem_wait(&mutex); (nunca al revés).");
       hints.push("Reto 2: sem_post(&mutex); seguido de sem_post(&Hay_Datos);");
       checks.push({
         label: "Orden libre de interbloqueo en Productor: sem_wait(&Hay_espacio) antes de sem_wait(&mutex)",
-        test: (c) => /sem_wait\s*\(\s*&Hay_espacio\s*\)\s*;\s*sem_wait\s*\(\s*&mutex\s*\)/.test(c)
+        test: (clean) => /sem_wait\s*\(\s*&Hay_espacio\s*\)\s*;\s*sem_wait\s*\(\s*&mutex\s*\)/.test(clean)
       });
       checks.push({
         label: "Señalización correcta en Productor: sem_post(&mutex) y sem_post(&Hay_Datos)",
-        test: (c) => /sem_post\s*\(\s*&mutex\s*\)\s*;\s*sem_post\s*\(\s*&Hay_Datos\s*\)/.test(c)
+        test: (clean) => /sem_post\s*\(\s*&mutex\s*\)\s*;\s*sem_post\s*\(\s*&Hay_Datos\s*\)/.test(clean)
       });
     }
     // 6. Lectores-Escritores (Tema 3_1)
@@ -195,21 +195,21 @@
       challengeCode = challengeCode
         .replace(
           /nLectores\+\+\s*;\s*\n\s*if\s*\(\s*nLectores\s*==\s*1\s*\)\s*\{\s*\n\s*sem_wait\(&escribiendo\)\s*;\s*\n\s*\}/,
-          "    /* [RETO 1]: Incrementa nLectores y, si es el primer lector (nLectores == 1), bloquea a los escritores con sem_wait(&escribiendo) */\n    // ___ COMPLETAR AQUÍ ENTRADA PRIMER LECTOR ___"
+          "    // Reto 1: Entrada primer lector (incrementar nLectores y, si es el primero (== 1), bloquear escritores)\n    // ___ COMPLETAR AQUÍ: ENTRADA PRIMER LECTOR ___"
         )
         .replace(
           /nLectores--\s*;\s*\n\s*if\s*\(\s*nLectores\s*==\s*0\s*\)\s*\{\s*\n\s*sem_post\(&escribiendo\)\s*;\s*\n\s*\}/,
-          "    /* [RETO 2]: Decrementa nLectores y, si era el último lector (nLectores == 0), libera sem_post(&escribiendo) */\n    // ___ COMPLETAR AQUÍ SALIDA ÚLTIMO LECTOR ___"
+          "    // Reto 2: Salida último lector (decrementar nLectores y, si es el último (== 0), liberar escritores)\n    // ___ COMPLETAR AQUÍ: SALIDA ÚLTIMO LECTOR ___"
         );
       hints.push("Reto 1: nLectores++; if (nLectores == 1) { sem_wait(&escribiendo); }");
       hints.push("Reto 2: nLectores--; if (nLectores == 0) { sem_post(&escribiendo); }");
       checks.push({
         label: "Primer lector cierra el paso a escritores: if (nLectores == 1) sem_wait(&escribiendo)",
-        test: (c) => /nLectores\s*\+\+/.test(c) && /if\s*\(\s*nLectores\s*==\s*1\s*\)[\s\S]*?sem_wait\s*\(\s*&escribiendo\s*\)/.test(c)
+        test: (clean) => /nLectores\s*\+\+/.test(clean) && /if\s*\(\s*nLectores\s*==\s*1\s*\)[\s\S]*?sem_wait\s*\(\s*&escribiendo\s*\)/.test(clean)
       });
       checks.push({
         label: "Último lector abre el paso a escritores: if (nLectores == 0) sem_post(&escribiendo)",
-        test: (c) => /nLectores\s*--/.test(c) && /if\s*\(\s*nLectores\s*==\s*0\s*\)[\s\S]*?sem_post\s*\(\s*&escribiendo\s*\)/.test(c)
+        test: (clean) => /nLectores\s*--/.test(clean) && /if\s*\(\s*nLectores\s*==\s*0\s*\)[\s\S]*?sem_post\s*\(\s*&escribiendo\s*\)/.test(clean)
       });
     }
     // 7. Cena de los Filósofos (Tema 3_1)
@@ -217,67 +217,67 @@
       challengeCode = challengeCode
         .replace(
           /sem_init\(&sillas,\s*0,\s*MAXF\s*-\s*1\)\s*;/,
-          "    /* [RETO 1]: Inicializa el semáforo 'sillas' a MAXF - 1 para romper la espera circular */\n    // ___ COMPLETAR AQUÍ INICIALIZACIÓN DE SILLAS ___"
+          "    // Reto 1: Inicializar el semáforo 'sillas' a MAXF - 1 para romper la espera circular\n    /* ___ COMPLETAR AQUÍ ___ */"
         )
         .replace(
           /sem_wait\(&sillas\)\s*;\s*\n\s*sem_wait\(&ten\[(?:id|miId)\]\)\s*;\s*\n\s*sem_wait\(&ten\[\((?:id|miId)\s*\+\s*1\)\s*%\s*MAXF\]\)\s*;/,
-          "    /* [RETO 2]: Toma asiento (sem_wait(&sillas)) y adquiere los dos tenedores adyacentes (id y (id + 1) % MAXF) */\n    // ___ COMPLETAR AQUÍ PREPROTOCOLO DEL FILÓSOFO ___"
+          "    // Reto 2: Tomar asiento en silla y adquirir ambos tenedores adyacentes (id y (id + 1) % MAXF)\n    // ___ COMPLETAR AQUÍ: PREPROTOCOLO FILÓSOFO ___"
         );
       hints.push("Reto 1: sem_init(&sillas, 0, MAXF - 1);");
       hints.push("Reto 2: sem_wait(&sillas); sem_wait(&ten[id]); sem_wait(&ten[(id + 1) % MAXF]);");
       checks.push({
         label: "Inicialización del semáforo de sillas a MAXF - 1",
-        test: (c) => /sem_init\s*\(\s*&sillas\s*,\s*0\s*,\s*(?:MAXF\s*-\s*1|4)\s*\)/.test(c)
+        test: (clean) => /sem_init\s*\(\s*&sillas\s*,\s*0\s*,\s*(?:MAXF\s*-\s*1|4)\s*\)/.test(clean)
       });
       checks.push({
         label: "Adquisición de silla y ambos tenedores (ten[id] y ten[(id + 1) % MAXF])",
-        test: (c) =>
-          /sem_wait\s*\(\s*&sillas\s*\)/.test(c) &&
-          /sem_wait\s*\(\s*&ten\s*\[\s*(?:id|miId)\s*\]\s*\)/.test(c)
+        test: (clean) =>
+          /sem_wait\s*\(\s*&sillas\s*\)/.test(clean) &&
+          /sem_wait\s*\(\s*&ten\s*\[\s*(?:id|miId)\s*\]\s*\)/.test(clean)
       });
     }
     // 8. Colas de mensajes POSIX (Tema 4)
     else if (fileName.includes("colas_mensajes")) {
       challengeCode = challengeCode
         .replace(
-          /mq_send\(cola\[(?:idCola|id)\],\s*\(const char \*\)&(?:val|msg),\s*sizeof\(int\),\s*(?:prio|1)\)/,
-          "/* [RETO 1]: ___ COMPLETAR AQUÍ: mq_send(cola[idCola], (const char *)&val, sizeof(int), prio) ___ */"
+          /if\s*\(\s*mq_send\(cola\[(?:idCola|id)\]\s*,\s*\(const char \*\)&(?:val|msg)\s*,\s*sizeof\(int\)\s*,\s*(?:prio|1)\)\s*==\s*-1\s*\)/,
+          "        // Reto 1: Enviar dato por la cola POSIX cola[idCola] con mq_send comprobando retorno == -1\n        if (/* ___ COMPLETAR AQUÍ ___ */ == -1)"
         )
         .replace(
-          /mq_receive\(cola\[(?:0|i)\],\s*\(char \*\)&(?:num|dato),\s*sizeof\(int\),\s*&(?:prior|prio)\)/,
-          "/* [RETO 2]: ___ COMPLETAR AQUÍ: mq_receive(cola[0], (char *)&num, sizeof(int), &prior) ___ */"
+          /if\s*\(\s*mq_receive\(cola\[(?:0|i)\]\s*,\s*\(char \*\)&(?:num|dato)\s*,\s*sizeof\(int\)\s*,\s*&(?:prior|prio)\)\s*!=\s*-1\s*\)/,
+          "                // Reto 2: Extraer número de cola[0] con mq_receive comprobando retorno != -1\n                if (/* ___ COMPLETAR AQUÍ ___ */ != -1)"
         );
       hints.push("Reto 1: mq_send(cola[idCola], (const char *)&val, sizeof(int), prio)");
       hints.push("Reto 2: mq_receive(cola[0], (char *)&num, sizeof(int), &prior)");
       checks.push({
         label: "Envío por cola de mensajes POSIX mediante mq_send",
-        test: (c) => /mq_send\s*\(\s*cola\[/.test(c)
+        test: (clean) => /mq_send\s*\(\s*cola\s*\[/.test(clean)
       });
       checks.push({
         label: "Recepción desde cola de mensajes POSIX mediante mq_receive",
-        test: (c) => /mq_receive\s*\(\s*cola\[/.test(c)
+        test: (clean) => /mq_receive\s*\(\s*cola\s*\[/.test(clean)
       });
     }
     // 9. Señales POSIX sigwaitinfo (Tema 5)
     else if (fileName.includes("senales_sigwait")) {
       challengeCode = challengeCode
         .replace(
-          /pthread_sigmask\(SIG_BLOCK,\s*&sigset,\s*NULL\)/,
-          "/* [RETO 1]: ___ COMPLETAR AQUÍ: pthread_sigmask(SIG_BLOCK, &sigset, NULL) ___ */"
+          /if\s*\(\s*pthread_sigmask\(SIG_BLOCK\s*,\s*&sigset\s*,\s*NULL\)\s*!=\s*0\s*\)/,
+          "    // Reto 1: Bloquear la máscara de señales sigset con pthread_sigmask comprobando retorno != 0\n    if (/* ___ COMPLETAR AQUÍ ___ */ != 0)"
         )
         .replace(
-          /sigwaitinfo\((?:set|&sigset),\s*&info\)\s*;/,
-          "/* [RETO 2]: ___ COMPLETAR AQUÍ: sigwaitinfo(set, &info); ___ */"
+          /s\s*=\s*sigwaitinfo\((?:set|&sigset)\s*,\s*&info\)\s*;/,
+          "        // Reto 2: Espera síncrona de señales con sigwaitinfo\n        s = /* ___ COMPLETAR AQUÍ ___ */;"
         );
       hints.push("Reto 1: pthread_sigmask(SIG_BLOCK, &sigset, NULL)");
-      hints.push("Reto 2: sigwaitinfo(set, &info);");
+      hints.push("Reto 2: sigwaitinfo(set, &info)");
       checks.push({
         label: "Bloqueo de la máscara de señales con pthread_sigmask(SIG_BLOCK, &sigset, NULL)",
-        test: (c) => /pthread_sigmask\s*\(\s*SIG_BLOCK\s*,\s*&sigset/.test(c)
+        test: (clean) => /pthread_sigmask\s*\(\s*SIG_BLOCK\s*,\s*&sigset/.test(clean)
       });
       checks.push({
         label: "Espera síncrona con sigwaitinfo(set, &info) o sigwait",
-        test: (c) => /sigwait(?:info)?\s*\(\s*(?:set|&sigset)/.test(c)
+        test: (clean) => /sigwait(?:info)?\s*\(\s*(?:set|&sigset)/.test(clean)
       });
     }
     // 10. Monitor Java BufferAcotado (Tema 6)
@@ -285,43 +285,45 @@
       challengeCode = challengeCode
         .replace(
           /while\s*\(\s*cima\s*==\s*capacidad(?:\s*-\s*1)?\s*\)\s*\{\s*\n\s*try\s*\{\s*\n\s*wait\(\)\s*;\s*\n\s*\}\s*catch\s*\([^)]+\)\s*\{\s*\n\s*[^}]+\n\s*\}\s*\n\s*\}/,
-          "        /* [RETO 1]: Mientras el buffer esté lleno (cima == capacidad - 1), suspende la hebra con wait() */\n        while (cima == capacidad - 1) {\n            try { /* ___ COMPLETAR AQUÍ: wait(); ___ */ } catch (InterruptedException e) { Thread.currentThread().interrupt(); }\n        }"
+          "        // Reto 1: Mientras el buffer esté lleno (cima == capacidad - 1), suspender la hebra en el monitor\n        while (cima == capacidad - 1) {\n            try {\n                /* ___ COMPLETAR AQUÍ ___ */\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n            }\n        }"
         )
         .replace(
-          /notifyAll\(\)\s*;/g,
-          "/* [RETO 2]: ___ COMPLETAR AQUÍ: notifyAll(); ___ */"
+          /vector\[cima\]\s*=\s*elem\s*;\s*\n\s*cima\+\+\s*;\s*\n\s*notifyAll\(\)\s*;/,
+          "        vector[cima] = elem;\n        cima++;\n        // Reto 2: Despertar a todas las hebras esperando en el monitor\n        /* ___ COMPLETAR AQUÍ ___ */"
         );
       hints.push("Reto 1: Invoca wait(); dentro del bloque try cuando cima == capacidad - 1.");
       hints.push("Reto 2: Invoca notifyAll(); para despertar a las hebras bloqueadas en el monitor.");
       checks.push({
         label: "Comprobación de condición en bucle while y llamada a wait()",
-        test: (c) => /while\s*\(\s*cima\s*==\s*capacidad(?:\s*-\s*1)?\s*\)\s*\{[\s\S]*?wait\s*\(\s*\)/.test(c)
+        test: (clean) =>
+          /while\s*\(\s*cima\s*==\s*capacidad(?:\s*-\s*1)?\s*\)/.test(clean) &&
+          /wait\s*\(\s*\)/.test(clean)
       });
       checks.push({
         label: "Notificación a las hebras esperando mediante notifyAll()",
-        test: (c) => /notifyAll\s*\(\s*\)\s*;/.test(c)
+        test: (clean) => /notifyAll\s*\(\s*\)\s*;?/.test(clean)
       });
     }
     // 11. Tarea periódica Tiempo Real (Tema 7)
     else if (fileName.includes("tarea_periodica")) {
       challengeCode = challengeCode
         .replace(
-          /mlockall\(MCL_CURRENT\s*\|\s*MCL_FUTURE\)/,
-          "/* [RETO 1]: ___ COMPLETAR AQUÍ: mlockall(MCL_CURRENT | MCL_FUTURE) ___ */"
+          /if\s*\(\s*mlockall\(MCL_CURRENT\s*\|\s*MCL_FUTURE\)\s*(?:==\s*-1|!=\s*0)\s*\)/,
+          "    // Reto 1: Bloquear páginas en memoria RAM física con mlockall comprobando si devuelve == -1\n    if (/* ___ COMPLETAR AQUÍ ___ */ == -1)"
         )
         .replace(
-          /clock_nanosleep\(CLOCK_MONOTONIC,\s*TIMER_ABSTIME,\s*&next(?:_activation)?,\s*NULL\)/,
-          "/* [RETO 2]: ___ COMPLETAR AQUÍ: clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next_activation, NULL) ___ */"
+          /if\s*\(\s*clock_nanosleep\(CLOCK_MONOTONIC\s*,\s*TIMER_ABSTIME\s*,\s*&next(?:_activation)?\s*,\s*NULL\)\s*!=\s*0\s*\)/,
+          "        // Reto 2: Espera periódica absoluta sin deriva acumulativa con clock_nanosleep comprobando != 0\n        if (/* ___ COMPLETAR AQUÍ ___ */ != 0)"
         );
       hints.push("Reto 1: mlockall(MCL_CURRENT | MCL_FUTURE)");
       hints.push("Reto 2: clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next_activation, NULL)");
       checks.push({
         label: "Bloqueo de paginación en RAM física con mlockall(MCL_CURRENT | MCL_FUTURE)",
-        test: (c) => /mlockall\s*\(\s*MCL_CURRENT\s*\|\s*MCL_FUTURE\s*\)/.test(c)
+        test: (clean) => /mlockall\s*\(\s*MCL_CURRENT\s*\|\s*MCL_FUTURE\s*\)/.test(clean)
       });
       checks.push({
         label: "Espera periódica absoluta con clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &next_activation, NULL)",
-        test: (c) => /clock_nanosleep\s*\(\s*CLOCK_MONOTONIC\s*,\s*TIMER_ABSTIME\s*,\s*&next(?:_activation)?/.test(c)
+        test: (clean) => /clock_nanosleep\s*\(\s*CLOCK_MONOTONIC\s*,\s*TIMER_ABSTIME\s*,\s*&next(?:_activation)?/.test(clean)
       });
     }
 
@@ -333,9 +335,9 @@
      -------------------------------------------------------------------------- */
   function checkBasicSyntaxAndCompleteness(code, lang) {
     const issues = [];
-    if (/__\s*(?:ESCRIBE|COMPLETAR)\s+AQUÍ|\[RETO\s+\d+\]:\s*(?:Envía|Extrae|Espera|Despierta|Ancla)/.test(code)) {
+    if (/__\s*(?:ESCRIBE|COMPLETAR)\s+AQU/i.test(code)) {
       issues.push(
-        "🧩 Todavía quedan huecos del Modo Reto por completar en el código. Rellena las secciones marcadas con [RETO] antes de ejecutar."
+        "🧩 Todavía quedan huecos del Modo Reto por completar en el código. Completa las secciones marcadas con «___ COMPLETAR AQUÍ ___» antes de ejecutar."
       );
     }
 
@@ -808,7 +810,7 @@
       stdoutEl.className = "ceb-stdout";
       stdoutEl.style.color = "#f2a33a";
       stdoutEl.textContent =
-        "🧩 MODO RETO ACTIVADO: Completa las líneas marcadas con [RETO] en el editor superior y pulsa «✓ Comprobar y Ejecutar Mi Código» para verificar si tu solución funciona correctamente.";
+        "🧩 MODO RETO ACTIVADO: Completa las líneas marcadas con «___ COMPLETAR AQUÍ ___» en el editor superior y pulsa «✓ Comprobar y Ejecutar Mi Código» para verificar tu solución.";
     });
 
     hintBtn.addEventListener("click", () => {
@@ -855,6 +857,7 @@
   global.WorkbenchCodeRunner = {
     executeConcurrentCode,
     analyzeCodingRecommendations,
-    initAllCodeBoxes
+    initAllCodeBoxes,
+    buildChallengeFromSource
   };
 })(window);
